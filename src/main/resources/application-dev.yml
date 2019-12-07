@@ -14,9 +14,9 @@ spring:
     password: Thwf1858
   mail:
     protocol: smtp
-    username: 852092786@qq.com
     port: 465
     host: smtp.qq.com
+    username: 852092786@qq.com
     password: gxntmgkfmqtkbcha
     properties:
       mail:
@@ -24,6 +24,9 @@ spring:
           ssl:
             enable: true
     from: 852092786@qq.com
+  redis:
+    host: 152.136.173.30
+    password: LAIqian~~666
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

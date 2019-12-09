@@ -30,9 +30,14 @@ public class CustomerController {
         return ResultEntity.succeed();
     }
 
-    @GetMapping("/email")
-    public ResultEntity checkEmail(){
-        return ResultEntity.fail("邮箱检查");
+    @GetMapping("/register")
+    public ResultEntity register(@RequestParam String userName,
+                                 @RequestParam String email,
+                                 @RequestParam String password,
+                                 @RequestParam String checkCode){
+        customerService.register(userName, email, password, checkCode);
+        return ResultEntity.succeed();
     }
+
 
 }

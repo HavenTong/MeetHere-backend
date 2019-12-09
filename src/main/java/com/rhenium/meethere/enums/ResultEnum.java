@@ -16,6 +16,8 @@ public enum ResultEnum {
      * 在这里可以一直添加异常类型的枚举
      */
     EMAIL_EXISTS(1001, "邮箱已被使用"),
+    CHECK_CODE_ERROR(1002, "验证码错误"),
+    EMAIL_NO_CHECK_CODE(1003, "邮箱未发送验证码或验证码已失效")
     ;
 
     private Integer code;

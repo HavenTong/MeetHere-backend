@@ -1,6 +1,7 @@
 package com.rhenium.meethere.service.impl;
 
 import com.rhenium.meethere.service.MailService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 
 /**
  * @author HavenTong
@@ -17,6 +19,7 @@ import javax.mail.internet.MimeMessage;
  */
 @Service
 @Slf4j
+@Data
 public class MailServiceImpl implements MailService {
 
     @Autowired

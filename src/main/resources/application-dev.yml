@@ -10,8 +10,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/meethere?useUnicode=yes&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    password: Thwf1858
+    url: jdbc:mysql://152.136.173.30:3306/meethere?useUnicode=yes&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    password: LAIqian~~666
   mail:
     protocol: smtp
     port: 465

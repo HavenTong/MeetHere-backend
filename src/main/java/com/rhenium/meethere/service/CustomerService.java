@@ -8,4 +8,5 @@ public interface CustomerService {
 
     void sendCheckCode(String email);
 
+    void register(String userName, String email, String password, String checkCode);
 }

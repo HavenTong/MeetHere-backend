@@ -69,6 +69,5 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setUserName(userName);
         customer.setRegisteredTime(LocalDateTime.now());
         customerDao.saveCustomer(customer);
-        // TODO: 判断checkCode是否一致，若一致则继续注册
     }
 }

@@ -60,8 +60,8 @@ class MailServiceTest {
         verify(mailSender, times(1)).send(any(MimeMessage.class));
     }
 
-    @DisplayName("确保邮件信息正确")
     @Test
+    @DisplayName("确保邮件信息正确")
     void shouldSendEmailCorrectly() throws Exception {
         ArgumentCaptor<MimeMessage> messageArgumentCaptor = ArgumentCaptor.forClass(MimeMessage.class);
         mailService.sendHtmlMail("10175101152@stu.ecnu.edu.cn", "Test Subject", "<h1>Test Case</h1>");

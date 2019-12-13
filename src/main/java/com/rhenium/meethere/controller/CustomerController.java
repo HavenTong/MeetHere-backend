@@ -1,16 +1,11 @@
 package com.rhenium.meethere.controller;
 
-import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.CustomerService;
-import com.rhenium.meethere.service.MailService;
-import com.rhenium.meethere.util.CheckCodeUtil;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author HavenTong
@@ -24,13 +19,13 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping("/check-code")
+    @RequestMapping(value = "check-code", method = RequestMethod.POST)
     public ResultEntity sendCheckCode(@RequestParam String email){
         customerService.sendCheckCode(email);
         return ResultEntity.succeed();
     }
 
-    @GetMapping("/register")
+    @RequestMapping(value = "register", method = RequestMethod.POST)
     public ResultEntity register(@RequestParam String userName,
                                  @RequestParam String email,
                                  @RequestParam String password,
@@ -38,6 +33,5 @@ public class CustomerController {
         customerService.register(userName, email, password, checkCode);
         return ResultEntity.succeed();
     }
-
 
 }

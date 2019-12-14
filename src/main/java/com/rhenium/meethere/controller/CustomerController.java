@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.util.Map;
 
 /**
  * @author HavenTong
@@ -34,4 +34,10 @@ public class CustomerController {
         customerService.register(customerRequest);
         return ResultEntity.succeed();
     }
+
+    @PostMapping("/login")
+    public Map<String, String> login(@RequestBody CustomerRequest customerRequest){
+        return customerService.login(customerRequest);
+    }
+
 }

@@ -6,6 +6,7 @@ import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.CustomerServiceImpl;
 import com.rhenium.meethere.util.CheckCodeUtil;
+import com.rhenium.meethere.util.JwtUtil;
 import mockit.MockUp;
 import mockit.Mocked;
 import mockit.integration.junit5.JMockitExtension;
@@ -279,4 +280,53 @@ class CustomerServiceTest {
         );
 
     }
+
+    @Test
+    @DisplayName("当登录用户不存在时，抛出异常")
+    void shouldThrowExceptionWhenLoginUserNotExist(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .email("10175101152@stu.ecnu.edu.cn").password("123456").build();
+        Throwable exception = assertThrows(MyException.class,
+                () -> customerService.login(customerRequest));
+        assertEquals("用户不存在", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("当登录用户密码错误时，抛出异常")
+    void shouldThrowExceptionWhenLoginWithWrongPassword(){
+        Customer mockedCustomer = Customer.builder()
+                .password("456789").build();
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .email("10175101152@stu.ecnu.edu.cn").password("123456").build();
+        when(customerDao.findCustomerByEmail(anyString())).thenReturn(mockedCustomer);
+        Throwable exception = assertThrows(MyException.class,
+                () -> customerService.login(customerRequest));
+        assertEquals("密码错误", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("当登录密码正确时，允许登录并返回正确登录信息")
+    void shouldReturnCorrectLoginInfoWhenPasswordIsRight(){
+        Customer mockedCustomer = Customer.builder()
+                .customerId(6)
+                .email("10175101152@stu.ecnu.edu.cn")
+                .userName("root")
+                .password("$2a$10$lU2Cx08u/4ovjHpf/aFzhe9EdayhH3ZyYR9ThAXaXV8CuKN.ZtvAy")
+                .build();
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .email("10175101152@stu.ecnu.edu.cn")
+                .password("123456")
+                .build();
+        String token = JwtUtil.createJwt(mockedCustomer);
+        when(customerDao.findCustomerByEmail(anyString())).thenReturn(mockedCustomer);
+        Map<String, String> loginInfo = customerService.login(customerRequest);
+        assertAll(
+                () -> assertEquals(token, loginInfo.get("token")),
+                () -> assertEquals("6", loginInfo.get("customerId")),
+                () -> assertEquals("10175101152@stu.ecnu.edu.cn", loginInfo.get("email")),
+                () -> assertEquals("root", loginInfo.get("userName"))
+        );
+    }
+
+
 }

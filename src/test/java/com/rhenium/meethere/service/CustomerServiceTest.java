@@ -6,8 +6,6 @@ import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.CustomerServiceImpl;
 import com.rhenium.meethere.util.CheckCodeUtil;
 import mockit.MockUp;
-import mockit.Mocked;
-import mockit.integration.junit5.JMockitExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,15 +13,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -264,7 +259,7 @@ class CustomerServiceTest {
                                  "123456",
                                  "123456");
         verify(customerDao, times(1))
-                .saveCustomer(customerArgumentCaptor.capture());
+                .saveNewCustomer(customerArgumentCaptor.capture());
         assertAll(
                 () -> assertEquals("user", customerArgumentCaptor.getValue().getUserName()),
                 () -> assertEquals("852092786@qq.com", customerArgumentCaptor.getValue().getEmail()),

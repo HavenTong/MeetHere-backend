@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import javax.xml.transform.Result;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
@@ -68,6 +66,12 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPassword(encoder.encode(password));
         customer.setUserName(userName);
         customer.setRegisteredTime(LocalDateTime.now());
-        customerDao.saveCustomer(customer);
+        customerDao.saveNewCustomer(customer);
+    }
+
+    @Override
+    public void saveUserInfo(String customerId, String userName, String phoneNumber) {
+        // 因为拦截在控制器之前就已经完成，所以该 customerId 是值得信任的
+        customerDao.saveCustomerInfo(customerId, userName, phoneNumber);
     }
 }

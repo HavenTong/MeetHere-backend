@@ -17,7 +17,13 @@ public enum ResultEnum {
      */
     EMAIL_EXISTS(1001, "邮箱已被使用"),
     CHECK_CODE_ERROR(1002, "验证码错误"),
-    EMAIL_NO_CHECK_CODE(1003, "邮箱未发送验证码或验证码已失效")
+    EMAIL_NO_CHECK_CODE(1003, "邮箱未发送验证码或验证码已失效"),
+    INVALID_TOKEN(1004, "TOKEN错误，无法解析"),
+    TOKEN_NOT_EXIST(1005, "HTTP头部未携带TOKEN"),
+    TOKEN_NOT_MATCH(1006, "TOKEN不匹配"),
+    USER_NOT_EXIST(1007, "用户不存在"),
+    PASSWORD_ERROR(1008, "密码错误"),
+    USER_NAME_EMPTY(1009, "用户名不允许为空")
     ;
 
     private Integer code;

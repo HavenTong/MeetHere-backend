@@ -3,6 +3,7 @@ package com.rhenium.meethere.dao;
 import com.rhenium.meethere.domain.Customer;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 /**
  * @author HavenTong
@@ -21,7 +22,6 @@ public interface CustomerDao {
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")
     int saveNewCustomer(Customer customer);
-    //TODO: 验证这个返回值会是什么？
 
     @Update("UPDATE customer SET user_name = #{userName}, phone_number = #{phoneNumber} WHERE customer_id = #{id}")
     int saveCustomerInfo(@Param("id") String id, @Param("userName") String userName, @Param("phoneNumber") String phoneNumber);

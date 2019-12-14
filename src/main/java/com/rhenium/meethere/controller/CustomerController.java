@@ -1,11 +1,15 @@
 package com.rhenium.meethere.controller;
 
+import com.rhenium.meethere.dto.CustomerRequest;
+import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.CustomerService;
+import com.rhenium.meethere.util.CheckCodeUtil;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
+
+
 
 /**
  * @author HavenTong
@@ -25,13 +29,9 @@ public class CustomerController {
         return ResultEntity.succeed();
     }
 
-    @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ResultEntity register(@RequestParam String userName,
-                                 @RequestParam String email,
-                                 @RequestParam String password,
-                                 @RequestParam String checkCode){
-        customerService.register(userName, email, password, checkCode);
+    @PostMapping("/register")
+    public ResultEntity register(@RequestBody CustomerRequest customerRequest){
+        customerService.register(customerRequest);
         return ResultEntity.succeed();
     }
-
 }

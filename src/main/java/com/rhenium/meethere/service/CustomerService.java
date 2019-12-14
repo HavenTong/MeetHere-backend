@@ -14,5 +14,5 @@ public interface CustomerService {
 
     void register(CustomerRequest customerRequest);
 
-    Map<String, String> login(String email, String password);
+    Map<String, String> login(CustomerRequest customerRequest);
 }

@@ -3,12 +3,13 @@ package com.rhenium.meethere.controller;
 import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.CustomerService;
-import com.rhenium.meethere.service.MailService;
 import com.rhenium.meethere.util.CheckCodeUtil;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author HavenTong
@@ -34,6 +35,9 @@ public class CustomerController {
         return ResultEntity.succeed();
     }
 
-
+    @PostMapping("/login")
+    public Map<String, String> login(@RequestBody CustomerRequest customerRequest){
+        return customerService.login(customerRequest);
+    }
 
 }

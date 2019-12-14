@@ -8,6 +8,7 @@ import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.CustomerService;
 import com.rhenium.meethere.service.MailService;
 import com.rhenium.meethere.util.CheckCodeUtil;
+import com.rhenium.meethere.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.xml.transform.Result;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -74,7 +76,27 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Map<String, String> login(String email, String password) {
-        return null;
+    public Map<String, String> login(CustomerRequest customerRequest) {
+        // 根据邮箱和密码进行登录，首先通过邮箱查找用户判断用户是否存在，
+        // 若存在则判断密码，若密码一致则生成JWT，将信息放入Map中返回，
+        // 密码不一致抛出异常
+        // 用户不存在抛出异常
+        Customer customer = customerDao.findCustomerByEmail(customerRequest.getEmail());
+        if (customer == null){
+            throw new MyException(ResultEnum.USER_NOT_EXIST);
+        }
+        if (!encoder.matches(customerRequest.getPassword(), customer.getPassword())){
+            throw new MyException(ResultEnum.PASSWORD_ERROR);
+        }
+        Map<String, String> loginInfo = new HashMap<>();
+        String token = JwtUtil.createJwt(customer);
+        String customerId = customer.getCustomerId().toString();
+        String email = customer.getEmail();
+        String userName = customer.getUserName();
+        loginInfo.put("token", token);
+        loginInfo.put("customerId", customerId);
+        loginInfo.put("email", email);
+        loginInfo.put("userName", userName);
+        return loginInfo;
     }
 }

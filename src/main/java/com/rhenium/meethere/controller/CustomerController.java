@@ -1,14 +1,18 @@
 package com.rhenium.meethere.controller;
 
+import com.rhenium.meethere.annotation.LoginRequired;
+import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.CustomerService;
 import com.rhenium.meethere.util.CheckCodeUtil;
+import com.rhenium.meethere.util.JwtUtil;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.Map;
 
 /**
@@ -38,6 +42,29 @@ public class CustomerController {
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody CustomerRequest customerRequest){
         return customerService.login(customerRequest);
+    }
+
+    @PutMapping("/update-user-name")
+    @LoginRequired
+    public ResultEntity updateUserName(@RequestBody CustomerRequest customerRequest){
+        customerService.updateUserName(customerRequest);
+        return ResultEntity.succeed();
+    }
+
+
+    /**
+     * 非业务接口，仅仅便于获得某个用户的JWT进行测试
+     * @param customerRequest 想要获取JWT的customerRequest
+     * @return JWT
+     */
+    @GetMapping("/jwt")
+    public ResultEntity getCustomerJwt(@RequestBody CustomerRequest customerRequest){
+        Customer customer = Customer.builder()
+                .customerId(customerRequest.getCustomerId())
+                .email(customerRequest.getEmail())
+                .build();
+        String token = JwtUtil.createJwt(customer);
+        return ResultEntity.succeed(token);
     }
 
 }

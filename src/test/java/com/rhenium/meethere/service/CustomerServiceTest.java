@@ -327,6 +327,4 @@ class CustomerServiceTest {
                 () -> assertEquals("root", loginInfo.get("userName"))
         );
     }
-
-
 }

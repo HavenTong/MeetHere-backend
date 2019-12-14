@@ -44,17 +44,10 @@ public class CustomerController {
         return customerService.login(customerRequest);
     }
 
-    @PostMapping("/update-user-name")
-    @LoginRequired
-    public ResultEntity updateUserName(@RequestBody CustomerRequest customerRequest){
-        customerService.updateUserName(customerRequest);
-        return ResultEntity.succeed();
-    }
-
     @PostMapping("/save-user-info")
     @LoginRequired
     public ResultEntity saveUserInfo(@RequestBody CustomerRequest customerRequest) {
-        customerService.saveUserInfo(customerRequest.getCustomerId(), customerRequest.getUserName(), customerRequest.getPhoneNumber());
+        customerService.saveUserInfo(customerRequest);
         return ResultEntity.succeed();
     }
 

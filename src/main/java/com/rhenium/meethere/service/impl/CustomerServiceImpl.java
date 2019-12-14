@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -74,9 +75,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void saveUserInfo(String customerId, String userName, String phoneNumber) {
+    public void saveUserInfo(CustomerRequest customerRequest) {
+        if (StringUtils.isEmpty(customerRequest.getUserName())){
+            throw new MyException(ResultEnum.USER_NAME_EMPTY);
+        }
+
         // 因为拦截在控制器之前就已经完成，所以该 customerId 是值得信任的
-        customerDao.saveCustomerInfo(customerId, userName, phoneNumber);
+        customerDao.saveCustomerInfo(customerRequest.getCustomerId().toString(), customerRequest.getUserName(), customerRequest.getPhoneNumber());
     }
 
     @Override
@@ -102,21 +107,5 @@ public class CustomerServiceImpl implements CustomerService {
         loginInfo.put("email", email);
         loginInfo.put("userName", userName);
         return loginInfo;
-    }
-
-    /**
-     * 更新用户名
-     * @param customerRequest 携带更新用户名的信息的CustomerRequest
-     */
-    @Override
-    public void updateUserName(CustomerRequest customerRequest) {
-        if (StringUtils.isEmpty(customerRequest.getUserName())){
-            throw new MyException(ResultEnum.USER_NAME_EMPTY);
-        }
-        Customer customer = Customer.builder()
-                .customerId(customerRequest.getCustomerId())
-                .userName(customerRequest.getUserName())
-                .build();
-        customerDao.updateUserName(customer);
     }
 }

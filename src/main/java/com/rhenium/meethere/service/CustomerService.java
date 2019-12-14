@@ -16,8 +16,5 @@ public interface CustomerService {
 
     Map<String, String> login(CustomerRequest customerRequest);
 
-    void updateUserName(CustomerRequest customerRequest);
-
-    // TODO: 更改成 CustomerRequest
-    void saveUserInfo(String customerId, String userName, String phoneNumber);
+    void saveUserInfo(CustomerRequest customerRequest);
 }

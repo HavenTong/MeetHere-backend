@@ -15,4 +15,6 @@ public interface CustomerService {
     void register(CustomerRequest customerRequest);
 
     Map<String, String> login(CustomerRequest customerRequest);
+
+    void updateUserName(CustomerRequest customerRequest);
 }

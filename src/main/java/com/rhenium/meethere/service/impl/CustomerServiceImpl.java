@@ -99,4 +99,20 @@ public class CustomerServiceImpl implements CustomerService {
         loginInfo.put("userName", userName);
         return loginInfo;
     }
+
+    /**
+     * 更新用户名
+     * @param customerRequest 携带更新用户名的信息的CustomerRequest
+     */
+    @Override
+    public void updateUserName(CustomerRequest customerRequest) {
+        if (StringUtils.isEmpty(customerRequest.getUserName())){
+            throw new MyException(ResultEnum.USER_NAME_EMPTY);
+        }
+        Customer customer = Customer.builder()
+                .customerId(customerRequest.getCustomerId())
+                .userName(customerRequest.getUserName())
+                .build();
+        customerDao.updateUserName(customer);
+    }
 }

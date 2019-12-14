@@ -1,11 +1,9 @@
 package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.Customer;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 /**
  * @author HavenTong
@@ -21,4 +19,7 @@ public interface CustomerDao {
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")
     int saveCustomer(Customer customer);
+
+    @Update("UPDATE customer SET user_name = #{userName} WHERE customer_id = #{customerId} ")
+    int updateUserName(Customer customer);
 }

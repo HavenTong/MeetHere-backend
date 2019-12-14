@@ -22,7 +22,8 @@ public enum ResultEnum {
     TOKEN_NOT_EXIST(1005, "HTTP头部未携带TOKEN"),
     TOKEN_NOT_MATCH(1006, "TOKEN不匹配"),
     USER_NOT_EXIST(1007, "用户不存在"),
-    PASSWORD_ERROR(1008, "密码错误")
+    PASSWORD_ERROR(1008, "密码错误"),
+    USER_NAME_EMPTY(1009, "用户名不允许为空")
     ;
 
     private Integer code;

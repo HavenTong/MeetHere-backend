@@ -22,6 +22,8 @@ import java.net.http.HttpRequest;
 /**
  * @author HavenTong
  * @date 2019/12/14 11:29 上午
+ * 通过aop进行全局拦截，必须要保证HTTP头部中的TOKEN字段中携带的Id
+ * 与传入的CustomerRequest中的id相匹配才可以进入controller
  */
 @Aspect
 @Component

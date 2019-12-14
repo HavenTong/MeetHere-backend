@@ -3,12 +3,13 @@ package com.rhenium.meethere.controller;
 import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.CustomerService;
-import com.rhenium.meethere.service.MailService;
 import com.rhenium.meethere.util.CheckCodeUtil;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+
 
 /**
  * @author HavenTong
@@ -22,7 +23,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping("/check-code")
+    @RequestMapping(value = "check-code", method = RequestMethod.POST)
     public ResultEntity sendCheckCode(@RequestParam String email){
         customerService.sendCheckCode(email);
         return ResultEntity.succeed();
@@ -33,7 +34,4 @@ public class CustomerController {
         customerService.register(customerRequest);
         return ResultEntity.succeed();
     }
-
-
-
 }

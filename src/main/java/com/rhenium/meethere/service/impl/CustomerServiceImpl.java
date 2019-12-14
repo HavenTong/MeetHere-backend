@@ -2,6 +2,7 @@ package com.rhenium.meethere.service.impl;
 
 import com.rhenium.meethere.dao.CustomerDao;
 import com.rhenium.meethere.domain.Customer;
+import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.CustomerService;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.xml.transform.Result;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -55,19 +57,24 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void register(String userName, String email, String password, String checkCode) {
-        String expectedCode = redisTemplate.opsForValue().get("code:" + email);
+    public void register(CustomerRequest customerRequest) {
+        String expectedCode = redisTemplate.opsForValue().get("code:" + customerRequest.getEmail());
         if (expectedCode == null){
             throw new MyException(ResultEnum.EMAIL_NO_CHECK_CODE);
         }
-        if (!checkCode.equals(expectedCode)){
+        if (!expectedCode.equals(customerRequest.getCheckCode())){
             throw new MyException(ResultEnum.CHECK_CODE_ERROR);
         }
         Customer customer = new Customer();
-        customer.setEmail(email);
-        customer.setPassword(encoder.encode(password));
-        customer.setUserName(userName);
+        customer.setEmail(customerRequest.getEmail());
+        customer.setPassword(encoder.encode(customerRequest.getPassword()));
+        customer.setUserName(customerRequest.getUserName());
         customer.setRegisteredTime(LocalDateTime.now());
         customerDao.saveCustomer(customer);
+    }
+
+    @Override
+    public Map<String, String> login(String email, String password) {
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package com.rhenium.meethere.service;
 
 import com.rhenium.meethere.dao.CustomerDao;
 import com.rhenium.meethere.domain.Customer;
+import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.CustomerServiceImpl;
 import com.rhenium.meethere.util.CheckCodeUtil;
@@ -27,6 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -234,11 +236,12 @@ class CustomerServiceTest {
     @Test
     @DisplayName("当用户的验证码为空时，抛出异常")
     void shouldThrowExceptionWhenCheckCodeIsNull(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .userName("user")
+                .email("10175101152@stu.ecnu.edu.cn")
+                .password("123456").build();
         Throwable exception = assertThrows(MyException.class,
-                () -> customerService.register("user",
-                                        "10175101152@stu.ecnu.edu.cn",
-                                        "123456",
-                                        null)
+                () -> customerService.register(customerRequest)
         );
         assertEquals("邮箱未发送验证码或验证码已失效", exception.getMessage());
     }
@@ -246,11 +249,13 @@ class CustomerServiceTest {
     @Test
     @DisplayName("当用户验证码和数据库中不匹配时，抛出异常")
     void shouldThrowExceptionWhenCheckCodeNotMatch(){
+        CustomerRequest customerRequest = CustomerRequest
+                .builder().userName("user")
+                .email("852092786@qq.com")
+                .password("123456")
+                .checkCode("456789").build();
         Throwable exception = assertThrows(MyException.class,
-                () -> customerService.register("user",
-                                                "852092786@qq.com",
-                                                "123456",
-                                                "456789")
+                () -> customerService.register(customerRequest)
         );
         assertEquals("验证码错误", exception.getMessage());
     }
@@ -259,10 +264,10 @@ class CustomerServiceTest {
     @DisplayName("当用户验证码匹配时，完成注册")
     void shouldRegisterUserWhenCheckCodeMatches(){
         ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
-        customerService.register("user",
-                                 "852092786@qq.com",
-                                 "123456",
-                                 "123456");
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .userName("user").email("852092786@qq.com")
+                .password("123456").checkCode("123456").build();
+        customerService.register(customerRequest);
         verify(customerDao, times(1))
                 .saveCustomer(customerArgumentCaptor.capture());
         assertAll(

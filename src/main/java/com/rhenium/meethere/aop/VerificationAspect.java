@@ -34,13 +34,7 @@ public class VerificationAspect {
 
     @Before("verifyLoginPoint()")
     public void verifyLogin(JoinPoint joinPoint){
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) requestAttributes;
-        HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
-        String token = httpServletRequest.getHeader("TOKEN");
-        if (StringUtils.isEmpty(token)){
-            throw new MyException(ResultEnum.TOKEN_NOT_EXIST);
-        }
+        String token = getToken();
         Claims claims = JwtUtil.parseJwt(token);
         Integer decodedCustomerId = Integer.parseInt(claims.getId());
         Object[] arguments = joinPoint.getArgs();
@@ -52,6 +46,18 @@ public class VerificationAspect {
                 }
                 break;
             }
+
         }
+    }
+
+    public String getToken(){
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) requestAttributes;
+        HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
+        String token = httpServletRequest.getHeader("TOKEN");
+        if (StringUtils.isEmpty(token)){
+            throw new MyException(ResultEnum.TOKEN_NOT_EXIST);
+        }
+        return token;
     }
 }

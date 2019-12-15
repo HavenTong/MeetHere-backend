@@ -17,4 +17,6 @@ public interface CustomerService {
     Map<String, String> login(CustomerRequest customerRequest);
 
     void saveUserInfo(CustomerRequest customerRequest);
+
+    void changePassword(CustomerRequest customerRequest);
 }

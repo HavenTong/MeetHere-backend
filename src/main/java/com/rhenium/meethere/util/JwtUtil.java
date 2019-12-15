@@ -4,7 +4,12 @@ import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import io.jsonwebtoken.*;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -42,5 +47,16 @@ public class JwtUtil {
         } catch (Exception ex){
             throw new MyException(ResultEnum.INVALID_TOKEN);
         }
+    }
+
+    public static String getToken(){
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) requestAttributes;
+        HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
+        String token = httpServletRequest.getHeader("TOKEN");
+        if (StringUtils.isEmpty(token)){
+            throw new MyException(ResultEnum.TOKEN_NOT_EXIST);
+        }
+        return token;
     }
 }

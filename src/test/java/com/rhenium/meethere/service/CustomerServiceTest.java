@@ -7,6 +7,7 @@ import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.CustomerServiceImpl;
 import com.rhenium.meethere.util.CheckCodeUtil;
 import com.rhenium.meethere.util.JwtUtil;
+import com.sun.mail.iap.Argument;
 import mockit.MockUp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -188,7 +189,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("当用户邮箱已存在时，抛出异常")
+    @DisplayName("注册时，当用户邮箱已存在时，抛出异常")
     void shouldThrowExceptionWhenRegisteringUserExists(){
         Customer customer = new Customer();
         when(customerDao.findCustomerByEmail(anyString())).thenReturn(customer);
@@ -198,7 +199,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("注册的为新用户则发送邮件")
+    @DisplayName("注册时，注册的为新用户则发送邮件")
     void shouldSendEmailWhenUserIsNew(){
         customerService.sendCheckCode("10175101152@stu.ecnu.edu.cn");
         verify(mailService, times(1)).
@@ -206,7 +207,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("发送邮件内容正确")
+    @DisplayName("注册时，发送邮件内容正确")
     void shouldSendCorrectEmailWhenUserIsNew(){
         // 使用JMockit对静态方法进行打桩
         new MockUp<CheckCodeUtil>(){
@@ -230,7 +231,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("当用户的验证码为空时，抛出异常")
+    @DisplayName("注册时，当用户的验证码为空时，抛出异常")
     void shouldThrowExceptionWhenCheckCodeIsNull(){
         CustomerRequest customerRequest = CustomerRequest.builder()
                 .userName("user")
@@ -243,7 +244,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("当用户验证码和数据库中不匹配时，抛出异常")
+    @DisplayName("注册时，当用户验证码和数据库中不匹配时，抛出异常")
     void shouldThrowExceptionWhenCheckCodeNotMatch(){
         CustomerRequest customerRequest = CustomerRequest
                 .builder().userName("user")
@@ -257,7 +258,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("当用户验证码匹配时，完成注册")
+    @DisplayName("注册时，当用户验证码匹配时，完成注册")
     void shouldRegisterUserWhenCheckCodeMatches(){
         ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
         CustomerRequest customerRequest = CustomerRequest.builder()
@@ -277,7 +278,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("当登录用户不存在时，抛出异常")
+    @DisplayName("登录时，当登录用户不存在时，抛出异常")
     void shouldThrowExceptionWhenLoginUserNotExist(){
         CustomerRequest customerRequest = CustomerRequest.builder()
                 .email("10175101152@stu.ecnu.edu.cn").password("123456").build();
@@ -287,7 +288,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("当登录用户密码错误时，抛出异常")
+    @DisplayName("登录时，当登录用户密码错误时，抛出异常")
     void shouldThrowExceptionWhenLoginWithWrongPassword(){
         Customer mockedCustomer = Customer.builder()
                 .password("456789").build();
@@ -300,7 +301,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("当登录密码正确时，允许登录并返回正确登录信息")
+    @DisplayName("登录时，当登录密码正确时，允许登录并返回正确登录信息")
     void shouldReturnCorrectLoginInfoWhenPasswordIsRight(){
         Customer mockedCustomer = Customer.builder()
                 .customerId(6)
@@ -324,29 +325,81 @@ class CustomerServiceTest {
     }
 
     // TODO: 修改成新版本
-//    @Test
-//    @DisplayName("当将要更新的用户名为空时，抛出异常")
-//    void shouldThrowExceptionWhenUpdatingWithEmptyUserName(){
-//        CustomerRequest customerRequest = CustomerRequest.builder()
-//                .customerId(6).build();
-//        Throwable exception = assertThrows(MyException.class,
-//                () -> customerService.updateUserName(customerRequest));
-//        assertEquals("用户名不允许为空", exception.getMessage());
-//    }
-//
-//    @Test
-//    @DisplayName("确保更新的用户名正确")
-//    void shouldUpdateUserNameCorrectly(){
-//        CustomerRequest customerRequest = CustomerRequest.builder()
-//                .customerId(6).userName("root").build();
-//        ArgumentCaptor<Customer> customerArgumentCaptor =
-//                ArgumentCaptor.forClass(Customer.class);
-//        customerService.updateUserName(customerRequest);
-//        verify(customerDao, times(1)).
-//                updateUserName(customerArgumentCaptor.capture());
-//        assertAll(
-//                () -> assertEquals(6, customerArgumentCaptor.getValue().getCustomerId()),
-//                () -> assertEquals("root", customerArgumentCaptor.getValue().getUserName())
-//        );
-//    }
+    @Test
+    @DisplayName("更新用户信息时，当将要更新的用户名为空时，抛出异常")
+    void shouldThrowExceptionWhenSaveUserInfoWithEmptyUserName(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(6).build();
+        Throwable exception = assertThrows(MyException.class,
+                () -> customerService.saveUserInfo(customerRequest));
+        assertEquals("用户名不允许为空", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("更新用户信息时，确保用户更新正确信息")
+    void shouldUpdateCorrectInfoWhenSaveUserInfo(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(6).userName("user").phoneNumber("18900001111").build();
+        customerService.saveUserInfo(customerRequest);
+        ArgumentCaptor<String> customerIdCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> userNameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> phoneNumberCaptor = ArgumentCaptor.forClass(String.class);
+        verify(customerDao, times(1))
+                .saveCustomerInfo( customerIdCaptor.capture(),
+                                    userNameCaptor.capture(),
+                                    phoneNumberCaptor.capture());
+        assertAll(
+                () -> assertEquals("6", customerIdCaptor.getValue()),
+                () -> assertEquals("user", userNameCaptor.getValue()),
+                () -> assertEquals("18900001111", phoneNumberCaptor.getValue())
+        );
+    }
+
+    @Test
+    @DisplayName("修改密码时，当用户修改的新密码为空时，抛出异常")
+    void shouldThrowExceptionWhenChangePasswordWithEmptyPassword(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(6).password("123456").build();
+        Throwable exception = assertThrows(MyException.class,
+                () -> customerService.changePassword(customerRequest));
+        assertEquals("新密码不允许为空", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("修改密码时，当用户输入的旧密码错误时，抛出异常")
+    void shouldThrowExceptionWhenChangePasswordWithWrongPassword(){
+        Customer customer = Customer.builder()
+                .customerId(6)
+                .password("$2a$10$S1wJ1fbSdi7zymmqMAHNRORkBnrmElDWF55mwUrOMY5QiCzgJQ81q")
+                .build();
+        when(customerDao.findCustomerById(anyInt())).thenReturn(customer);
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(6).password("456789").newPassword("123456").build();
+        Throwable exception = assertThrows(MyException.class,
+                () -> customerService.changePassword(customerRequest));
+        assertEquals("密码错误", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("修改密码时，当旧密码正确且新密码不为空时，修改成功")
+    void shouldSaveCorrectPasswordWhenChangePassword(){
+        Customer customer = Customer.builder()
+                .customerId(6)
+                .password("$2a$10$Ebx04j4OxmRbnfEnXx4fiuWITXR14esb5WQWCJHIEphO30l9WI2yq")
+                .build();
+        when(customerDao.findCustomerById(anyInt())).thenReturn(customer);
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(6)
+                .password("123456")
+                .newPassword("456789").build();
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+        customerService.changePassword(customerRequest);
+        verify(customerDao, times(1))
+                .saveNewPassword(customerArgumentCaptor.capture());
+        assertAll(
+                () -> assertEquals(6, customerArgumentCaptor.getValue().getCustomerId()),
+                () -> assertTrue(encoder.matches("456789", customerArgumentCaptor.getValue().getPassword()))
+        );
+    }
+
 }

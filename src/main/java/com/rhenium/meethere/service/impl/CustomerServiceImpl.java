@@ -79,7 +79,6 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.isEmpty(customerRequest.getUserName())){
             throw new MyException(ResultEnum.USER_NAME_EMPTY);
         }
-
         // 因为拦截在控制器之前就已经完成，所以该 customerId 是值得信任的
         customerDao.saveCustomerInfo(customerRequest.getCustomerId().toString(), customerRequest.getUserName(), customerRequest.getPhoneNumber());
     }
@@ -107,5 +106,19 @@ public class CustomerServiceImpl implements CustomerService {
         loginInfo.put("email", email);
         loginInfo.put("userName", userName);
         return loginInfo;
+    }
+
+    @Override
+    public void changePassword(CustomerRequest customerRequest) {
+        String newPassword = customerRequest.getNewPassword();
+        if (StringUtils.isEmpty(newPassword)){
+            throw new MyException(ResultEnum.NEW_PASSWORD_EMPTY);
+        }
+        Customer customer = customerDao.findCustomerById(customerRequest.getCustomerId());
+        if (!encoder.matches(customerRequest.getPassword(), customer.getPassword())){
+            throw new MyException(ResultEnum.PASSWORD_ERROR);
+        }
+        customer.setPassword(encoder.encode(newPassword));
+        customerDao.saveNewPassword(customer);
     }
 }

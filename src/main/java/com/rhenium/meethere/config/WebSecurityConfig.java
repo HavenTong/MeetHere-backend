@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/**").permitAll()
                 // 暂且允许所有请求
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 // disable对CSRF的防护
                 .and().csrf().disable();
     }

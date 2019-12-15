@@ -16,10 +16,14 @@ public interface CustomerDao {
     @Select("SELECT * FROM customer WHERE email = #{email}")
     Customer findCustomerByEmail(@Param("email") String email);
 
+    @Select("SELECT * FROM customer WHERE customerId = #{id}")
+    Customer findCustomerById(@Param("id") String id);
+
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")
-    int saveCustomer(Customer customer);
+    int saveNewCustomer(Customer customer);
 
-    @Update("UPDATE customer SET user_name = #{userName} WHERE customer_id = #{customerId} ")
-    int updateUserName(Customer customer);
+    @Update("UPDATE customer SET user_name = #{userName}, phone_number = #{phoneNumber} WHERE customer_id = #{id}")
+    int saveCustomerInfo(@Param("id") String id, @Param("userName") String userName, @Param("phoneNumber") String phoneNumber);
+
 }

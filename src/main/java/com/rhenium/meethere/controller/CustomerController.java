@@ -28,7 +28,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @RequestMapping(value = "check-code", method = RequestMethod.POST)
-    public ResultEntity sendCheckCode(@RequestParam String email){
+    public ResultEntity sendCheckCode(@RequestParam String email) {
         customerService.sendCheckCode(email);
         return ResultEntity.succeed();
     }
@@ -44,14 +44,12 @@ public class CustomerController {
         return customerService.login(customerRequest);
     }
 
-    @PutMapping("/update-user-name")
+    @PostMapping("/save-user-info")
     @LoginRequired
-    public ResultEntity updateUserName(@RequestBody CustomerRequest customerRequest){
-        customerService.updateUserName(customerRequest);
+    public ResultEntity saveUserInfo(@RequestBody CustomerRequest customerRequest) {
+        customerService.saveUserInfo(customerRequest);
         return ResultEntity.succeed();
     }
-
-
 
     /**
      * 非业务接口，仅仅便于获得某个用户的JWT进行测试

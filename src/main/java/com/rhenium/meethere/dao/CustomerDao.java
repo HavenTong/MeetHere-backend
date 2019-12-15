@@ -16,8 +16,8 @@ public interface CustomerDao {
     @Select("SELECT * FROM customer WHERE email = #{email}")
     Customer findCustomerByEmail(@Param("email") String email);
 
-    @Select("SELECT * FROM customer WHERE customerId = #{id}")
-    Customer findCustomerById(@Param("id") String id);
+    @Select("SELECT * FROM customer WHERE customer_id = #{id}")
+    Customer findCustomerById(@Param("id") Integer id);
 
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")
@@ -26,4 +26,6 @@ public interface CustomerDao {
     @Update("UPDATE customer SET user_name = #{userName}, phone_number = #{phoneNumber} WHERE customer_id = #{id}")
     int saveCustomerInfo(@Param("id") String id, @Param("userName") String userName, @Param("phoneNumber") String phoneNumber);
 
+    @Update("UPDATE customer SET password = #{password} WHERE customer_id = #{customerId}")
+    int saveNewPassword(Customer customer);
 }

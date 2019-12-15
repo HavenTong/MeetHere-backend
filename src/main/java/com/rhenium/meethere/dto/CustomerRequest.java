@@ -24,5 +24,6 @@ public class CustomerRequest {
     private String phoneNumber;
     private String userName;
     private String password;
+    private String newPassword;
     private String checkCode;
 }

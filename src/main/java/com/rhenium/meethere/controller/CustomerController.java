@@ -1,18 +1,15 @@
 package com.rhenium.meethere.controller;
 
-import com.rhenium.meethere.annotation.LoginRequired;
+import com.rhenium.meethere.annotation.UserLoginRequired;
 import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.dto.CustomerRequest;
-import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.CustomerService;
-import com.rhenium.meethere.util.CheckCodeUtil;
 import com.rhenium.meethere.util.JwtUtil;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.transform.Result;
 import java.util.Map;
 
 /**
@@ -45,11 +42,19 @@ public class CustomerController {
     }
 
     @PostMapping("/save-user-info")
-    @LoginRequired
+    @UserLoginRequired
     public ResultEntity saveUserInfo(@RequestBody CustomerRequest customerRequest) {
         customerService.saveUserInfo(customerRequest);
         return ResultEntity.succeed();
     }
+
+    @PostMapping("/change-password")
+    @UserLoginRequired
+    public ResultEntity changePassword(@RequestBody CustomerRequest customerRequest){
+        customerService.changePassword(customerRequest);
+        return ResultEntity.succeed();
+    }
+
 
     /**
      * 非业务接口，仅仅便于获得某个用户的JWT进行测试

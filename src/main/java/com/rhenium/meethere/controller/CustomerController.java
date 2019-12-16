@@ -37,8 +37,9 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody CustomerRequest customerRequest){
-        return customerService.login(customerRequest);
+    public ResultEntity login(@RequestBody CustomerRequest customerRequest){
+        Map<String, String> loginInfo = customerService.login(customerRequest);
+        return ResultEntity.succeed(loginInfo);
     }
 
     @PostMapping("/save-user-info")

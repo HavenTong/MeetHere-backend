@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * @author HavenTong
  * @date 2019/12/14 11:22 上午
- * 如果controller中的操作需要登录才可以进行，则在该方法上加上注解
+ * 如果controller中的操作需要用户登录才可以进行，则在该方法上加上注解
  */
 @Target({ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)

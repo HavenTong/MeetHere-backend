@@ -9,14 +9,17 @@ import com.rhenium.meethere.service.CustomerService;
 import com.rhenium.meethere.service.MailService;
 import com.rhenium.meethere.util.CheckCodeUtil;
 import com.rhenium.meethere.util.JwtUtil;
+import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -101,10 +104,16 @@ public class CustomerServiceImpl implements CustomerService {
         String customerId = customer.getCustomerId().toString();
         String email = customer.getEmail();
         String userName = customer.getUserName();
+        String phoneNumber = customer.getPhoneNumber();
+        DateTimeFormatter dft = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime registeredTime = customer.getRegisteredTime();
+        String dateString = registeredTime.format(dft);
         loginInfo.put("token", token);
         loginInfo.put("customerId", customerId);
         loginInfo.put("email", email);
         loginInfo.put("userName", userName);
+        loginInfo.put("phoneNumber", phoneNumber);
+        loginInfo.put("registeredTime", dateString);
         return loginInfo;
     }
 

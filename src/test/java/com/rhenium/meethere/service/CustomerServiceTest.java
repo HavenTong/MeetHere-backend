@@ -24,6 +24,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
@@ -308,6 +309,8 @@ class CustomerServiceTest {
                 .email("10175101152@stu.ecnu.edu.cn")
                 .userName("root")
                 .password("$2a$10$lU2Cx08u/4ovjHpf/aFzhe9EdayhH3ZyYR9ThAXaXV8CuKN.ZtvAy")
+                .phoneNumber("18900001111")
+                .registeredTime(LocalDateTime.of(2019, 12, 21, 14, 30, 30))
                 .build();
         CustomerRequest customerRequest = CustomerRequest.builder()
                 .email("10175101152@stu.ecnu.edu.cn")
@@ -320,7 +323,9 @@ class CustomerServiceTest {
                 () -> assertEquals(token, loginInfo.get("token")),
                 () -> assertEquals("6", loginInfo.get("customerId")),
                 () -> assertEquals("10175101152@stu.ecnu.edu.cn", loginInfo.get("email")),
-                () -> assertEquals("root", loginInfo.get("userName"))
+                () -> assertEquals("root", loginInfo.get("userName")),
+                () -> assertEquals("18900001111", loginInfo.get("phoneNumber")),
+                () -> assertEquals("2019-12-21", loginInfo.get("registeredTime"))
         );
     }
 

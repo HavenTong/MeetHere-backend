@@ -1,6 +1,7 @@
 package com.rhenium.meethere.service;
 
 import com.rhenium.meethere.dto.CustomerRequest;
+import com.rhenium.meethere.vo.ResultEntity;
 
 import java.util.Map;
 

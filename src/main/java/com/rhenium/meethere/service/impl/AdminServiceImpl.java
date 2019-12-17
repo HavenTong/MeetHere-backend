@@ -61,6 +61,7 @@ public class AdminServiceImpl implements AdminService {
         return data;
     }
 
+    // TODO: 测试脚本
     @Override
     public Map<String, String> login(AdminRequest adminRequest) {
         Admin admin = adminDao.findAdminByEmail(adminRequest.getEmail());

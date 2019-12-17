@@ -24,13 +24,13 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<News> listNewsItems(int offset, int limit) {
-        if (offset < 1){
+        if (offset < 0){
             throw new MyException(ResultEnum.INVALID_OFFSET);
         }
         if (limit < 1){
             throw new MyException(ResultEnum.INVALID_LIMIT);
         }
-        int itemOffset = (offset - 1) * limit;
+        int itemOffset = offset * limit;
         return newsDao.findNewsByOffsetAndLimit(itemOffset, limit);
     }
 }

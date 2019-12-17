@@ -130,4 +130,9 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPassword(encoder.encode(newPassword));
         customerDao.saveNewPassword(customer);
     }
+
+    @Override
+    public Customer getOne(String email) {
+        return customerDao.findCustomerByEmail(email);
+    }
 }

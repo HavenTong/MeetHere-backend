@@ -15,6 +15,10 @@ public enum ResultEnum {
     /**
      * 在这里可以一直添加异常类型的枚举
      */
+
+    /**
+     * Customer Related
+     */
     EMAIL_EXISTS(1001, "邮箱已被使用"),
     CHECK_CODE_ERROR(1002, "验证码错误"),
     EMAIL_NO_CHECK_CODE(1003, "邮箱未发送验证码或验证码已失效"),
@@ -25,6 +29,12 @@ public enum ResultEnum {
     PASSWORD_ERROR(1008, "密码错误"),
     USER_NAME_EMPTY(1009, "用户名不允许为空"),
     NEW_PASSWORD_EMPTY(1010, "新密码不允许为空"),
+
+    /**
+     * News Related
+     */
+    INVALID_OFFSET(2001, "页数必须为正整数"),
+    INVALID_LIMIT(2002, "每页条目数必须为正整数")
     ;
 
     private Integer code;

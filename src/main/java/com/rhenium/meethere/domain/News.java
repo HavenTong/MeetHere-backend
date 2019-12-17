@@ -1,8 +1,10 @@
 package com.rhenium.meethere.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,6 +22,9 @@ public class News implements Serializable {
     private Integer newsId;
     private String newsTitle;
     private Integer adminId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime newsPostTime;
     private String newsContent;
 }

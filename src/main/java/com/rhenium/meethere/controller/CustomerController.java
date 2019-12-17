@@ -24,7 +24,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @RequestMapping(value = "check-code", method = RequestMethod.GET)
+    @GetMapping("/check-code")
     public ResultEntity sendCheckCode(@RequestParam String email) {
         customerService.sendCheckCode(email);
         return ResultEntity.succeed();
@@ -55,6 +55,16 @@ public class CustomerController {
         customerService.changePassword(customerRequest);
         return ResultEntity.succeed();
     }
+
+
+    // Testing
+    // 可以接收并成功验证
+//    @GetMapping("/get-one")
+//    @UserLoginRequired
+//    public ResultEntity getOne(@RequestParam String email, @RequestBody CustomerRequest customerRequest){
+//        Customer customer = customerService.getOne(email);
+//        return ResultEntity.succeed(customer);
+//    }
 
 
     /**

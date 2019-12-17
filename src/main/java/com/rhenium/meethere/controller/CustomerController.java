@@ -24,7 +24,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @RequestMapping(value = "check-code", method = RequestMethod.POST)
+    @RequestMapping(value = "check-code", method = RequestMethod.GET)
     public ResultEntity sendCheckCode(@RequestParam String email) {
         customerService.sendCheckCode(email);
         return ResultEntity.succeed();

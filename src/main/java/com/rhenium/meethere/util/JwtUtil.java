@@ -1,5 +1,6 @@
 package com.rhenium.meethere.util;
 
+import com.rhenium.meethere.domain.Admin;
 import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
@@ -30,6 +31,21 @@ public class JwtUtil {
         long current = System.currentTimeMillis();
         JwtBuilder builder = Jwts.builder()
                 .setId(customer.getCustomerId().toString())
+                .setIssuedAt(new Date(current))
+                .signWith(SignatureAlgorithm.HS256, KEY)
+                .setExpiration(new Date(current + ttl));
+        return builder.compact();
+    }
+
+    /**
+     * 通过Admin生成JWT
+     * @param admin Admin类型的参数，登录时将adminId编码到JWT中返回
+     * @return 返回通过adminId生成的JWT
+     */
+    public static String createJwt(Admin admin){
+        long current = System.currentTimeMillis();
+        JwtBuilder builder = Jwts.builder()
+                .setId(admin.getAdminId().toString())
                 .setIssuedAt(new Date(current))
                 .signWith(SignatureAlgorithm.HS256, KEY)
                 .setExpiration(new Date(current + ttl));

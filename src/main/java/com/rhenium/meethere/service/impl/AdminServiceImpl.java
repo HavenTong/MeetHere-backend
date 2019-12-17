@@ -53,6 +53,7 @@ public class AdminServiceImpl implements AdminService {
             customerInfo.put("registeredTime",String.valueOf(customer.getRegisteredTime()));
             customerInfo.put("userName",String.valueOf(customer.getUserName()));
             customerInfo.put("email",String.valueOf(customer.getEmail()));
+            customerInfo.put("phoneNumber",String.valueOf(customer.getPhoneNumber()));
             data.add(customerInfo);
         }
         return data;

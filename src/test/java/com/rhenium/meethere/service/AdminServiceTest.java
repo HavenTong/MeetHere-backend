@@ -11,6 +11,8 @@ import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -37,9 +39,9 @@ class AdminServiceTest {
     @DisplayName("获取用户数量时，获取结果正确")
     void shouldGetCorrectUserCount(){
         when(customerDao.getUserCount()).thenReturn(3);
-        int result = adminService.getUserCount();
+        Map<String, String> result = adminService.getUserCount();
         verify(customerDao, times(1))
                 .getUserCount();
-        assertEquals(3, result);
+        assertEquals("3", result.get("count"));
     }
 }

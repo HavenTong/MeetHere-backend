@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +52,7 @@ public class AdminServiceImpl implements AdminService {
         for (Customer customer : customers) {
             Map<String, String> customerInfo = new HashMap<>(limit);
             customerInfo.put("customerId", String.valueOf(customer.getCustomerId()));
-            customerInfo.put("registeredTime", String.valueOf(customer.getRegisteredTime()));
+            customerInfo.put("registeredTime", customer.getRegisteredTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             customerInfo.put("userName", customer.getUserName());
             customerInfo.put("email", customer.getEmail());
             String phoneNumber = customer.getPhoneNumber() != null ? customer.getPhoneNumber() : "空";

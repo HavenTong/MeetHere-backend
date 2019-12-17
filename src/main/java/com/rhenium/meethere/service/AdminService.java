@@ -3,6 +3,7 @@ package com.rhenium.meethere.service;
 import com.rhenium.meethere.dto.AdminRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +18,9 @@ public interface AdminService {
      * 获取注册的用户个数
      * @return 注册的用户个数
      */
-    int getUserCount();
+    Map<String, String> getUserCount();
+
+    List<Map<String, String>> getUsers(int offset, int limit);
 
     Map<String, String> login(AdminRequest adminRequest);
 }

@@ -25,7 +25,7 @@ public interface CustomerDao {
     int getUserCount();
 
     @Select("SELECT * FROM customer ORDER BY customerId LIMIT #{offset}, #{limit}")
-    List<Customer> getUsers(@Param("offset") int offset, @Param("limit") int limit);
+    List<Customer> getUserList(@Param("offset") int offset, @Param("limit") int limit);
 
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")

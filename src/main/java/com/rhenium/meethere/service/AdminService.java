@@ -20,7 +20,7 @@ public interface AdminService {
      */
     Map<String, String> getUserCount();
 
-    List<Map<String, String>> getUsers(int offset, int limit);
+    List<Map<String, String>> getUserList(int offset, int limit);
 
     Map<String, String> login(AdminRequest adminRequest);
 }

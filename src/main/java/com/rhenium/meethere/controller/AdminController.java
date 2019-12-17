@@ -30,9 +30,9 @@ public class AdminController {
     }
 
     // TODO: 管理员的请求也应该被检测，另外，id 应该作为 param 还是 body?(暂时没传)
-    @RequestMapping(value = "/get-users", method = RequestMethod.GET)
-    public ResultEntity getUsers(@RequestParam int offset, @RequestParam int limit) {
-        List<Map<String, String>> data = adminService.getUsers(offset, limit);
+    @RequestMapping(value = "/get-user-list", method = RequestMethod.GET)
+    public ResultEntity getUserList(@RequestParam int offset, @RequestParam int limit) {
+        List<Map<String, String>> data = adminService.getUserList(offset, limit);
         return ResultEntity.succeed(data);
     }
 

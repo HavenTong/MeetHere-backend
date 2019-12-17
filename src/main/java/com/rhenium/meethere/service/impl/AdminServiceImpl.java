@@ -44,8 +44,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Map<String, String>> getUsers(int offset, int limit) {
-        List<Customer> customers = customerDao.getUsers(offset, limit);
+    public List<Map<String, String>> getUserList(int offset, int limit) {
+        List<Customer> customers = customerDao.getUserList(offset, limit);
         List<Map<String, String>> data = new ArrayList<>();
         for (Customer customer : customers) {
             Map<String, String> customerInfo = new HashMap<>(limit);

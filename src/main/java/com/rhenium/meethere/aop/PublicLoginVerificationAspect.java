@@ -6,6 +6,7 @@ import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.ognl.ObjectElementsAccessor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author HavenTong
@@ -32,14 +35,10 @@ public class PublicLoginVerificationAspect {
         Claims claims = JwtUtil.parseJwt(token);
         Integer decodedId = Integer.parseInt(claims.getId());
         Object[] arguments = joinPoint.getArgs();
-        for (Object argument : arguments){
-            if (argument instanceof PublicRequest){
-                Integer actualId = ((PublicRequest) argument).getUserId();
-                if (!decodedId.equals(actualId)){
-                    throw new MyException(ResultEnum.TOKEN_NOT_MATCH);
-                }
-                break;
-            }
+        Integer queryId = (Integer)arguments[arguments.length - 1];
+        if (!decodedId.equals(queryId)){
+            throw new MyException(ResultEnum.TOKEN_NOT_MATCH);
         }
     }
+
 }

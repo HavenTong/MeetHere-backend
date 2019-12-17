@@ -25,7 +25,7 @@ public class NewsController {
     @PublicLoginRequired
     public ResultEntity listNewsItems(@RequestParam int offset,
                                       @RequestParam int limit,
-                                      @RequestBody PublicRequest publicRequest){
+                                      @RequestParam int userId){
         List<News> newsList = newsService.listNewsItems(offset, limit);
         return ResultEntity.succeed(newsList);
     }

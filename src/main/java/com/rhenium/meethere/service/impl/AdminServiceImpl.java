@@ -3,6 +3,7 @@ package com.rhenium.meethere.service.impl;
 import com.rhenium.meethere.dao.AdminDao;
 import com.rhenium.meethere.dao.CustomerDao;
 import com.rhenium.meethere.domain.Admin;
+import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,17 +37,35 @@ public class AdminServiceImpl implements AdminService {
     private BCryptPasswordEncoder encoder;
 
     @Override
-    public int getUserCount() {
-        return customerDao.getUserCount();
+    public Map<String, String> getUserCount() {
+        Map<String, String> data = new HashMap<>();
+        data.put("count", String.valueOf(customerDao.getUserCount()));
+        return data;
+    }
+
+    @Override
+    public List<Map<String, String>> getUserList(int offset, int limit) {
+        List<Customer> customers = customerDao.getUserList(offset, limit);
+        List<Map<String, String>> data = new ArrayList<>();
+        for (Customer customer : customers) {
+            Map<String, String> customerInfo = new HashMap<>(limit);
+            customerInfo.put("customerId",String.valueOf(customer.getCustomerId()));
+            customerInfo.put("registeredTime",String.valueOf(customer.getRegisteredTime()));
+            customerInfo.put("userName",String.valueOf(customer.getUserName()));
+            customerInfo.put("email",String.valueOf(customer.getEmail()));
+            customerInfo.put("phoneNumber",String.valueOf(customer.getPhoneNumber()));
+            data.add(customerInfo);
+        }
+        return data;
     }
 
     @Override
     public Map<String, String> login(AdminRequest adminRequest) {
         Admin admin = adminDao.findAdminByEmail(adminRequest.getEmail());
-        if (admin == null){
+        if (admin == null) {
             throw new MyException(ResultEnum.USER_NOT_EXIST);
         }
-        if (!encoder.matches(adminRequest.getPassword(), admin.getPassword())){
+        if (!encoder.matches(adminRequest.getPassword(), admin.getPassword())) {
             throw new MyException(ResultEnum.PASSWORD_ERROR);
         }
         Map<String, String> adminLoginInfo = new HashMap<>();

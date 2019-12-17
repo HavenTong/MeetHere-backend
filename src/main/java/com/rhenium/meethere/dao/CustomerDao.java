@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /**
  * @author HavenTong
  * @date 2019/12/7 9:43 下午
@@ -21,6 +23,9 @@ public interface CustomerDao {
 
     @Select("SELECT COUNT(*) FROM customer")
     int getUserCount();
+
+    @Select("SELECT * FROM customer ORDER BY customer_Id LIMIT #{offset}, #{limit}")
+    List<Customer> getUserList(@Param("offset") int offset, @Param("limit") int limit);
 
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")

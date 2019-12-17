@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,14 +23,22 @@ public class AdminController {
     private AdminService adminService;
 
     // TODO: 管理员的请求也应该被检测
-    @RequestMapping(value = "get-user-count", method = RequestMethod.GET)
+    @RequestMapping(value = "/get-user-count", method = RequestMethod.GET)
     public ResultEntity getUserCount() {
-        int count = adminService.getUserCount();
-        return ResultEntity.succeed(count);
+        Map<String, String> data = adminService.getUserCount();
+        return ResultEntity.succeed(data);
     }
 
+    // TODO: 管理员的请求也应该被检测，另外，id 应该作为 param 还是 body?(暂时没传)
+    @RequestMapping(value = "/get-user-list", method = RequestMethod.GET)
+    public ResultEntity getUserList(@RequestParam int offset, @RequestParam int limit) {
+        List<Map<String, String>> data = adminService.getUserList(offset, limit);
+        return ResultEntity.succeed(data);
+    }
+
+
     @PostMapping("/login")
-    public ResultEntity login(@RequestBody AdminRequest adminRequest){
+    public ResultEntity login(@RequestBody AdminRequest adminRequest) {
         Map<String, String> loginInfo = adminService.login(adminRequest);
         return ResultEntity.succeed(loginInfo);
     }

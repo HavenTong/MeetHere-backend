@@ -1,5 +1,6 @@
 package com.rhenium.meethere.service;
 
+import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.vo.ResultEntity;
 
@@ -20,4 +21,6 @@ public interface CustomerService {
     void saveUserInfo(CustomerRequest customerRequest);
 
     void changePassword(CustomerRequest customerRequest);
+
+    Customer getOne(String email);
 }

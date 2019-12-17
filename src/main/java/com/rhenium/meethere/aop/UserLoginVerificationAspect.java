@@ -31,10 +31,10 @@ import java.net.http.HttpRequest;
 @Slf4j
 public class UserLoginVerificationAspect {
     @Pointcut("@annotation(com.rhenium.meethere.annotation.UserLoginRequired)")
-    public void verifyLoginPoint(){}
+    public void verifyUserLoginPoint(){}
 
-    @Before("verifyLoginPoint()")
-    public void verifyLogin(JoinPoint joinPoint){
+    @Before("verifyUserLoginPoint()")
+    public void verifyUserLogin(JoinPoint joinPoint){
         String token = JwtUtil.getToken();
         Claims claims = JwtUtil.parseJwt(token);
         Integer decodedCustomerId = Integer.parseInt(claims.getId());

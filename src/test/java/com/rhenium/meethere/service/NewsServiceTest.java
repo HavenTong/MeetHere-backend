@@ -37,7 +37,7 @@ class NewsServiceTest {
         PublicRequest publicRequest = PublicRequest.builder()
                 .userId(6).build();
         Throwable exception = assertThrows(MyException.class,
-                () -> newsService.listNewsItems(0, 3));
+                () -> newsService.listNewsItems(-1, 3));
         assertEquals("页数必须为正整数", exception.getMessage());
     }
 
@@ -58,7 +58,7 @@ class NewsServiceTest {
                 .userId(6).build();
         ArgumentCaptor<Integer> offsetCaptor = ArgumentCaptor.forClass(Integer.class);
         ArgumentCaptor<Integer> limitCaptor = ArgumentCaptor.forClass(Integer.class);
-        List<News> list =  newsService.listNewsItems(1,3);
+        List<News> list =  newsService.listNewsItems(0,3);
         verify(newsDao, times(1))
                 .findNewsByOffsetAndLimit(offsetCaptor.capture(), limitCaptor.capture());
         assertAll(

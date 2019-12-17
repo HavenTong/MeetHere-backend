@@ -19,6 +19,9 @@ public interface CustomerDao {
     @Select("SELECT * FROM customer WHERE customer_id = #{id}")
     Customer findCustomerById(@Param("id") Integer id);
 
+    @Select("SELECT COUNT(*) FROM customer")
+    int getUserCount();
+
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")
     int saveNewCustomer(Customer customer);

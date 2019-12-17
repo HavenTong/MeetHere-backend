@@ -49,11 +49,13 @@ public class AdminServiceImpl implements AdminService {
         List<Map<String, String>> data = new ArrayList<>();
         for (Customer customer : customers) {
             Map<String, String> customerInfo = new HashMap<>(limit);
-            customerInfo.put("customerId",String.valueOf(customer.getCustomerId()));
-            customerInfo.put("registeredTime",String.valueOf(customer.getRegisteredTime()));
-            customerInfo.put("userName",String.valueOf(customer.getUserName()));
-            customerInfo.put("email",String.valueOf(customer.getEmail()));
-            customerInfo.put("phoneNumber",String.valueOf(customer.getPhoneNumber()));
+            customerInfo.put("customerId", String.valueOf(customer.getCustomerId()));
+            customerInfo.put("registeredTime", String.valueOf(customer.getRegisteredTime()));
+            customerInfo.put("userName", customer.getUserName());
+            customerInfo.put("email", customer.getEmail());
+            String phoneNumber = customer.getPhoneNumber() != null ? customer.getPhoneNumber() : "空";
+            customerInfo.put("phoneNumber", phoneNumber);
+
             data.add(customerInfo);
         }
         return data;

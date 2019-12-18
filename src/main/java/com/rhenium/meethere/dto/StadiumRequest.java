@@ -1,5 +1,7 @@
 package com.rhenium.meethere.dto;
 
+import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.enums.StadiumTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +23,9 @@ public class StadiumRequest {
     private String description;
     private double price;
     private String picture;
+
+
+    public StadiumRequest(Stadium stadium) {
+        this(stadium.getStadiumId(), stadium.getStadiumName(), stadium.getType(), StadiumTypeEnum.getByCode(stadium.getType()).getType(), stadium.getLocation(), stadium.getDescription(), stadium.getPrice(), stadium.getPicture());
+    }
 }

@@ -20,6 +20,11 @@ public class StadiumServiceImpl implements StadiumService {
 
     @Override
     public ArrayList<Stadium> listStadiumItems() {
-        return stadiumDao.getAllStadium();
+        return stadiumDao.getStadiumList();
+    }
+
+    @Override
+    public Stadium getStadiumById(Integer id) {
+        return stadiumDao.getStadiumById(id);
     }
 }

@@ -23,4 +23,6 @@ public interface AdminService {
     List<Map<String, String>> getUserList(int offset, int limit);
 
     Map<String, String> login(AdminRequest adminRequest);
+
+    void deleteUser(AdminRequest adminRequest);
 }

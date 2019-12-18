@@ -23,4 +23,9 @@ public class AdminRequest {
     private String phoneNumber;
     private String adminName;
     private String password;
+
+    /**
+     * 当管理员需要对用户进行一些操作时需要匹配 customerId.
+     */
+    private Integer customerId;
 }

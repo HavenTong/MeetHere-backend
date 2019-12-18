@@ -36,4 +36,7 @@ public interface CustomerDao {
 
     @Update("UPDATE customer SET password = #{password} WHERE customer_id = #{customerId}")
     int saveNewPassword(Customer customer);
+
+    @Delete("DELETE FROM customer WHERE customer_id = #{customerId}")
+    void deleteCustomerById(@Param("customerId") int customerId);
 }

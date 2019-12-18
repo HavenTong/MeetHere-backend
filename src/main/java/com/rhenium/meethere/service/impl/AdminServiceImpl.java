@@ -86,4 +86,10 @@ public class AdminServiceImpl implements AdminService {
         adminLoginInfo.put("phoneNumber", phoneNumber);
         return adminLoginInfo;
     }
+
+    // TODO: 测试脚本
+    @Override
+    public void deleteUser(AdminRequest adminRequest) {
+        customerDao.deleteCustomerById(adminRequest.getCustomerId());
+    }
 }

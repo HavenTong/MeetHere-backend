@@ -1,5 +1,6 @@
 package com.rhenium.meethere.controller;
 
+import com.rhenium.meethere.annotation.AdminLoginRequired;
 import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.service.AdminService;
 import com.rhenium.meethere.vo.ResultEntity;
@@ -34,6 +35,13 @@ public class AdminController {
     public ResultEntity getUserList(@RequestParam int offset, @RequestParam int limit) {
         List<Map<String, String>> data = adminService.getUserList(offset, limit);
         return ResultEntity.succeed(data);
+    }
+
+    @RequestMapping(value = "/delete-user", method = RequestMethod.POST)
+    @AdminLoginRequired
+    public ResultEntity deleteUser(@RequestBody AdminRequest adminRequest) {
+        adminService.deleteUser(adminRequest);
+        return ResultEntity.succeed();
     }
 
 

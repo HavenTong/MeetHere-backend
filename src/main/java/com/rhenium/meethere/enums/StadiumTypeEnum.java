@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StadiumTypeEnum {
-    NONE_STADIUM(-1, "错误"),
+    NONE_STADIUM(-1, "待定分类"),
     TENNIS_BALL_STADIUM(0, "网球场"),
     VOLLEYBALL_STADIUM(1, "排球场");
 

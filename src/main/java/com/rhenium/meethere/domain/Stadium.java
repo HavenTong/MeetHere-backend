@@ -23,4 +23,5 @@ public class Stadium implements Serializable {
     private String location;
     private String description;
     private Double price;
+    private String picture;
 }

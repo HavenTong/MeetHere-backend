@@ -15,7 +15,8 @@ import lombok.Data;
 public class StadiumRequest {
     private Integer stadiumId;
     private String stadiumName;
-    private Integer type;
+    private Integer typeCode;
+    private String typeName;
     private String location;
     private String description;
     private double price;

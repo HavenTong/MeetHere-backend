@@ -3,7 +3,7 @@ package com.rhenium.meethere.controller;
 import com.rhenium.meethere.annotation.UserLoginRequired;
 import com.rhenium.meethere.domain.Comment;
 import com.rhenium.meethere.domain.Stadium;
-import com.rhenium.meethere.dto.StadiumRequest;
+import com.rhenium.meethere.dto.StadiumEntity;
 import com.rhenium.meethere.service.StadiumService;
 import com.rhenium.meethere.vo.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,9 @@ public class StadiumController {
     }
 
     @GetMapping("/message")
-    @UserLoginRequired
+//    @UserLoginRequired
     public ResultEntity getStadiumById(@RequestParam int id) {
-        StadiumRequest stadium = stadiumService.getStadiumById(id);
+        StadiumEntity stadium = stadiumService.getStadiumById(id);
         return ResultEntity.succeed(stadium);
     }
 

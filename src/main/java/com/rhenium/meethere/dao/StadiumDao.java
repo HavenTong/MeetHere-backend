@@ -1,6 +1,7 @@
 package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.StadiumEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,5 +21,5 @@ public interface StadiumDao {
     ArrayList<Stadium> getStadiumList();
 
     @Select("SELECT * FROM stadium WHERE stadium_id = #{id}")
-    Stadium getStadiumById(@Param("id") Integer stadiumId);
+    StadiumEntity getStadiumById(@Param("id") Integer stadiumId);
 }

@@ -20,10 +20,10 @@ public class Comment implements Serializable {
     private Integer commentId;
     private Integer stadiumId;
     private Integer customerId;
-    private String customerName;
 
     private LocalDateTime commentPostTime;
     private String commentContent;
     private Integer likes;
 
+    private Customer customer;
 }

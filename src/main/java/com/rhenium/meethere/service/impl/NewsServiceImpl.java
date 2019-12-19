@@ -37,8 +37,8 @@ public class NewsServiceImpl implements NewsService {
         if (limit < 1){
             throw new MyException(ResultEnum.INVALID_LIMIT);
         }
-        int itemOffset = offset * limit;
-        return newsDao.findNewsByOffsetAndLimit(itemOffset, limit);
+
+        return newsDao.findNewsByOffsetAndLimit(offset, limit);
     }
 
     @Override

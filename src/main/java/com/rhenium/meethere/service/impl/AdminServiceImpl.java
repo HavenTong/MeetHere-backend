@@ -1,8 +1,10 @@
 package com.rhenium.meethere.service.impl;
 
 import com.rhenium.meethere.dao.AdminDao;
+import com.rhenium.meethere.dao.BookingDao;
 import com.rhenium.meethere.dao.CustomerDao;
 import com.rhenium.meethere.domain.Admin;
+import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.enums.ResultEnum;
@@ -14,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminDao adminDao;
+
+    @Autowired
+    private BookingDao bookingDao;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -91,5 +95,17 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteUser(AdminRequest adminRequest) {
         customerDao.deleteCustomerById(adminRequest.getCustomerId());
+    }
+
+    @Override
+    public List<Booking> getBookingList(int offset, int limit) {
+        if (offset < 0){
+            throw new MyException(ResultEnum.INVALID_OFFSET);
+        }
+        if (limit < 1){
+            throw new MyException(ResultEnum.INVALID_LIMIT);
+        }
+        List<Booking> bookingList = bookingDao.getBookingList(offset, limit);
+        return bookingList;
     }
 }

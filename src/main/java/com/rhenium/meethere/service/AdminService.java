@@ -28,4 +28,8 @@ public interface AdminService {
     void deleteUser(AdminRequest adminRequest);
 
     List<Booking> getBookingList(int offset, int limit);
+
+    Map<String, String> getBookingCount();
+
+    void deleteBooking(AdminRequest adminRequest);
 }

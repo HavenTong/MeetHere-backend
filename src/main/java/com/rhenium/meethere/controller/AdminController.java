@@ -45,12 +45,27 @@ public class AdminController {
         return ResultEntity.succeed();
     }
 
+    @RequestMapping(value = "/get-booking-count", method = RequestMethod.GET)
+    @AdminLoginRequired
+    public ResultEntity getBookingCount(@RequestParam int adminId){
+        Map<String, String> data = adminService.getBookingCount();
+        return ResultEntity.succeed(data);
+    }
+
     @RequestMapping(value = "/get-booking-list", method = RequestMethod.GET)
     @AdminLoginRequired
     public ResultEntity getBookingList(@RequestParam int offset, @RequestParam int limit, @RequestParam int adminId) {
         List<Booking> data = adminService.getBookingList(offset, limit);
         return ResultEntity.succeed(data);
     }
+
+    @RequestMapping(value = "/delete-booking", method = RequestMethod.POST)
+    @AdminLoginRequired
+    public ResultEntity deleteBooking(@RequestBody AdminRequest adminRequest) {
+        adminService.deleteBooking(adminRequest);
+        return ResultEntity.succeed();
+    }
+
 
     @PostMapping("/login")
     public ResultEntity login(@RequestBody AdminRequest adminRequest) {

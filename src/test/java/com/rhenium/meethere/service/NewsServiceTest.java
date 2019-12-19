@@ -1,7 +1,10 @@
 package com.rhenium.meethere.service;
 
+import com.rhenium.meethere.dao.AdminDao;
 import com.rhenium.meethere.dao.NewsDao;
+import com.rhenium.meethere.domain.Admin;
 import com.rhenium.meethere.domain.News;
+import com.rhenium.meethere.dto.NewsRequest;
 import com.rhenium.meethere.dto.PublicRequest;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.NewsServiceImpl;
@@ -15,8 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author HavenTong
@@ -27,6 +29,9 @@ class NewsServiceTest {
 
     @Mock
     private NewsDao newsDao;
+
+    @Mock
+    private AdminDao adminDao;
 
     @InjectMocks
     private NewsServiceImpl newsService;
@@ -67,4 +72,88 @@ class NewsServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("发布新闻时，发布信息正确")
+    void shouldPostCorrectNews(){
+        when(adminDao.findAdminById(anyInt())).thenReturn(new Admin());
+        NewsRequest newsRequest = NewsRequest.builder()
+                .newsTitle("title").newsContent("content").adminId(1).build();
+        ArgumentCaptor<NewsRequest> newsCaptor = ArgumentCaptor.forClass(NewsRequest.class);
+        newsService.createNews(newsRequest);
+        verify(newsDao, times(1))
+                .createNews(newsCaptor.capture());
+        assertAll(
+                () -> assertEquals(1, newsCaptor.getValue().getAdminId()),
+                () -> assertEquals("title", newsCaptor.getValue().getNewsTitle()),
+                () -> assertEquals("content", newsCaptor.getValue().getNewsContent())
+        );
+    }
+
+    @Test
+    @DisplayName("发布新闻时，若管理员不存在，抛出异常")
+    void shouldThrowExceptionWhenPostingWithAdminNotExist(){
+        NewsRequest newsRequest = NewsRequest.builder()
+                .adminId(1).build();
+        Throwable exception = assertThrows(MyException.class,
+                () -> newsService.createNews(newsRequest));
+        assertEquals("管理员不存在", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("修改新闻时，修改信息正确")
+    void shouldUpdateCorrectNews(){
+        when(adminDao.findAdminById(anyInt())).thenReturn(new Admin());
+        NewsRequest newsRequest = NewsRequest.builder()
+                .newsContent("update content")
+                .newsTitle("update title")
+                .newsId(1)
+                .adminId(1)
+                .build();
+        ArgumentCaptor<NewsRequest> newsCaptor = ArgumentCaptor.forClass(NewsRequest.class);
+        newsService.updateNews(newsRequest);
+        verify(newsDao, times(1))
+                .updateNews(newsCaptor.capture());
+        assertAll(
+                () -> assertEquals(1, newsCaptor.getValue().getNewsId()),
+                () -> assertEquals("update title", newsCaptor.getValue().getNewsTitle()),
+                () -> assertEquals("update content", newsCaptor.getValue().getNewsContent())
+        );
+    }
+
+    @Test
+    @DisplayName("修改新闻时，若管理员不存在，抛出异常")
+    void shouldThrowExceptionWhenUpdatingWithAdminNotExist(){
+        NewsRequest newsRequest = NewsRequest.builder()
+                .adminId(1).build();
+        Throwable exception = assertThrows(MyException.class,
+                () -> newsService.updateNews(newsRequest));
+        assertEquals("管理员不存在", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("删除新闻时，若管理员不存在，抛出异常")
+    void shouldThrowExceptionWhenDeletingWithAdminNotExist(){
+        NewsRequest newsRequest = NewsRequest.builder()
+                .adminId(1).build();
+        Throwable exception = assertThrows(MyException.class,
+                () -> newsService.deleteNews(newsRequest));
+        assertEquals("管理员不存在", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("删除新闻时，删除正确的新闻")
+    void shouldDeleteCorrectNews(){
+        when(adminDao.findAdminById(anyInt())).thenReturn(new Admin());
+        NewsRequest newsRequest = NewsRequest.builder()
+                .newsId(1)
+                .adminId(1)
+                .build();
+        ArgumentCaptor<NewsRequest> newsCaptor = ArgumentCaptor.forClass(NewsRequest.class);
+        newsService.deleteNews(newsRequest);
+        verify(newsDao, times(1))
+                .deleteNews(newsCaptor.capture());
+        assertAll(
+                () -> assertEquals(1, newsCaptor.getValue().getNewsId())
+        );
+    }
 }

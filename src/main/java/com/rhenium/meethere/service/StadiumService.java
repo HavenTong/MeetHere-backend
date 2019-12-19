@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public interface StadiumService {
 
     ArrayList<Stadium> listStadiumItems();
+
     StadiumEntity getStadiumById(Integer id);
+
     ArrayList<Comment> getCommentByStadiumId(Integer stadiumId);
 }

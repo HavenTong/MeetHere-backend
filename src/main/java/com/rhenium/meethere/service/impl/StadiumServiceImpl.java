@@ -65,6 +65,7 @@ public class StadiumServiceImpl implements StadiumService {
             commentMap.put("commentPostTime", comment.getCommentPostTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
             commentMap.put("commentContent", comment.getCommentContent());
             commentMap.put("likes", String.valueOf(comment.getLikes()));
+            commentMap.put("commentId", String.valueOf(comment.getCommentId()));
             comments.add(commentMap);
         }
         return comments;
@@ -77,5 +78,10 @@ public class StadiumServiceImpl implements StadiumService {
         comment.setCustomerId(commentRequest.getCustomerId());
         comment.setCommentContent(commentRequest.getCommentContent());
         commentDao.addNewComment(comment);
+    }
+
+    @Override
+    public void deleteComment(CommentRequest commentRequest) {
+        commentDao.deleteCommentById(commentRequest.getCommentId());
     }
 }

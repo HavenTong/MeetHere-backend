@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CommentRequest {
+    private Integer commentId;
     private Integer stadiumId;
     private Integer customerId;
 

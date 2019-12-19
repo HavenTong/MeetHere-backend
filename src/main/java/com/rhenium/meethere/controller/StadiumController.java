@@ -53,7 +53,7 @@ public class StadiumController {
     @PostMapping("/deleteComment")
 //    @UserLoginRequired
     public ResultEntity deleteComment(@RequestBody CommentRequest commentRequest) {
-
+        stadiumService.deleteComment(commentRequest);
         return ResultEntity.succeed();
     }
 }

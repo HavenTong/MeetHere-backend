@@ -31,5 +31,6 @@ public interface CommentDao {
             "VALUES (#{stadiumId}, #{customerId}, #{commentContent})")
     int addNewComment(Comment comment);
 
-//    @Delete()
+    @Delete("DELETE FROM comment WHERE comment_id = #{commentId}")
+    void deleteCommentById(@Param("commentId") int commentId);
 }

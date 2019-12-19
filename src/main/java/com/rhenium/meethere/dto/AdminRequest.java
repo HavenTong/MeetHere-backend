@@ -28,4 +28,6 @@ public class AdminRequest {
      * 当管理员需要对用户进行一些操作时需要匹配 customerId.
      */
     private Integer customerId;
+
+    private Integer bookingId;
 }

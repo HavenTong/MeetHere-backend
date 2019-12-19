@@ -108,4 +108,16 @@ public class AdminServiceImpl implements AdminService {
         List<Booking> bookingList = bookingDao.getBookingList(offset, limit);
         return bookingList;
     }
+
+    @Override
+    public Map<String, String> getBookingCount() {
+        Map<String, String> data = new HashMap<>();
+        data.put("count", String.valueOf(bookingDao.getBookingCount()));
+        return data;
+    }
+
+    @Override
+    public void deleteBooking(AdminRequest adminRequest) {
+        bookingDao.deleteBookingById(adminRequest.getBookingId());
+    }
 }

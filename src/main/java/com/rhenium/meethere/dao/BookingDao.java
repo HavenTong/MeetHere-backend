@@ -26,8 +26,16 @@ public interface BookingDao {
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "priceSum", column = "price_sum"),
             @Result(property = "paid", column = "paid"),
+            @Result(property = "customerId", column = "customer_id"),
+            @Result(property = "stadiumId", column = "stadium_id"),
             @Result(property = "customerName", column = "customer_id", one = @One(select="com.rhenium.meethere.dao.CustomerDao.getCustomerNameById", fetchType = FetchType.EAGER)),
             @Result(property = "stadiumName", column = "stadium_id", one = @One(select="com.rhenium.meethere.dao.StadiumDao.getStadiumNameById", fetchType = FetchType.EAGER))
     })
     List<Booking> getBookingList(@Param("offset") int offset, @Param("limit") int limit);
+
+    @Delete("DELETE FROM booking WHERE booking_id = #{bookingId}")
+    void deleteBookingById(Integer bookingId);
+
+    @Select("SELECT COUNT(*) FROM booking")
+    int getBookingCount();
 }

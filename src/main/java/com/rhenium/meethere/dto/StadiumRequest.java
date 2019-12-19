@@ -24,7 +24,6 @@ public class StadiumRequest {
     private double price;
     private String picture;
 
-
     public StadiumRequest(Stadium stadium) {
         this(stadium.getStadiumId(), stadium.getStadiumName(), stadium.getType(), StadiumTypeEnum.getByCode(stadium.getType()).getType(), stadium.getLocation(), stadium.getDescription(), stadium.getPrice(), stadium.getPicture());
     }

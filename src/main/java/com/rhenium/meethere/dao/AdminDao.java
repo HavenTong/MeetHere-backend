@@ -16,4 +16,7 @@ import org.springframework.stereotype.Repository;
 public interface AdminDao {
     @Select("SELECT * FROM admin WHERE email = #{email}")
     Admin findAdminByEmail(@Param("email") String email);
+
+    @Select("SELECT * FROM admin WHERE admin_id = #{adminId}")
+    Admin findAdminById(@Param("adminId") Integer adminId);
 }

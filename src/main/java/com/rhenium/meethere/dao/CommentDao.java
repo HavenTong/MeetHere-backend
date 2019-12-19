@@ -1,9 +1,7 @@
 package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.Comment;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -21,4 +19,11 @@ public interface CommentDao {
             "WHERE comment.customer_id = customer.customer_id AND comment.stadium_id = #{stadiumId} " +
             "ORDER BY comment_post_time DESC ")
     ArrayList<Comment> getCommentByStadiumId(@Param("stadiumId") Integer id);
+
+    @Select("SELECT *" +
+            "FROM comment " +
+            "WHERE stadium_id = #{stadiumId}")
+    @Results({@Result(property = "customer", column = "customer_id",
+              one = @One(select = "com.rhenium.meethere.dao.CustomerDao.findCustomerById"))})
+    ArrayList<Comment> getCommentByStadiumIdT(@Param("stadiumId") Integer id);
 }

@@ -1,5 +1,6 @@
 package com.rhenium.meethere.service;
 
+import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.dto.AdminRequest;
 import org.springframework.stereotype.Service;
 
@@ -25,4 +26,6 @@ public interface AdminService {
     Map<String, String> login(AdminRequest adminRequest);
 
     void deleteUser(AdminRequest adminRequest);
+
+    List<Booking> getBookingList(int offset, int limit);
 }

@@ -12,10 +12,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class StadiumEntity {
+public class StadiumRequest {
     private Integer stadiumId;
     private String stadiumName;
-    private Integer type;
     private String typeName;
     private String location;
     private String description;

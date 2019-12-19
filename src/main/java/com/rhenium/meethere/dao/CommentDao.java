@@ -14,16 +14,16 @@ import java.util.ArrayList;
 @Repository
 @Mapper
 public interface CommentDao {
-    @Select("SELECT comment.customer_id, comment_post_time, comment_content, likes, user_name " +
-            "FROM comment, customer " +
-            "WHERE comment.customer_id = customer.customer_id AND comment.stadium_id = #{stadiumId} " +
-            "ORDER BY comment_post_time DESC ")
-    ArrayList<Comment> getCommentByStadiumId(@Param("stadiumId") Integer id);
+//    @Select("SELECT comment.customer_id, comment_post_time, comment_content, likes, user_name " +
+//            "FROM comment, customer " +
+//            "WHERE comment.customer_id = customer.customer_id AND comment.stadium_id = #{stadiumId} " +
+//            "ORDER BY comment_post_time DESC ")
+//    ArrayList<Comment> getCommentByStadiumId(@Param("stadiumId") Integer id);
 
     @Select("SELECT *" +
             "FROM comment " +
             "WHERE stadium_id = #{stadiumId}")
     @Results({@Result(property = "customer", column = "customer_id",
               one = @One(select = "com.rhenium.meethere.dao.CustomerDao.findCustomerById"))})
-    ArrayList<Comment> getCommentByStadiumIdT(@Param("stadiumId") Integer id);
+    ArrayList<Comment> getCommentByStadiumId(@Param("stadiumId") Integer id);
 }

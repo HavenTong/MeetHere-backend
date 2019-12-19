@@ -1,6 +1,7 @@
 package com.rhenium.meethere.aop;
 
 import com.rhenium.meethere.dto.AdminRequest;
+import com.rhenium.meethere.dto.NewsRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.util.JwtUtil;
@@ -51,6 +52,9 @@ public class AdminLoginVerificationAspect {
             for (Object argument : arguments){
                 if (argument instanceof AdminRequest){
                     actualAdminId = ((AdminRequest) argument).getAdminId();
+                    break;
+                } else if (argument instanceof NewsRequest){
+                    actualAdminId = ((NewsRequest) argument).getAdminId();
                     break;
                 }
             }

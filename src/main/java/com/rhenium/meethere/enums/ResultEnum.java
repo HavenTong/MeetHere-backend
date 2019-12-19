@@ -34,9 +34,15 @@ public enum ResultEnum {
      * News Related
      */
     INVALID_OFFSET(2001, "页数必须为正整数"),
-    INVALID_LIMIT(2002, "每页条目数必须为正整数")
-    ;
+    INVALID_LIMIT(2002, "每页条目数必须为正整数"),
 
+    /**
+     * Admin Related
+     */
+    ADMIN_NOT_EXIST(3001, "管理员不存在"),
+
+
+    ;
     private Integer code;
     private String message;
 

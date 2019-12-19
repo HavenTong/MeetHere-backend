@@ -27,4 +27,8 @@ public class Booking implements Serializable {
 
     private Integer priceSum;
     private Boolean paid;
+
+    /** For SQL **/
+    private String stadiumName;
+    private String customerName;
 }

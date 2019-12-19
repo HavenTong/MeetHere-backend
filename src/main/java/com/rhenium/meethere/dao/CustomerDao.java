@@ -21,6 +21,9 @@ public interface CustomerDao {
     @Select("SELECT * FROM customer WHERE customer_id = #{id}")
     Customer findCustomerById(@Param("id") Integer id);
 
+    @Select("SELECT user_name FROM customer WHERE customer_id = #{id}")
+    String getCustomerNameById(@Param("id") int id);
+
     @Select("SELECT COUNT(*) FROM customer")
     int getUserCount();
 

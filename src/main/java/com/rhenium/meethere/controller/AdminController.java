@@ -1,6 +1,7 @@
 package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.annotation.AdminLoginRequired;
+import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.service.AdminService;
 import com.rhenium.meethere.vo.ResultEntity;
@@ -44,6 +45,12 @@ public class AdminController {
         return ResultEntity.succeed();
     }
 
+    @RequestMapping(value = "/get-booking-list", method = RequestMethod.GET)
+    @AdminLoginRequired
+    public ResultEntity getBookingList(@RequestParam int offset, @RequestParam int limit) {
+        List<Booking> data = adminService.getBookingList(offset, limit);
+        return ResultEntity.succeed(data);
+    }
 
     @PostMapping("/login")
     public ResultEntity login(@RequestBody AdminRequest adminRequest) {

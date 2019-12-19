@@ -21,4 +21,7 @@ public interface StadiumDao {
 
     @Select("SELECT * FROM stadium WHERE stadium_id = #{id}")
     Stadium getStadiumById(@Param("id") Integer stadiumId);
+
+    @Select("SELECT stadium.stadium_name FROM stadium WHERE stadium_id = #{id}")
+    String getStadiumNameById(@Param("id") Integer id);
 }

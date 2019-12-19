@@ -26,4 +26,10 @@ public interface CommentDao {
     @Results({@Result(property = "customer", column = "customer_id",
               one = @One(select = "com.rhenium.meethere.dao.CustomerDao.findCustomerById"))})
     ArrayList<Comment> getCommentByStadiumId(@Param("stadiumId") Integer id);
+
+    @Insert("INSERT INTO comment(stadium_id, customer_id, comment_content) " +
+            "VALUES (#{stadiumId}, #{customerId}, #{commentContent})")
+    int addNewComment(Comment comment);
+
+//    @Delete()
 }

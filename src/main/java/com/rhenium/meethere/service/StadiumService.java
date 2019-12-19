@@ -1,6 +1,7 @@
 package com.rhenium.meethere.service;
 
 import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.CommentRequest;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,4 +16,6 @@ public interface StadiumService {
     ArrayList<Stadium> listStadiumItems();
     Map<String, String> getStadiumById(Integer id);
     ArrayList<Map<String, String>> getCommentByStadiumId(Integer stadiumId);
+
+    void addNewComment(CommentRequest commentRequest);
 }

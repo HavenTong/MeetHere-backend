@@ -1,9 +1,8 @@
 package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.News;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import com.rhenium.meethere.dto.NewsRequest;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,4 +16,16 @@ import java.util.List;
 public interface NewsDao {
     @Select("SELECT * FROM news ORDER BY news_post_time DESC LIMIT #{offset}, #{limit}")
     List<News> findNewsByOffsetAndLimit(@Param("offset") int offset, @Param("limit") int limit);
+
+    @Insert("INSERT INTO news (news_title, admin_id, news_post_time, news_content) " +
+            "VALUES (#{newsTitle}, #{adminId}, #{newsPostTime}, #{newsContent})")
+    int createNews(NewsRequest newsRequest);
+
+    @Update("UPDATE news SET news_title = #{newsTitle}, news_content = #{newsContent} " +
+            "WHERE news_id = #{newsId}")
+    int updateNews(NewsRequest newsRequest);
+
+    @Delete("DELETE FROM news WHERE news_id = #{newsId}")
+    int deleteNews(NewsRequest newsRequest);
+
 }

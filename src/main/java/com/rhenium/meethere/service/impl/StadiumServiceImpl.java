@@ -4,6 +4,7 @@ import com.rhenium.meethere.dao.CommentDao;
 import com.rhenium.meethere.dao.StadiumDao;
 import com.rhenium.meethere.domain.Comment;
 import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.CommentRequest;
 import com.rhenium.meethere.enums.StadiumTypeEnum;
 import com.rhenium.meethere.service.StadiumService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,14 @@ public class StadiumServiceImpl implements StadiumService {
             comments.add(commentMap);
         }
         return comments;
+    }
+
+    @Override
+    public void addNewComment(CommentRequest commentRequest) {
+        Comment comment = new Comment();
+        comment.setStadiumId(commentRequest.getStadiumId());
+        comment.setCustomerId(commentRequest.getCustomerId());
+        comment.setCommentContent(commentRequest.getCommentContent());
+        commentDao.addNewComment(comment);
     }
 }

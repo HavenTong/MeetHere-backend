@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -95,6 +94,8 @@ class CustomerControllerTest {
         // 需要使用jsonPath来取出返回的ResultEntity中的字段
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(customerService, never())
+                .changePassword(customerRequest);
     }
 
     @Test
@@ -109,6 +110,8 @@ class CustomerControllerTest {
                         header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(customerService, never())
+                .changePassword(customerRequest);
     }
 
     @Test
@@ -123,6 +126,8 @@ class CustomerControllerTest {
                         header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("success"));
+        verify(customerService, times(1))
+                .saveUserInfo(customerRequest);
     }
 
     @Test
@@ -136,6 +141,8 @@ class CustomerControllerTest {
                 .content(JSON.toJSONString(customerRequest)));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(customerService, never())
+                .changePassword(customerRequest);
     }
 
     @Test
@@ -150,6 +157,8 @@ class CustomerControllerTest {
                         header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(customerService, never())
+                .changePassword(customerRequest);
     }
 
     @Test
@@ -164,5 +173,7 @@ class CustomerControllerTest {
                         header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("success"));
+        verify(customerService, times(1))
+                .changePassword(customerRequest);
     }
 }

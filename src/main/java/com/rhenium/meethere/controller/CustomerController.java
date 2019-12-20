@@ -82,5 +82,4 @@ public class CustomerController {
         String token = JwtUtil.createJwt(customer);
         return ResultEntity.succeed(token);
     }
-
 }

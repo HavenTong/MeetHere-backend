@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.List;
 import java.util.Map;
 
@@ -71,5 +72,28 @@ public class AdminController {
     public ResultEntity login(@RequestBody AdminRequest adminRequest) {
         Map<String, String> loginInfo = adminService.login(adminRequest);
         return ResultEntity.succeed(loginInfo);
+    }
+
+    /**
+     * 获取一天当中的订单数
+     * @param date 日期 yyyy-MM-dd格式
+     * @return 返回该天存在的订单数
+     */
+    @GetMapping("/booking-count-by-date")
+    @AdminLoginRequired
+    public ResultEntity getBookingCountByDate(@RequestParam String date){
+        int result = adminService.getBookingCountByDate(date);
+        return ResultEntity.succeed(result);
+    }
+
+    /**
+     * 获取每个场馆的订单数
+     * @return 返回一个map，其中有两个list，stadiums为场馆名称的list, count为对应的订单数的list
+     */
+    @GetMapping("/booking-count-by-stadium")
+    @AdminLoginRequired
+    public ResultEntity getBookingCountGroupByStadium(){
+        Map<String, Object> bookingCountInfo = adminService.getBookingCountGroupByStadium();
+        return ResultEntity.succeed(bookingCountInfo);
     }
 }

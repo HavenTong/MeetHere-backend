@@ -3,10 +3,13 @@ package com.rhenium.meethere.dao;
 import com.rhenium.meethere.domain.Booking;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.awt.print.Book;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author JJAYCHEN
@@ -38,4 +41,13 @@ public interface BookingDao {
 
     @Select("SELECT COUNT(*) FROM booking")
     int getBookingCount();
+
+    @Select("SELECT COUNT(*) FROM booking WHERE start_time <= #{end} && end_time >= #{start} ")
+    int getBookingCountBetweenStartAndEnd(@Param("start")LocalDateTime start,
+                                          @Param("end") LocalDateTime end);
+
+    @Select("SELECT stadium_name AS stadiumName,  count(booking_id) AS count\n" +
+            "FROM booking NATURAL JOIN stadium\n" +
+            "GROUP BY stadium_name;")
+    List<Map<String, Object>> getBookingCountGroupByStadium();
 }

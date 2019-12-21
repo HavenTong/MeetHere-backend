@@ -13,9 +13,13 @@ import com.rhenium.meethere.service.AdminService;
 import com.rhenium.meethere.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,5 +123,32 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteBooking(AdminRequest adminRequest) {
         bookingDao.deleteBookingById(adminRequest.getBookingId());
+    }
+
+
+    @Override
+    public int getBookingCountByDate(String date) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(date, df);
+        LocalDateTime start = LocalDateTime.of(localDate, LocalTime.parse("00:00:00"));
+        LocalDateTime end = start.plusDays(1).minusSeconds(1);
+        int count = bookingDao.getBookingCountBetweenStartAndEnd(start, end);
+        return count;
+    }
+
+
+    @Override
+    public Map<String, Object> getBookingCountGroupByStadium(){
+        List<Map<String, Object>> result = bookingDao.getBookingCountGroupByStadium();
+        List<String> stadiums = new ArrayList<>();
+        List<Long> count = new ArrayList<>();
+        for (Map<String, Object> map : result){
+            stadiums.add((String) map.get("stadiumName"));
+            count.add((Long) map.get("count"));
+        }
+        Map<String, Object> bookingCountInfo = new HashMap<>();
+        bookingCountInfo.put("stadiums", stadiums);
+        bookingCountInfo.put("count", count);
+        return bookingCountInfo;
     }
 }

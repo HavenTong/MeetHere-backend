@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -42,4 +43,5 @@ public interface CustomerDao {
 
     @Delete("DELETE FROM customer WHERE customer_id = #{customerId}")
     void deleteCustomerById(@Param("customerId") int customerId);
+
 }

@@ -32,4 +32,8 @@ public interface AdminService {
     Map<String, String> getBookingCount();
 
     void deleteBooking(AdminRequest adminRequest);
+
+    int getBookingCountByDate(String date);
+
+    Map<String, Object> getBookingCountGroupByStadium();
 }

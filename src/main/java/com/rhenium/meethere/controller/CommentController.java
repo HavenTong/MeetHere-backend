@@ -32,7 +32,7 @@ public class CommentController {
 
     @GetMapping("/get-by-user")
     @UserLoginRequired
-    public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId) {
+    public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId, int customerId) {
         ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(stadiumId);
         return ResultEntity.succeed(comments);
     }

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
  * @date 2019/12/21 21:34
  */
 @SpringBootTest
-public class StadiumServiceTest {
+class StadiumServiceTest {
     @Mock
     private StadiumDao stadiumDao;
 

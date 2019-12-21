@@ -5,6 +5,7 @@ import com.rhenium.meethere.dao.CommentDao;
 import com.rhenium.meethere.domain.Admin;
 import com.rhenium.meethere.domain.Comment;
 import com.rhenium.meethere.dto.AdminRequest;
+import com.rhenium.meethere.dto.CommentRequest;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -54,5 +58,37 @@ class CommentServiceTest {
         verify(commentDao, times(1))
                 .deleteCommentById(idCaptor.capture());
         assertEquals(1, idCaptor.getValue());
+    }
+
+    @Test
+    void shouldGetCommentByStadiumId() {
+        when(commentDao.getCommentByStadiumId(1)).thenReturn(new ArrayList<>());
+        ArgumentCaptor<Integer> idCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(1);
+
+        verify(commentDao, times(1)).getCommentByStadiumId(idCaptor.capture());
+        assertAll(
+                () -> assertEquals(1, idCaptor.getValue())
+        );
+    }
+
+    @Test
+    void shouldAddNewComment() {
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setStadiumId(1);
+        commentRequest.setCustomerId(2);
+        commentRequest.setCommentContent("Just for test");
+        ArgumentCaptor<Comment> commentCaptor = ArgumentCaptor.forClass(Comment.class);
+
+        commentService.addNewComment(commentRequest);
+
+        verify(commentDao, times(1)).addNewComment(commentCaptor.capture());
+        assertAll(
+                () -> assertEquals(1, commentCaptor.getValue().getStadiumId()),
+                () -> assertEquals(2, commentCaptor.getValue().getCustomerId()),
+                () -> assertEquals("Just for test", commentCaptor.getValue().getCommentContent())
+        );
+
     }
 }

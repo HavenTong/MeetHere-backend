@@ -15,8 +15,5 @@ public interface StadiumService {
 
     ArrayList<Stadium> listStadiumItems();
     Map<String, String> getStadiumById(Integer id);
-    ArrayList<Map<String, String>> getCommentByStadiumId(Integer stadiumId);
 
-    void addNewComment(CommentRequest commentRequest);
-    void deleteComment(CommentRequest commentRequest);
 }

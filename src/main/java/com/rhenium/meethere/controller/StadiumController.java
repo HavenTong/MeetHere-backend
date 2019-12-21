@@ -2,11 +2,13 @@ package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.annotation.UserLoginRequired;
 import com.rhenium.meethere.domain.Stadium;
-import com.rhenium.meethere.dto.CommentRequest;
 import com.rhenium.meethere.service.StadiumService;
 import com.rhenium.meethere.vo.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -36,24 +38,5 @@ public class StadiumController {
         return ResultEntity.succeed(stadium);
     }
 
-    @GetMapping("/comments")
-    @UserLoginRequired
-    public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId) {
-        ArrayList<Map<String, String>> comments = stadiumService.getCommentByStadiumId(stadiumId);
-        return ResultEntity.succeed(comments);
-    }
 
-    @PostMapping("/addComment")
-//    @UserLoginRequired
-    public ResultEntity addComment(@RequestBody CommentRequest commentRequest) {
-        stadiumService.addNewComment(commentRequest);
-        return ResultEntity.succeed();
-    }
-
-    @PostMapping("/deleteComment")
-//    @UserLoginRequired
-    public ResultEntity deleteComment(@RequestBody CommentRequest commentRequest) {
-        stadiumService.deleteComment(commentRequest);
-        return ResultEntity.succeed();
-    }
 }

@@ -17,7 +17,7 @@ public interface CommentService {
     ArrayList<Map<String, String>> getCommentByStadiumId(Integer stadiumId);
 
     void addNewComment(CommentRequest commentRequest);
-    void deleteComment(CommentRequest commentRequest);
+    void deleteCommentByCustomer(CommentRequest commentRequest);
 
     void updateLikes(CommentRequest commentRequest);
 }

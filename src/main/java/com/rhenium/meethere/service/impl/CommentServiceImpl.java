@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -75,8 +74,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(CommentRequest commentRequest) {
-        commentDao.deleteCommentById(commentRequest.getCommentId());
+    public void deleteCommentByCustomer(CommentRequest commentRequest) {
+        int commentId = commentRequest.getCommentId();
+        Comment comment = commentDao.getCommentByCommentId(commentId);
+        if(comment.getCustomerId().equals(commentRequest.getCustomerId())) {
+            commentDao.deleteCommentById(commentRequest.getCommentId());
+        }
+        return;
     }
 
     @Override

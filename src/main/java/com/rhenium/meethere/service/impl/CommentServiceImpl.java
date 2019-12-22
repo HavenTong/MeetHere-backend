@@ -80,8 +80,9 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentDao.getCommentByCommentId(commentId);
         if(comment.getCustomerId().equals(commentRequest.getCustomerId())) {
             commentDao.deleteCommentById(commentRequest.getCommentId());
+        } else {
+            throw new MyException(ResultEnum.DELETE_COMMENT_IS_NOT_USERS);
         }
-        return;
     }
 
     @Override
@@ -117,7 +118,7 @@ public class CommentServiceImpl implements CommentService {
         data.put("count", String.valueOf(commentDao.getCommentCount()));
         return data;
     }
-}
+
     public void updateLikes(CommentRequest commentRequest) {
         if (Objects.isNull(commentRequest.getCommentId())){
             throw new MyException(ResultEnum.COMMENT_NOT_EXIST);

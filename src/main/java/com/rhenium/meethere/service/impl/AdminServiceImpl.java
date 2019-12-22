@@ -102,7 +102,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Booking> getBookingList(int offset, int limit) {
+    public List<Map<String, String>> getBookingList(int offset, int limit) {
         if (offset < 0){
             throw new MyException(ResultEnum.INVALID_OFFSET);
         }
@@ -110,7 +110,22 @@ public class AdminServiceImpl implements AdminService {
             throw new MyException(ResultEnum.INVALID_LIMIT);
         }
         List<Booking> bookingList = bookingDao.getBookingList(offset, limit);
-        return bookingList;
+        List<Map<String, String>> data = new ArrayList<>();
+        for(Booking booking : bookingList) {
+            Map<String, String> bookingItem = new HashMap<>(limit);
+            bookingItem.put("bookingId", String.valueOf(booking.getBookingId()));
+            bookingItem.put("startTime", booking.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            bookingItem.put("endTime", booking.getEndTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            bookingItem.put("priceSum", String.valueOf(booking.getPriceSum()));
+            bookingItem.put("paid", String.valueOf(booking.getPaid()));
+            bookingItem.put("customerId", String.valueOf(booking.getCustomerId()));
+            bookingItem.put("stadiumId", String.valueOf(booking.getStadiumId()));
+            bookingItem.put("customerName", String.valueOf(booking.getCustomer().getUserName()));
+            bookingItem.put("stadiumName", String.valueOf(booking.getStadium().getStadiumName()));
+
+            data.add(bookingItem);
+        }
+        return data;
     }
 
     @Override

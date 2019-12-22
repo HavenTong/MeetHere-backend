@@ -27,4 +27,6 @@ public class Comment implements Serializable {
 
     // 关联用户
     private Customer customer;
+    private Stadium stadium;
+
 }

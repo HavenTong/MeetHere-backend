@@ -47,4 +47,9 @@ public interface CommentDao {
             @Result(property = "stadium", column = "stadium_id", one = @One(select="com.rhenium.meethere.dao.StadiumDao.getStadiumById", fetchType = FetchType.EAGER))
     })
     List<Comment> getCommentList(@Param("offset") int offset, @Param("limit") int limit);
+    @Update("UPDATE comment SET likes = likes + 1 WHERE comment_id = #{commentId}")
+    int increaseLikesById(@Param("commentId") int commentId);
+
+    @Update("UPDATE comment SET likes = likes - 1 WHERE comment_id = #{commentId}")
+    int decreaseLikesById(@Param("commentId") int commentId);
 }

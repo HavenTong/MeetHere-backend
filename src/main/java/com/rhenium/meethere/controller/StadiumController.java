@@ -26,17 +26,15 @@ public class StadiumController {
 
     @GetMapping("/items")
     @UserLoginRequired
-    public ResultEntity listNewsItems() {
+    public ResultEntity listNewsItems(@RequestParam int customerId) {
         ArrayList<Stadium> stadiums = stadiumService.listStadiumItems();
         return ResultEntity.succeed(stadiums);
     }
 
     @GetMapping("/message")
     @UserLoginRequired
-    public ResultEntity getStadiumById(@RequestParam int id) {
+    public ResultEntity getStadiumById(@RequestParam int id, int customerId) {
         Map<String, String> stadium = stadiumService.getStadiumById(id);
         return ResultEntity.succeed(stadium);
     }
-
-
 }

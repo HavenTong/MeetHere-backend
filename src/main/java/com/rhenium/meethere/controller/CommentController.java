@@ -34,7 +34,8 @@ public class CommentController {
     // TODO: 鉴权
     @GetMapping("/get-by-user")
     @UserLoginRequired
-    public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId) {
+    public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId,
+                                              @RequestParam int customerId) {
         ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(stadiumId);
         return ResultEntity.succeed(comments);
     }
@@ -64,6 +65,13 @@ public class CommentController {
     @UserLoginRequired
     public ResultEntity deleteComment(@RequestBody CommentRequest commentRequest) {
         commentService.deleteComment(commentRequest);
+        return ResultEntity.succeed();
+    }
+
+    @PostMapping("/update-likes")
+    @UserLoginRequired
+    public ResultEntity updateLikes(@RequestBody CommentRequest commentRequest){
+        commentService.updateLikes(commentRequest);
         return ResultEntity.succeed();
     }
 }

@@ -63,8 +63,8 @@ public class CommentController {
 
     @PostMapping("/delete-by-user")
     @UserLoginRequired
-    public ResultEntity deleteComment(@RequestBody CommentRequest commentRequest) {
-        commentService.deleteComment(commentRequest);
+    public ResultEntity deleteByCustomer(@RequestBody CommentRequest commentRequest) {
+        commentService.deleteCommentByCustomer(commentRequest);
         return ResultEntity.succeed();
     }
 

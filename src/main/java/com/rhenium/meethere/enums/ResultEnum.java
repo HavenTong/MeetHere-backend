@@ -1,7 +1,6 @@
 package com.rhenium.meethere.enums;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -45,6 +44,7 @@ public enum ResultEnum {
      * Comment Related
      */
     COMMENT_NOT_EXIST(4001, "评论不存在"),
+    DELETE_COMMENT_IS_NOT_USERS(4001, "删除非本人的评论"),
 
     ;
     private Integer code;

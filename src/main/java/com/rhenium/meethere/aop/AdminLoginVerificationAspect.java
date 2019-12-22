@@ -20,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 
 /**
  * @author HavenTong
@@ -33,7 +34,7 @@ public class AdminLoginVerificationAspect {
     public void verifyAdminLoginPoint(){}
 
     @Before("verifyAdminLoginPoint()")
-    public void verifyAdminLogin(JoinPoint joinPoint){
+    public void verifyAdminLogin(JoinPoint joinPoint) throws IllegalAccessException {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) requestAttributes;
         HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
@@ -49,17 +50,19 @@ public class AdminLoginVerificationAspect {
         if ("GET".equals(method)){
             actualAdminId = (Integer) arguments[arguments.length - 1];
         } else if ("POST".equals(method)){
-            for (Object argument : arguments){
-                if (argument instanceof AdminRequest){
-                    actualAdminId = ((AdminRequest) argument).getAdminId();
-                    break;
-                } else if (argument instanceof NewsRequest){
-                    actualAdminId = ((NewsRequest) argument).getAdminId();
+            Object argument = arguments[0];
+            Field[] fields = argument.getClass().getDeclaredFields();
+            for (Field field : fields){
+                field.setAccessible(true);
+                if ("adminId".equals(field.getName())){
+                    actualAdminId = (Integer) field.get(argument);
+                    log.info("actual: {}", actualAdminId);
                     break;
                 }
             }
         }
         if (!decodedAdminId.equals(actualAdminId)){
+            log.info("not equals: actual: {}", actualAdminId);
             throw new MyException(ResultEnum.TOKEN_NOT_MATCH);
         }
     }

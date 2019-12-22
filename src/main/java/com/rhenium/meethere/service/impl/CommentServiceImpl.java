@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -76,8 +75,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(CommentRequest commentRequest) {
-        commentDao.deleteCommentById(commentRequest.getCommentId());
+    public void deleteCommentByCustomer(CommentRequest commentRequest) {
+        int commentId = commentRequest.getCommentId();
+        Comment comment = commentDao.getCommentByCommentId(commentId);
+        if(comment.getCustomerId().equals(commentRequest.getCustomerId())) {
+            commentDao.deleteCommentById(commentRequest.getCommentId());
+        } else {
+            throw new MyException(ResultEnum.DELETE_COMMENT_IS_NOT_USERS);
+        }
     }
 
     @Override
@@ -119,9 +124,13 @@ public class CommentServiceImpl implements CommentService {
         if (Objects.isNull(commentRequest.getCommentId())){
             throw new MyException(ResultEnum.COMMENT_NOT_EXIST);
         }
-        String hashName = "comment:likes";
         int customerId = commentRequest.getCustomerId();
         int commentId = commentRequest.getCommentId();
+        Comment comment = commentDao.getCommentByCommentId(commentId);
+        if (comment == null){
+            throw new MyException(ResultEnum.COMMENT_NOT_EXIST);
+        }
+        String hashName = "comment:likes";
         String key = commentId + ":" + customerId;
         String liked = (String) redisTemplate.opsForHash().get(hashName, key);
         // 还未点赞

@@ -95,18 +95,61 @@ class CommentServiceTest {
                 () -> assertEquals(2, commentCaptor.getValue().getCustomerId()),
                 () -> assertEquals("Just for test", commentCaptor.getValue().getCommentContent())
         );
+    }
 
+    @Test
+    @DisplayName("用户删除评论时，如果该评论是用户发的，则删除")
+    void shouldDeleteCommentByCustomerWhenIsCustomersComment() {
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setCustomerId(1);
+        commentRequest.setCommentId(2);
+        Comment comment = new Comment();
+        comment.setCustomerId(1);
+        when(commentDao.getCommentByCommentId(2)).thenReturn(comment);
+        ArgumentCaptor<Integer> commentIdCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        commentService.deleteCommentByCustomer(commentRequest);
+
+        verify(commentDao, times(1)).deleteCommentById(commentIdCaptor.capture());
+        assertAll(
+                () -> assertEquals(2, commentIdCaptor.getValue())
+        );
+    }
+
+    @Test
+    @DisplayName("用户删除评论时，如果该评论不是该用户发的，则抛出错误")
+    void shouldThrowExceptionWhenDeletedCommentIsNotCustomers() {
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setCustomerId(1);
+        commentRequest.setCommentId(2);
+        Comment comment = new Comment();
+        comment.setCustomerId(3);
+        when(commentDao.getCommentByCommentId(2)).thenReturn(comment);
+
+        Throwable exception = assertThrows(MyException.class,
+                () -> commentService.deleteCommentByCustomer(commentRequest));
+        assertEquals("删除非本人的评论", exception.getMessage());
     }
 
     @Test
     @DisplayName("点赞时，若commentId为空，则抛出异常")
-    void shouldThrowExceptionWhenCommentNotExist(){
+    void shouldThrowExceptionWhenCommentIdIsEmpty(){
         CommentRequest commentRequest = CommentRequest.builder()
                 .customerId(1).build();
         Throwable exception = assertThrows(MyException.class,
                 () -> commentService.updateLikes(commentRequest));
         assertEquals("评论不存在", exception.getMessage());
+    }
 
+    @Test
+    @DisplayName("点赞时，若评论不存在，则抛出异常")
+    void shouldThrowExceptionWhenCommentNotExist(){
+        CommentRequest commentRequest = CommentRequest.builder()
+                .customerId(1).commentId(10).build();
+        when(commentDao.getCommentByCommentId(10)).thenReturn(null);
+        Throwable exception = assertThrows(MyException.class,
+                () -> commentService.updateLikes(commentRequest));
+        assertEquals("评论不存在", exception.getMessage());
     }
 
     @Test

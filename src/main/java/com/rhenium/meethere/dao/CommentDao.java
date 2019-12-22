@@ -39,4 +39,7 @@ public interface CommentDao {
 
     @Update("UPDATE comment SET likes = likes - 1 WHERE comment_id = #{commentId}")
     int decreaseLikesById(@Param("commentId") int commentId);
+
+    @Select("SELECT * FROM comment WHERE comment_id = #{commendId}")
+    Comment findCommentById(@Param("commentId") int commentId);
 }

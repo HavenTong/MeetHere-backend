@@ -17,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -33,7 +34,7 @@ public class UserLoginVerificationAspect {
     public void verifyUserLoginPoint(){}
 
     @Before("verifyUserLoginPoint()")
-    public void verifyUserLogin(JoinPoint joinPoint){
+    public void verifyUserLogin(JoinPoint joinPoint) throws IllegalAccessException {
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest httpServletRequest = sra.getRequest();
@@ -47,9 +48,13 @@ public class UserLoginVerificationAspect {
         Integer actualCustomerId = -1;
         Object[] arguments = joinPoint.getArgs();
         if ("POST".equals(method)){
-            for (Object argument: arguments){
-                if (argument instanceof CustomerRequest){
-                    actualCustomerId = ((CustomerRequest) argument).getCustomerId();
+            Object argument = arguments[0];
+            Field[] fields = argument.getClass().getDeclaredFields();
+            for (Field field : fields){
+                field.setAccessible(true);
+                if ("customerId".equals(field.getName())){
+                    actualCustomerId = (Integer) field.get(argument);
+                    log.info("actual: {}", actualCustomerId);
                     break;
                 }
             }
@@ -57,6 +62,7 @@ public class UserLoginVerificationAspect {
             actualCustomerId = (Integer) arguments[arguments.length - 1];
         }
         if (!decodedCustomerId.equals(actualCustomerId)){
+            log.info("not equals: actualId: {}", actualCustomerId);
             throw new MyException(ResultEnum.TOKEN_NOT_MATCH);
         }
     }

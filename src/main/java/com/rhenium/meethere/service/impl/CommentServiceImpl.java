@@ -84,9 +84,13 @@ public class CommentServiceImpl implements CommentService {
         if (Objects.isNull(commentRequest.getCommentId())){
             throw new MyException(ResultEnum.COMMENT_NOT_EXIST);
         }
-        String hashName = "comment:likes";
         int customerId = commentRequest.getCustomerId();
         int commentId = commentRequest.getCommentId();
+        Comment comment = commentDao.findCommentById(commentId);
+        if (comment == null){
+            throw new MyException(ResultEnum.COMMENT_NOT_EXIST);
+        }
+        String hashName = "comment:likes";
         String key = commentId + ":" + customerId;
         String liked = (String) redisTemplate.opsForHash().get(hashName, key);
         // 还未点赞

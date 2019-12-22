@@ -6,17 +6,21 @@ import com.rhenium.meethere.domain.Admin;
 import com.rhenium.meethere.domain.Comment;
 import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.dto.CommentRequest;
+import com.rhenium.meethere.enums.LikesEnum;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author HavenTong
@@ -25,6 +29,9 @@ import java.util.Map;
 @Service
 @Slf4j
 public class CommentServiceImpl implements CommentService {
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private CommentDao commentDao;
@@ -70,5 +77,26 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(CommentRequest commentRequest) {
         commentDao.deleteCommentById(commentRequest.getCommentId());
+    }
+
+    @Override
+    public void updateLikes(CommentRequest commentRequest) {
+        if (Objects.isNull(commentRequest.getCommentId())){
+            throw new MyException(ResultEnum.COMMENT_NOT_EXIST);
+        }
+        String hashName = "comment:likes";
+        int customerId = commentRequest.getCustomerId();
+        int commentId = commentRequest.getCommentId();
+        String key = commentId + ":" + customerId;
+        String liked = (String) redisTemplate.opsForHash().get(hashName, key);
+        // 还未点赞
+        if (Objects.isNull(liked)){
+            redisTemplate.opsForHash().put(hashName, key, LikesEnum.LIKED.getCode().toString());
+            commentDao.increaseLikesById(commentId);
+        } else {
+            // 已点赞
+            redisTemplate.opsForHash().delete(hashName, key);
+            commentDao.decreaseLikesById(commentId);
+        }
     }
 }

@@ -41,6 +41,10 @@ public enum ResultEnum {
      */
     ADMIN_NOT_EXIST(3001, "管理员不存在"),
 
+    /**
+     * Comment Related
+     */
+    COMMENT_NOT_EXIST(4001, "评论不存在"),
 
     ;
     private Integer code;

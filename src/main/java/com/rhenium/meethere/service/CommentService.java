@@ -19,4 +19,5 @@ public interface CommentService {
     void addNewComment(CommentRequest commentRequest);
     void deleteComment(CommentRequest commentRequest);
 
+    void updateLikes(CommentRequest commentRequest);
 }

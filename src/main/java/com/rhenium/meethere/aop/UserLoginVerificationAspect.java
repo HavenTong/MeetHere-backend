@@ -5,7 +5,6 @@ import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,7 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
+import java.util.Objects;
 
 /**
  * @author HavenTong
@@ -35,18 +34,30 @@ public class UserLoginVerificationAspect {
 
     @Before("verifyUserLoginPoint()")
     public void verifyUserLogin(JoinPoint joinPoint){
-        String token = JwtUtil.getToken();
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+        HttpServletRequest httpServletRequest = sra.getRequest();
+        String token = httpServletRequest.getHeader("TOKEN");
+        String method = httpServletRequest.getMethod();
+        if (StringUtils.isEmpty(token)){
+            throw new MyException(ResultEnum.TOKEN_NOT_EXIST);
+        }
         Claims claims = JwtUtil.parseJwt(token);
         Integer decodedCustomerId = Integer.parseInt(claims.getId());
+        Integer actualCustomerId = -1;
         Object[] arguments = joinPoint.getArgs();
-        for (Object argument: arguments){
-            if (argument instanceof CustomerRequest){
-                Integer actualCustomerId = ((CustomerRequest) argument).getCustomerId();
-                if (!decodedCustomerId.equals(actualCustomerId)){
-                    throw new MyException(ResultEnum.TOKEN_NOT_MATCH);
+        if ("POST".equals(method)){
+            for (Object argument: arguments){
+                if (argument instanceof CustomerRequest){
+                    actualCustomerId = ((CustomerRequest) argument).getCustomerId();
+                    break;
                 }
-                break;
             }
+        } else if ("GET".equals(method)){
+            actualCustomerId = (Integer) arguments[arguments.length - 1];
+        }
+        if (!decodedCustomerId.equals(actualCustomerId)){
+            throw new MyException(ResultEnum.TOKEN_NOT_MATCH);
         }
     }
 }

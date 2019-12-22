@@ -33,4 +33,10 @@ public interface CommentDao {
 
     @Delete("DELETE FROM comment WHERE comment_id = #{commentId}")
     void deleteCommentById(@Param("commentId") int commentId);
+
+    @Update("UPDATE comment SET likes = likes + 1 WHERE comment_id = #{commentId}")
+    int increaseLikesById(@Param("commentId") int commentId);
+
+    @Update("UPDATE comment SET likes = likes - 1 WHERE comment_id = #{commentId}")
+    int decreaseLikesById(@Param("commentId") int commentId);
 }

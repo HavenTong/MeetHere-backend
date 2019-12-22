@@ -125,7 +125,7 @@ public class CommentServiceImpl implements CommentService {
         }
         int customerId = commentRequest.getCustomerId();
         int commentId = commentRequest.getCommentId();
-        Comment comment = commentDao.findCommentById(commentId);
+        Comment comment = commentDao.getCommentByCommentId(commentId);
         if (comment == null){
             throw new MyException(ResultEnum.COMMENT_NOT_EXIST);
         }

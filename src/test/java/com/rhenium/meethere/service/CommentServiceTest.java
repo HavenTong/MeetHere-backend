@@ -146,7 +146,7 @@ class CommentServiceTest {
     void shouldThrowExceptionWhenCommentNotExist(){
         CommentRequest commentRequest = CommentRequest.builder()
                 .customerId(1).commentId(10).build();
-        when(commentDao.findCommentById(10)).thenReturn(null);
+        when(commentDao.getCommentByCommentId(10)).thenReturn(null);
         Throwable exception = assertThrows(MyException.class,
                 () -> commentService.updateLikes(commentRequest));
         assertEquals("评论不存在", exception.getMessage());

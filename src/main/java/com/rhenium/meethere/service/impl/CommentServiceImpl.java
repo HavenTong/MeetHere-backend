@@ -113,7 +113,8 @@ public class CommentServiceImpl implements CommentService {
         data.put("count", String.valueOf(commentDao.getCommentCount()));
         return data;
     }
-}
+
+    @Override
     public void updateLikes(CommentRequest commentRequest) {
         if (Objects.isNull(commentRequest.getCommentId())){
             throw new MyException(ResultEnum.COMMENT_NOT_EXIST);

@@ -3,6 +3,7 @@ package com.rhenium.meethere.service;
 import com.rhenium.meethere.dao.AdminDao;
 import com.rhenium.meethere.dao.BookingDao;
 import com.rhenium.meethere.dao.CustomerDao;
+import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.service.impl.AdminServiceImpl;
 import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.DisplayName;
@@ -52,6 +53,15 @@ class AdminServiceTest {
         verify(customerDao, times(1))
                 .getUserCount();
         assertEquals("3", result.get("count"));
+    }
+
+    @Test
+    @DisplayName("删除指定用户ID的用户，应该调用customerDao")
+    void shouldCallCustomerDaoWhenDeleteCustomerById() {
+        AdminRequest adminRequest = AdminRequest.builder().customerId(1).build();
+        adminService.deleteUser(adminRequest);
+
+        verify(customerDao, times(1)).deleteCustomerById(1);
     }
 
     @Test

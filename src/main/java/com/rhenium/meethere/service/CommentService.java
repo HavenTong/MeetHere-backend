@@ -4,6 +4,7 @@ import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.dto.CommentRequest;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,4 +20,7 @@ public interface CommentService {
     void addNewComment(CommentRequest commentRequest);
     void deleteComment(CommentRequest commentRequest);
 
+    List<Map<String, String>> getCommentList(int offset, int limit);
+
+    Map<String, String> getCommentCount();
 }

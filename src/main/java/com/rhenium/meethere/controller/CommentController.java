@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,11 +31,26 @@ public class CommentController {
         return ResultEntity.succeed();
     }
 
+    // TODO: 鉴权
     @GetMapping("/get-by-user")
     @UserLoginRequired
     public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId) {
         ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(stadiumId);
         return ResultEntity.succeed(comments);
+    }
+
+    @RequestMapping(value = "/get-comment-count", method = RequestMethod.GET)
+    @AdminLoginRequired
+    public ResultEntity getCommentCount(@RequestParam int adminId) {
+        Map<String, String> data = commentService.getCommentCount();
+        return ResultEntity.succeed(data);
+    }
+
+    @RequestMapping(value = "/get-comment-list", method = RequestMethod.GET)
+    @AdminLoginRequired
+    public ResultEntity getCommentList(@RequestParam int offset, @RequestParam int limit, @RequestParam int adminId) {
+        List<Map<String, String>> data = commentService.getCommentList(offset, limit);
+        return ResultEntity.succeed(data);
     }
 
     @PostMapping("/add")

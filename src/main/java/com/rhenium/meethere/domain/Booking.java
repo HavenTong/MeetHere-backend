@@ -36,6 +36,6 @@ public class Booking implements Serializable {
     private Boolean paid;
 
     /** For SQL **/
-    private String stadiumName;
-    private String customerName;
+    private Customer customer;
+    private Stadium stadium;
 }

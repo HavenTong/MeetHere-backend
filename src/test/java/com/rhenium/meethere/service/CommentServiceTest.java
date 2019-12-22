@@ -133,13 +133,23 @@ class CommentServiceTest {
 
     @Test
     @DisplayName("点赞时，若commentId为空，则抛出异常")
-    void shouldThrowExceptionWhenCommentNotExist(){
+    void shouldThrowExceptionWhenCommentIdIsEmpty(){
         CommentRequest commentRequest = CommentRequest.builder()
                 .customerId(1).build();
         Throwable exception = assertThrows(MyException.class,
                 () -> commentService.updateLikes(commentRequest));
         assertEquals("评论不存在", exception.getMessage());
+    }
 
+    @Test
+    @DisplayName("点赞时，若评论不存在，则抛出异常")
+    void shouldThrowExceptionWhenCommentNotExist(){
+        CommentRequest commentRequest = CommentRequest.builder()
+                .customerId(1).commentId(10).build();
+        when(commentDao.getCommentByCommentId(10)).thenReturn(null);
+        Throwable exception = assertThrows(MyException.class,
+                () -> commentService.updateLikes(commentRequest));
+        assertEquals("评论不存在", exception.getMessage());
     }
 
     @Test

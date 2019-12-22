@@ -27,7 +27,7 @@ public interface AdminService {
 
     void deleteUser(AdminRequest adminRequest);
 
-    List<Booking> getBookingList(int offset, int limit);
+    List<Map<String, String>> getBookingList(int offset, int limit);
 
     Map<String, String> getBookingCount();
 

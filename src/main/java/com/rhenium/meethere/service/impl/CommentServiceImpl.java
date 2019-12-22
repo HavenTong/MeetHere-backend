@@ -14,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteCommentByAdmin(AdminRequest adminRequest) {
         Admin admin = adminDao.findAdminById(adminRequest.getAdminId());
-        if (admin == null){
+        if (admin == null) {
             throw new MyException(ResultEnum.ADMIN_NOT_EXIST);
         }
         commentDao.deleteCommentById(adminRequest.getCommentId());
@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     public ArrayList<Map<String, String>> getCommentByStadiumId(Integer stadiumId) {
         ArrayList<Comment> commentList = commentDao.getCommentByStadiumId(stadiumId);
         ArrayList<Map<String, String>> comments = new ArrayList<>();
-        for(Comment comment : commentList) {
+        for (Comment comment : commentList) {
             HashMap<String, String> commentMap = new HashMap<>();
             commentMap.put("customerId", String.valueOf(comment.getCustomer().getCustomerId()));
             commentMap.put("userName", comment.getCustomer().getUserName());
@@ -75,11 +75,50 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(CommentRequest commentRequest) {
-        commentDao.deleteCommentById(commentRequest.getCommentId());
+    public void deleteCommentByCustomer(CommentRequest commentRequest) {
+        int commentId = commentRequest.getCommentId();
+        Comment comment = commentDao.getCommentByCommentId(commentId);
+        if(comment.getCustomerId().equals(commentRequest.getCustomerId())) {
+            commentDao.deleteCommentById(commentRequest.getCommentId());
+        } else {
+            throw new MyException(ResultEnum.DELETE_COMMENT_IS_NOT_USERS);
+        }
     }
 
     @Override
+    public List<Map<String, String>> getCommentList(int offset, int limit) {
+        if (offset < 0) {
+            throw new MyException(ResultEnum.INVALID_OFFSET);
+        }
+        if (limit < 1) {
+            throw new MyException(ResultEnum.INVALID_LIMIT);
+        }
+        List<Comment> commentList = commentDao.getCommentList(offset, limit);
+        List<Map<String, String>> data = new ArrayList<>();
+
+        for (Comment comment : commentList) {
+            Map<String, String> commentItem = new HashMap<>();
+            commentItem.put("commentId", String.valueOf(comment.getCommentId()));
+            commentItem.put("commentPostTime", comment.getCommentPostTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            commentItem.put("commentContent", comment.getCommentContent());
+            commentItem.put("likes", String.valueOf(comment.getLikes()));
+            commentItem.put("customerId", String.valueOf(comment.getCustomerId()));
+            commentItem.put("stadiumId", String.valueOf(comment.getStadiumId()));
+            commentItem.put("customerName", comment.getCustomer().getUserName());
+            commentItem.put("stadiumName", comment.getStadium().getStadiumName());
+
+            data.add(commentItem);
+        }
+        return data;
+    }
+
+    @Override
+    public Map<String, String> getCommentCount() {
+        Map<String, String> data = new HashMap<>();
+        data.put("count", String.valueOf(commentDao.getCommentCount()));
+        return data;
+    }
+
     public void updateLikes(CommentRequest commentRequest) {
         if (Objects.isNull(commentRequest.getCommentId())){
             throw new MyException(ResultEnum.COMMENT_NOT_EXIST);

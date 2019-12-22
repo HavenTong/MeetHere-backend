@@ -2,9 +2,11 @@ package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.Comment;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author YueChen
@@ -34,12 +36,23 @@ public interface CommentDao {
     @Delete("DELETE FROM comment WHERE comment_id = #{commentId}")
     void deleteCommentById(@Param("commentId") int commentId);
 
+    @Select("SELECT COUNT(*) FROM comment")
+    int getCommentCount();
+
+    @Select("SELECT comment.*, stadium.*, customer.* FROM comment NATURAL JOIN stadium NATURAL JOIN customer ORDER BY comment.comment_id LIMIT #{offset}, #{limit}")
+    @Results({
+            @Result(property = "customerId", column = "customer_id"),
+            @Result(property = "stadiumId", column = "stadium_id"),
+            @Result(property = "customer", column = "customer_id", one = @One(select="com.rhenium.meethere.dao.CustomerDao.findCustomerById", fetchType = FetchType.EAGER)),
+            @Result(property = "stadium", column = "stadium_id", one = @One(select="com.rhenium.meethere.dao.StadiumDao.getStadiumById", fetchType = FetchType.EAGER))
+    })
+    List<Comment> getCommentList(@Param("offset") int offset, @Param("limit") int limit);
     @Update("UPDATE comment SET likes = likes + 1 WHERE comment_id = #{commentId}")
     int increaseLikesById(@Param("commentId") int commentId);
 
     @Update("UPDATE comment SET likes = likes - 1 WHERE comment_id = #{commentId}")
     int decreaseLikesById(@Param("commentId") int commentId);
 
-    @Select("SELECT * FROM comment WHERE comment_id = #{commendId}")
-    Comment findCommentById(@Param("commentId") int commentId);
+    @Select("SELECT * FROM comment WHERE comment_id = #{commentId}")
+    Comment getCommentByCommentId(@Param("commentId") int commentId);
 }

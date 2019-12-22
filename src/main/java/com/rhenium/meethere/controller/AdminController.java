@@ -56,7 +56,7 @@ public class AdminController {
     @RequestMapping(value = "/get-booking-list", method = RequestMethod.GET)
     @AdminLoginRequired
     public ResultEntity getBookingList(@RequestParam int offset, @RequestParam int limit, @RequestParam int adminId) {
-        List<Booking> data = adminService.getBookingList(offset, limit);
+        List<Map<String, String>> data = adminService.getBookingList(offset, limit);
         return ResultEntity.succeed(data);
     }
 
@@ -81,8 +81,7 @@ public class AdminController {
      */
     @GetMapping("/booking-count-by-date")
     @AdminLoginRequired
-    public ResultEntity getBookingCountByDate(@RequestParam String date,
-                                              @RequestParam int adminId){
+    public ResultEntity getBookingCountByDate(@RequestParam String date, @RequestParam int adminId){
         int result = adminService.getBookingCountByDate(date);
         return ResultEntity.succeed(result);
     }

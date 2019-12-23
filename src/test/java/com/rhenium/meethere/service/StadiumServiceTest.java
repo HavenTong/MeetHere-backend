@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ class StadiumServiceTest {
         stadium.setStadiumName("Song");
         stadium.setType(1);
         stadium.setDescription("Just for test");
-        stadium.setPrice(12.00);
+        stadium.setPrice(BigDecimal.valueOf(12.0));
         stadium.setLocation("ZhongShanBei road");
         when(stadiumDao.getStadiumById(1)).thenReturn(stadium);
         ArgumentCaptor<Integer> idCaptor = ArgumentCaptor.forClass(Integer.class);

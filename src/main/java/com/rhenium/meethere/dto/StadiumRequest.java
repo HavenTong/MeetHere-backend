@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author YueChen
  * @version 1.0
@@ -18,6 +20,6 @@ public class StadiumRequest {
     private String typeName;
     private String location;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String picture;
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author HavenTong
@@ -22,6 +23,6 @@ public class Stadium implements Serializable {
     private Integer type;
     private String location;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String picture;
 }

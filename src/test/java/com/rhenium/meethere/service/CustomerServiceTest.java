@@ -329,7 +329,6 @@ class CustomerServiceTest {
         );
     }
 
-    // TODO: 修改成新版本
     @Test
     @DisplayName("更新用户信息时，当将要更新的用户名为空时，抛出异常")
     void shouldThrowExceptionWhenSaveUserInfoWithEmptyUserName(){

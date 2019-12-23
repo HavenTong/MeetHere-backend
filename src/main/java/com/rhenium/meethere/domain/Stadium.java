@@ -1,6 +1,7 @@
 package com.rhenium.meethere.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Stadium implements Serializable {
     private static final long serialVersionUID = -4454785377509579955L;
 

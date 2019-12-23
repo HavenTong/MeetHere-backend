@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService {
         if (limit < 1){
             throw new MyException(ResultEnum.INVALID_LIMIT);
         }
-        
+
         List<Customer> customers = customerDao.getUserList(offset, limit);
         List<Map<String, String>> data = new ArrayList<>();
         for (Customer customer : customers) {
@@ -101,8 +101,7 @@ public class AdminServiceImpl implements AdminService {
         adminLoginInfo.put("phoneNumber", phoneNumber);
         return adminLoginInfo;
     }
-
-    // TODO: 测试脚本
+    
     @Override
     public void deleteUser(AdminRequest adminRequest) {
         customerDao.deleteCustomerById(adminRequest.getCustomerId());

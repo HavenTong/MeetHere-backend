@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,12 +22,18 @@ public class News implements Serializable {
     private static final long serialVersionUID = 7620744559347674335L;
 
     private Integer newsId;
+
+    @NotNull
     private String newsTitle;
+
+    @NotNull
     private Integer adminId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime newsPostTime;
+
+    @Size(max = 200, message = "新闻内容最多200字")
     private String newsContent;
 
     // 相关联的管理员

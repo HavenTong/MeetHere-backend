@@ -33,7 +33,7 @@ public class StadiumController {
 
     @GetMapping("/message")
     @UserLoginRequired
-    public ResultEntity getStadiumById(@RequestParam int id, int customerId) {
+    public ResultEntity getStadiumById(@RequestParam int id, @RequestParam int customerId) {
         Map<String, String> stadium = stadiumService.getStadiumById(id);
         return ResultEntity.succeed(stadium);
     }

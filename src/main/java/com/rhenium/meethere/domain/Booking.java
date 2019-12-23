@@ -2,12 +2,13 @@ package com.rhenium.meethere.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Booking implements Serializable {
     private static final long serialVersionUID = 7212388806114748909L;
 
@@ -32,7 +34,7 @@ public class Booking implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endTime;
 
-    private Integer priceSum;
+    private BigDecimal priceSum;
     private Boolean paid;
 
     /** For SQL **/

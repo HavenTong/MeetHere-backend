@@ -1,6 +1,7 @@
 package com.rhenium.meethere.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Stadium implements Serializable {
     private static final long serialVersionUID = -4454785377509579955L;
 
@@ -30,6 +32,6 @@ public class Stadium implements Serializable {
 
     @Size(max = 200, message = "场馆描述最多200字")
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String picture;
 }

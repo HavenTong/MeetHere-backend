@@ -3,6 +3,12 @@ package com.rhenium.meethere.service;
 import com.rhenium.meethere.dao.AdminDao;
 import com.rhenium.meethere.dao.BookingDao;
 import com.rhenium.meethere.dao.CustomerDao;
+import com.rhenium.meethere.domain.Booking;
+import com.rhenium.meethere.domain.Customer;
+import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.AdminRequest;
+import com.rhenium.meethere.enums.ResultEnum;
+import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.AdminServiceImpl;
 import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -46,7 +53,7 @@ class AdminServiceTest {
 
     @Test
     @DisplayName("获取用户数量时，获取结果正确")
-    void shouldGetCorrectUserCount(){
+    void shouldGetCorrectUserCount() {
         when(customerDao.getUserCount()).thenReturn(3);
         Map<String, String> result = adminService.getUserCount();
         verify(customerDao, times(1))
@@ -55,8 +62,164 @@ class AdminServiceTest {
     }
 
     @Test
+    @DisplayName("删除指定用户ID的用户，应该调用customerDao")
+    void shouldCallCustomerDaoWhenDeleteCustomerById() {
+        AdminRequest adminRequest = AdminRequest.builder().customerId(1).build();
+        adminService.deleteUser(adminRequest);
+
+        verify(customerDao, times(1)).deleteCustomerById(1);
+    }
+
+    @Test
+    @DisplayName("当获取用户列表的offset参数小于0时，抛出异常")
+    void shouldThrowExceptionWhenGetUserListWithWrongOffset() {
+        MyException exception = assertThrows(MyException.class, () -> adminService.getUserList(-1, 20));
+        assertEquals(ResultEnum.INVALID_OFFSET.getCode(), exception.getCode());
+
+        verify(customerDao, never()).getUserList(-1, 20);
+    }
+
+    @Test
+    @DisplayName("当获取用户列表的limit参数小于1时，抛出异常")
+    void shouldThrowExceptionWhenGetUserListWithWrongLimit() {
+        MyException exception = assertThrows(MyException.class, () -> adminService.getUserList(0, 0));
+        assertEquals(ResultEnum.INVALID_LIMIT.getCode(), exception.getCode());
+
+        verify(customerDao, never()).getUserList(0, 0);
+    }
+
+    @Test
+    @DisplayName("当获取用户列表的参数正常时，返回符合预期格式的数据")
+    void shouldThrowExceptionWhenGetUserListWithCorrectOffsetAndLimit() {
+        List<Customer> customerList = new ArrayList<>();
+        customerList.add(
+                Customer.builder().customerId(1)
+                        .registeredTime(LocalDateTime.of(2019, 12, 20, 12, 0, 0))
+                        .userName("JJAYCHEN")
+                        .email("705276106@qq.com")
+                        .phoneNumber("18000000000").build());
+        customerList.add(
+                Customer.builder().customerId(2)
+                        .registeredTime(LocalDateTime.of(2019, 12, 20, 12, 0, 0))
+                        .userName("CHEN")
+                        .email("10175101148@stu.ecnu.edu.com")
+                        .phoneNumber(null).build());
+        when(customerDao.getUserList(0, 20)).thenReturn(customerList);
+        List<Map<String, String>> data = adminService.getUserList(0, 20);
+
+        verify(customerDao, times(1)).getUserList(0, 20);
+
+        Map<String, String> dataOne = data.get(0);
+        Map<String, String> dataTwo = data.get(1);
+        assertEquals("1", dataOne.get("customerId"));
+        assertEquals("2019-12-20 12:00:00", dataOne.get("registeredTime"));
+        assertEquals("JJAYCHEN", dataOne.get("userName"));
+        assertEquals("705276106@qq.com", dataOne.get("email"));
+        assertEquals("18000000000", dataOne.get("phoneNumber"));
+
+        assertEquals("2", dataTwo.get("customerId"));
+        assertEquals("2019-12-20 12:00:00", dataTwo.get("registeredTime"));
+        assertEquals("CHEN", dataTwo.get("userName"));
+        assertEquals("10175101148@stu.ecnu.edu.com", dataTwo.get("email"));
+        assertEquals("空", dataTwo.get("phoneNumber"));
+    }
+
+    @Test
+    @DisplayName("当获取订单列表的offset参数小于0时，抛出异常")
+    void shouldThrowExceptionWhenGetBookingListWithWrongOffset() {
+        MyException exception = assertThrows(MyException.class, () -> adminService.getBookingList(-1, 20));
+        assertEquals(ResultEnum.INVALID_OFFSET.getCode(), exception.getCode());
+
+        verify(bookingDao, never()).getBookingList(-1, 20);
+    }
+
+    @Test
+    @DisplayName("当获取订单列表的limit参数小于1时，抛出异常")
+    void shouldThrowExceptionWhenGetBookingListWithWrongLimit() {
+        MyException exception = assertThrows(MyException.class, () -> adminService.getBookingList(0, 0));
+        assertEquals(ResultEnum.INVALID_LIMIT.getCode(), exception.getCode());
+
+        verify(bookingDao, never()).getBookingList(0, 0);
+    }
+
+    @Test
+    @DisplayName("当获取订单列表的参数正常时，返回符合预期格式的数据")
+    void shouldThrowExceptionWhenGetBookingListWithCorrectOffsetAndLimit() {
+        List<Booking> bookingList = new ArrayList<>();
+        bookingList.add(
+                Booking.builder().bookingId(1)
+                        .startTime(LocalDateTime.of(2019, 12, 20, 12, 0, 0))
+                        .endTime(LocalDateTime.of(2019, 12, 20, 13, 0, 0))
+                        .priceSum(200)
+                        .paid(false)
+                        .customerId(1)
+                        .stadiumId(1)
+                        .customer(Customer.builder().customerId(1).userName("JJAYCHEN").build())
+                        .stadium(Stadium.builder().stadiumId(1).stadiumName("中北羽毛球馆").build())
+                        .build()
+        );
+        bookingList.add(
+                Booking.builder().bookingId(2)
+                        .startTime(LocalDateTime.of(2019, 12, 20, 12, 0, 0))
+                        .endTime(LocalDateTime.of(2019, 12, 20, 13, 0, 0))
+                        .priceSum(200)
+                        .paid(true)
+                        .customerId(1)
+                        .stadiumId(1)
+                        .customer(Customer.builder().customerId(1).userName("JJAYCHEN").build())
+                        .stadium(Stadium.builder().stadiumId(1).stadiumName("中北羽毛球馆").build())
+                        .build()
+        );
+        when(bookingDao.getBookingList(0, 20)).thenReturn(bookingList);
+        List<Map<String, String>> data = adminService.getBookingList(0, 20);
+
+        verify(bookingDao, times(1)).getBookingList(0, 20);
+
+        Map<String, String> dataOne = data.get(0);
+        Map<String, String> dataTwo = data.get(1);
+        assertEquals("1", dataOne.get("bookingId"));
+        assertEquals("2019-12-20 12:00", dataOne.get("startTime"));
+        assertEquals("2019-12-20 13:00", dataOne.get("endTime"));
+        assertEquals("200", dataOne.get("priceSum"));
+        assertEquals("false", dataOne.get("paid"));
+        assertEquals("1", dataOne.get("customerId"));
+        assertEquals("1", dataOne.get("stadiumId"));
+        assertEquals("JJAYCHEN", dataOne.get("customerName"));
+        assertEquals("中北羽毛球馆", dataOne.get("stadiumName"));
+
+        assertEquals("2", dataTwo.get("bookingId"));
+        assertEquals("2019-12-20 12:00", dataTwo.get("startTime"));
+        assertEquals("2019-12-20 13:00", dataTwo.get("endTime"));
+        assertEquals("200", dataTwo.get("priceSum"));
+        assertEquals("true", dataTwo.get("paid"));
+        assertEquals("1", dataTwo.get("customerId"));
+        assertEquals("1", dataTwo.get("stadiumId"));
+        assertEquals("JJAYCHEN", dataTwo.get("customerName"));
+        assertEquals("中北羽毛球馆", dataTwo.get("stadiumName"));
+    }
+
+    @Test
+    @DisplayName("获取订单数量时，获取结果正确")
+    void shouldGetCorrectBookingCount() {
+        when(bookingDao.getBookingCount()).thenReturn(3);
+        Map<String, String> result = adminService.getBookingCount();
+        verify(bookingDao, times(1))
+                .getBookingCount();
+        assertEquals("3", result.get("count"));
+    }
+
+    @Test
+    @DisplayName("删除指定订单ID的订单，应该调用bookingDao")
+    void shouldCallBookingDaoWhenDeleteBookingById() {
+        AdminRequest adminRequest = AdminRequest.builder().bookingId(1).build();
+        adminService.deleteBooking(adminRequest);
+
+        verify(bookingDao, times(1)).deleteBookingById(1);
+    }
+
+    @Test
     @DisplayName("根据日期统计订单数目时，当日期格式不正确，抛出异常")
-    void shouldThrowExceptionWhenGetBookingCountWithWrongDateFormat(){
+    void shouldThrowExceptionWhenGetBookingCountWithWrongDateFormat() {
         assertThrows(Exception.class,
                 () -> adminService.getBookingCountByDate("2020-1-1"));
         verify(bookingDao, never())
@@ -65,14 +228,14 @@ class AdminServiceTest {
 
     @Test
     @DisplayName("根据日期统计订单数目时，查询正确的日期区间")
-    void shouldGetBookingCountWithCorrectDate(){
+    void shouldGetBookingCountWithCorrectDate() {
         ArgumentCaptor<LocalDateTime> startCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
         ArgumentCaptor<LocalDateTime> endCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
         adminService.getBookingCountByDate("2019-12-21");
         verify(bookingDao, times(1))
                 .getBookingCountBetweenStartAndEnd(startCaptor.capture(), endCaptor.capture());
         assertAll(
-                () -> assertEquals(LocalDateTime.of(2019, 12, 21, 0,0, 0),
+                () -> assertEquals(LocalDateTime.of(2019, 12, 21, 0, 0, 0),
                         startCaptor.getValue()),
                 () -> assertEquals(LocalDateTime.of(2019, 12, 21, 23, 59, 59),
                         endCaptor.getValue())
@@ -81,10 +244,10 @@ class AdminServiceTest {
 
     @Test
     @DisplayName("根据场馆统计订单数目时，返回正确的数据list")
-    void shouldGetCorrectListsWhenGettingBookingCountByStadium(){
+    void shouldGetCorrectListsWhenGettingBookingCountByStadium() {
         Map<String, Object> item1 = new HashMap<>();
         item1.put("stadiumName", "中北网球馆");
-        item1.put("count",2L);
+        item1.put("count", 2L);
         Map<String, Object> item2 = new HashMap<>();
         item2.put("stadiumName", "国家体育馆");
         item2.put("count", 22L);

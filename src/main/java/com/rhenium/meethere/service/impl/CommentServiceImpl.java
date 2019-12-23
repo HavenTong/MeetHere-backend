@@ -119,6 +119,7 @@ public class CommentServiceImpl implements CommentService {
         return data;
     }
 
+    @Override
     public void updateLikes(CommentRequest commentRequest) {
         if (Objects.isNull(commentRequest.getCommentId())){
             throw new MyException(ResultEnum.COMMENT_NOT_EXIST);

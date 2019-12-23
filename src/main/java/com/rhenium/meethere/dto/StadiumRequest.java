@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 /**
  * @author YueChen
@@ -26,6 +27,6 @@ public class StadiumRequest {
     private String location;
 
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String picture;
 }

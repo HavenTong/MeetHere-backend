@@ -1,6 +1,7 @@
 package com.rhenium.meethere.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Comment implements Serializable {
     private static final long serialVersionUID = -8717397300631261545L;
 

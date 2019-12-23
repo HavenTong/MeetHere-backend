@@ -55,6 +55,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Map<String, String>> getUserList(int offset, int limit) {
+        if (offset < 0){
+            throw new MyException(ResultEnum.INVALID_OFFSET);
+        }
+        if (limit < 1){
+            throw new MyException(ResultEnum.INVALID_LIMIT);
+        }
+
         List<Customer> customers = customerDao.getUserList(offset, limit);
         List<Map<String, String>> data = new ArrayList<>();
         for (Customer customer : customers) {
@@ -95,7 +102,6 @@ public class AdminServiceImpl implements AdminService {
         return adminLoginInfo;
     }
 
-    // TODO: 测试脚本
     @Override
     public void deleteUser(AdminRequest adminRequest) {
         customerDao.deleteCustomerById(adminRequest.getCustomerId());

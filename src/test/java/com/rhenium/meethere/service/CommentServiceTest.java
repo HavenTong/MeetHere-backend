@@ -2,10 +2,10 @@ package com.rhenium.meethere.service;
 
 import com.rhenium.meethere.dao.AdminDao;
 import com.rhenium.meethere.dao.CommentDao;
-import com.rhenium.meethere.domain.Admin;
-import com.rhenium.meethere.domain.Comment;
+import com.rhenium.meethere.domain.*;
 import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.dto.CommentRequest;
+import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -182,5 +183,64 @@ class CommentServiceTest {
                 .put("comment:likes", "1:1", "1");
         verify(commentDao, times(1))
                 .increaseLikesById(1);
+    }
+
+    @Test
+    @DisplayName("当获取评论列表的offset参数小于0时，抛出异常")
+    void shouldThrowExceptionWhenGetCommentListWithWrongOffset() {
+        MyException exception = assertThrows(MyException.class, () -> commentService.getCommentList(-1, 20));
+        assertEquals(ResultEnum.INVALID_OFFSET.getCode(), exception.getCode());
+
+        verify(commentDao, never()).getCommentList(-1, 20);
+    }
+
+    @Test
+    @DisplayName("当获取评论列表的limit参数小于1时，抛出异常")
+    void shouldThrowExceptionWhenGetCommentListWithWrongLimit() {
+        MyException exception = assertThrows(MyException.class, () -> commentService.getCommentList(0, 0));
+        assertEquals(ResultEnum.INVALID_LIMIT.getCode(), exception.getCode());
+
+        verify(commentDao, never()).getCommentList(0, 0);
+    }
+
+    @Test
+    @DisplayName("当获取评论列表的参数正常时，返回符合预期格式的数据")
+    void shouldThrowExceptionWhenGetCommentListWithCorrectOffsetAndLimit() {
+        List<Comment> commentList = new ArrayList<>();
+        commentList.add(
+                Comment.builder().commentId(1)
+                        .commentPostTime(LocalDateTime.of(2019, 12, 20, 12, 0, 0))
+                        .commentContent("评论内容")
+                        .likes(32)
+                        .customerId(1)
+                        .stadiumId(1)
+                        .customer(Customer.builder().customerId(1).userName("JJAYCHEN").build())
+                        .stadium(Stadium.builder().stadiumId(1).stadiumName("中北羽毛球馆").build())
+                        .build()
+        );
+        when(commentDao.getCommentList(0, 20)).thenReturn(commentList);
+        List<Map<String, String>> data = commentService.getCommentList(0, 20);
+
+        verify(commentDao, times(1)).getCommentList(0, 20);
+
+        Map<String, String> dataOne = data.get(0);
+        assertEquals("1", dataOne.get("commentId"));
+        assertEquals("2019-12-20 12:00:00", dataOne.get("commentPostTime"));
+        assertEquals("评论内容", dataOne.get("commentContent"));
+        assertEquals("32", dataOne.get("likes"));
+        assertEquals("1", dataOne.get("customerId"));
+        assertEquals("1", dataOne.get("stadiumId"));
+        assertEquals("JJAYCHEN", dataOne.get("customerName"));
+        assertEquals("中北羽毛球馆", dataOne.get("stadiumName"));
+    }
+
+    @Test
+    @DisplayName("获取评论数量时，获取结果正确")
+    void shouldGetCorrectCommentCount() {
+        when(commentDao.getCommentCount()).thenReturn(3);
+        Map<String, String> result = commentService.getCommentCount();
+        verify(commentDao, times(1))
+                .getCommentCount();
+        assertEquals("3", result.get("count"));
     }
 }

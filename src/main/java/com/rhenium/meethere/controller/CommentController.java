@@ -7,6 +7,7 @@ import com.rhenium.meethere.dto.CommentRequest;
 import com.rhenium.meethere.service.CommentService;
 import com.rhenium.meethere.vo.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class CommentController {
 
     @PostMapping("/add")
     @UserLoginRequired
-    public ResultEntity addComment(@RequestBody CommentRequest commentRequest) {
+    public ResultEntity addComment(@Validated @RequestBody CommentRequest commentRequest) {
         commentService.addNewComment(commentRequest);
         return ResultEntity.succeed();
     }

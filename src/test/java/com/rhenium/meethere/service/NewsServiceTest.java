@@ -5,7 +5,6 @@ import com.rhenium.meethere.dao.NewsDao;
 import com.rhenium.meethere.domain.Admin;
 import com.rhenium.meethere.domain.News;
 import com.rhenium.meethere.dto.NewsRequest;
-import com.rhenium.meethere.dto.PublicRequest;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.NewsServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -39,8 +38,6 @@ class NewsServiceTest {
     @Test
     @DisplayName("获取新闻列表时，当offset不是正整数，抛出异常")
     void shouldThrowExceptionWhenOffsetLessThanOne(){
-        PublicRequest publicRequest = PublicRequest.builder()
-                .userId(6).build();
         Throwable exception = assertThrows(MyException.class,
                 () -> newsService.listNewsItems(-1, 3));
         assertEquals("页数必须为正整数", exception.getMessage());
@@ -49,8 +46,6 @@ class NewsServiceTest {
     @Test
     @DisplayName("获取新闻列表时，当limit不是正整数，抛出异常")
     void shouldThrowExceptionWhenLimitLessThanOne(){
-        PublicRequest publicRequest = PublicRequest.builder()
-                .userId(6).build();
         Throwable exception = assertThrows(MyException.class,
                 () -> newsService.listNewsItems(1, 0));
         assertEquals("每页条目数必须为正整数", exception.getMessage());
@@ -59,8 +54,6 @@ class NewsServiceTest {
     @Test
     @DisplayName("获取新闻列表时，当参数符合要求时，查找正确")
     void shouldGetCorrectNewsList(){
-        PublicRequest publicRequest = PublicRequest.builder()
-                .userId(6).build();
         ArgumentCaptor<Integer> offsetCaptor = ArgumentCaptor.forClass(Integer.class);
         ArgumentCaptor<Integer> limitCaptor = ArgumentCaptor.forClass(Integer.class);
         List<News> list =  newsService.listNewsItems(0,3);

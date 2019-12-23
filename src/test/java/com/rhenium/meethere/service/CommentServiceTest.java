@@ -158,6 +158,7 @@ class CommentServiceTest {
         HashOperations mockHashOperations = mock(HashOperations.class);
         when(mockHashOperations.get("comment:likes", "1:1")).thenReturn("1");
         when(redisTemplate.opsForHash()).thenReturn(mockHashOperations);
+        when(commentDao.getCommentByCommentId(1)).thenReturn(new Comment());
         CommentRequest commentRequest = CommentRequest.builder()
                 .customerId(1).commentId(1).build();
         commentService.updateLikes(commentRequest);
@@ -175,6 +176,7 @@ class CommentServiceTest {
         HashOperations mockHashOperations = mock(HashOperations.class);
         when(redisTemplate.opsForHash()).thenReturn(mockHashOperations);
         when(mockHashOperations.get("comment:likes", "1:1")).thenReturn(null);
+        when(commentDao.getCommentByCommentId(1)).thenReturn(new Comment());
         commentService.updateLikes(commentRequest);
         verify(mockHashOperations, times(1))
                 .put("comment:likes", "1:1", "1");

@@ -1,6 +1,5 @@
 package com.rhenium.meethere.aop;
 
-import com.rhenium.meethere.dto.PublicRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.util.JwtUtil;

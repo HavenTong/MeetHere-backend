@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -18,8 +19,10 @@ public class Admin implements Serializable {
     private static final long serialVersionUID = 8963513786794065582L;
 
     private Integer adminId;
-    @Email
+
+    @Email(message = "必须满足邮箱格式")
     private String email;
+
     private String phoneNumber;
     private String adminName;
     private String password;

@@ -7,8 +7,11 @@ import com.rhenium.meethere.service.AdminService;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.xml.transform.Result;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@Validated
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
@@ -69,7 +73,7 @@ public class AdminController {
 
 
     @PostMapping("/login")
-    public ResultEntity login(@RequestBody AdminRequest adminRequest) {
+    public ResultEntity login(@Validated @RequestBody AdminRequest adminRequest) {
         Map<String, String> loginInfo = adminService.login(adminRequest);
         return ResultEntity.succeed(loginInfo);
     }
@@ -81,7 +85,7 @@ public class AdminController {
      */
     @GetMapping("/booking-count-by-date")
     @AdminLoginRequired
-    public ResultEntity getBookingCountByDate(@RequestParam String date, @RequestParam int adminId){
+    public ResultEntity getBookingCountByDate(@RequestParam @NotBlank String date, @RequestParam int adminId){
         int result = adminService.getBookingCountByDate(date);
         return ResultEntity.succeed(result);
     }

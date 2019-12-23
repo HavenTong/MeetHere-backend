@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -24,9 +25,11 @@ public class Customer implements Serializable {
 
     private Integer customerId;
 
-    @Email
+    @Email(message = "必须满足邮箱格式")
     private String email;
     private String phoneNumber;
+
+    @Size(max = 8, message = "用户名不超过8个字符")
     private String userName;
     private String password;
 

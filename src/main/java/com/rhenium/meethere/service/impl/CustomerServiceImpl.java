@@ -82,6 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.isEmpty(customerRequest.getUserName())){
             throw new MyException(ResultEnum.USER_NAME_EMPTY);
         }
+        log.info("password: {}", customerRequest.getPassword());
         // 因为拦截在控制器之前就已经完成，所以该 customerId 是值得信任的
         customerDao.saveCustomerInfo(customerRequest.getCustomerId().toString(), customerRequest.getUserName(), customerRequest.getPhoneNumber());
     }

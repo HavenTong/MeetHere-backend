@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author HavenTong
@@ -67,5 +69,12 @@ public class NewsServiceImpl implements NewsService {
             throw new MyException(ResultEnum.ADMIN_NOT_EXIST);
         }
         newsDao.deleteNews(newsRequest);
+    }
+
+    @Override
+    public Map<String, String> getNewsCount() {
+        Map<String, String> data = new HashMap<>();
+        data.put("count", String.valueOf(newsDao.getNewsCount()));
+        return data;
     }
 }

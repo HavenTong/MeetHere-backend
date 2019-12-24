@@ -62,7 +62,7 @@ public class BookingServiceTest {
         ArrayList<Booking> bookings = new ArrayList<>();
         bookings.add(booking);
 
-        ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimesByBookingsInADay(bookings);
+        ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimesByBookingsInADay(bookings, 1);
 
         assertAll(
                 () -> assertEquals(8, emptyTimes.get(0).get("start")),

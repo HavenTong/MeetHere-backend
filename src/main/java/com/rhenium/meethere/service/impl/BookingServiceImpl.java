@@ -26,9 +26,9 @@ public class BookingServiceImpl implements BookingService {
     BookingDao bookingDao;
 
     @Override
-    public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer DaysAfterToday) {
-        ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, DaysAfterToday);
-        ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings);
+    public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer daysAfterToday) {
+        ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, daysAfterToday);
+        ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings, daysAfterToday);
         return emptyTimesByBooksInADay;
     }
 
@@ -40,9 +40,11 @@ public class BookingServiceImpl implements BookingService {
         return bookings;
     }
 
-    public ArrayList<Map<String, Integer>> getEmptyTimesByBookingsInADay(ArrayList<Booking> bookings) {
+    public ArrayList<Map<String, Integer>> getEmptyTimesByBookingsInADay(ArrayList<Booking> bookings, Integer daysAfterToday) {
         ArrayList<Map<String, Integer>> emptyTimes = new ArrayList<>();
         int currentHour = 8;
+        if(daysAfterToday == 0)
+            currentHour = LocalTime.now().getHour() + 2;
         int start, end;
         for(Booking booking : bookings) {
             if(currentHour != booking.getStartTime().getHour()) {

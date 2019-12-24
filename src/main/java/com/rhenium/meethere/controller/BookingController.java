@@ -1,6 +1,7 @@
 package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.annotation.UserLoginRequired;
+import com.rhenium.meethere.dto.BookingRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.BookingService;
 import com.rhenium.meethere.vo.ResultEntity;
@@ -8,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -36,5 +34,12 @@ public class BookingController {
                                                        @RequestParam int customerId) {
         ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimeByStadiumIdAndDate(stadiumId, daysAfterToday);
         return ResultEntity.succeed(emptyTimes);
+    }
+
+    @PostMapping("/add-new-booking")
+    @UserLoginRequired
+    public ResultEntity addNewBooking(@RequestBody BookingRequest bookingRequest) {
+        bookingService.addNewBooking(bookingRequest);
+        return ResultEntity.succeed();
     }
 }

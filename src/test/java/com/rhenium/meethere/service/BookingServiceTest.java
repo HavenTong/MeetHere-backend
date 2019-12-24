@@ -3,6 +3,7 @@ package com.rhenium.meethere.service;
 import com.rhenium.meethere.dao.BookingDao;
 import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.service.impl.BookingServiceImpl;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.*;
  * @date 2019/12/24 15:02
  */
 @SpringBootTest
-public class BookingServiceTest {
+class BookingServiceTest {
     @Mock
     private BookingDao bookingDao;
 
@@ -70,5 +71,11 @@ public class BookingServiceTest {
                 () -> assertEquals(11, emptyTimes.get(1).get("start")),
                 () -> assertEquals(20, emptyTimes.get(1).get("end"))
         );
+    }
+
+    @Test
+    @DisplayName("通过场馆ID和选定日期获取选定日期的空闲时间列表")
+    void shouldGetEmptyTimeByStadiumIdAndDate() {
+        ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimeByStadiumIdAndDate(1, 1);
     }
 }

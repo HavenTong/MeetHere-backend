@@ -1,5 +1,6 @@
 package com.rhenium.meethere.service;
 
+import com.rhenium.meethere.dto.BookingRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,4 +14,5 @@ import java.util.Map;
 @Service
 public interface BookingService {
     ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer DaysAfterToday);
+    void addNewBooking(BookingRequest bookingRequest);
 }

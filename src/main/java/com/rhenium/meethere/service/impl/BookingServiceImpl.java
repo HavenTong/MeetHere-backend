@@ -1,12 +1,17 @@
 package com.rhenium.meethere.service.impl;
 
 import com.rhenium.meethere.dao.BookingDao;
+import com.rhenium.meethere.dao.StadiumDao;
 import com.rhenium.meethere.domain.Booking;
+import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.BookingRequest;
 import com.rhenium.meethere.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.cache.decorators.BlockingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,11 +30,31 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     BookingDao bookingDao;
 
+    @Autowired
+    StadiumDao stadiumDao;
+
     @Override
     public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer daysAfterToday) {
         ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, daysAfterToday);
         ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings, daysAfterToday);
         return emptyTimesByBooksInADay;
+    }
+
+    @Override
+    public void addNewBooking(BookingRequest bookingRequest) {
+        Booking booking = new Booking();
+        booking.setCustomerId(bookingRequest.getCustomerId());
+        booking.setStadiumId(bookingRequest.getStadiumId());
+        LocalDate today = LocalDate.now();
+        LocalDateTime startTime = LocalDateTime.of(today.plusDays(bookingRequest.getDaysAfterToday()), LocalTime.of(bookingRequest.getStartTime(), 0));
+        LocalDateTime endTime = LocalDateTime.of(today.plusDays(bookingRequest.getDaysAfterToday()), LocalTime.of(bookingRequest.getEndTime(), 0));
+        booking.setStartTime(startTime);
+        booking.setEndTime(endTime);
+        Stadium stadium = stadiumDao.getStadiumById(bookingRequest.getStadiumId());
+        BigDecimal priceSum = BigDecimal.valueOf(bookingRequest.getEndTime() - bookingRequest.getStartTime()).multiply(stadium.getPrice());
+        booking.setPriceSum(priceSum);
+        booking.setPaid(false);
+        bookingDao.addNewBooking(booking);
     }
 
     public ArrayList<Booking> getBookingsByStadiumAndDate(Integer stadiumId, Integer daysAfterToday) {

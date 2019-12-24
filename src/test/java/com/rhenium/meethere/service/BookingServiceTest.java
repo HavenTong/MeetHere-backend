@@ -78,4 +78,10 @@ class BookingServiceTest {
     void shouldGetEmptyTimeByStadiumIdAndDate() {
         ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimeByStadiumIdAndDate(1, 1);
     }
+
+    @Test
+    @DisplayName("添加一个新的订单")
+    void shouldAddNewBooking() {
+
+    }
 }

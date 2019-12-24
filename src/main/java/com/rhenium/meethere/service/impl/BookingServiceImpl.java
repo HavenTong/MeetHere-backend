@@ -5,6 +5,8 @@ import com.rhenium.meethere.dao.StadiumDao;
 import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.domain.Stadium;
 import com.rhenium.meethere.dto.BookingRequest;
+import com.rhenium.meethere.enums.ResultEnum;
+import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.decorators.BlockingCache;
@@ -42,6 +44,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void addNewBooking(BookingRequest bookingRequest) {
+        boolean isValid = judgeBookingIsValid(bookingRequest);
+        if(!isValid) {
+            throw new MyException(ResultEnum.INVALID_TIME_IN_BOOKING);
+        }
         Booking booking = new Booking();
         booking.setCustomerId(bookingRequest.getCustomerId());
         booking.setStadiumId(bookingRequest.getStadiumId());
@@ -55,6 +61,18 @@ public class BookingServiceImpl implements BookingService {
         booking.setPriceSum(priceSum);
         booking.setPaid(false);
         bookingDao.addNewBooking(booking);
+    }
+
+    boolean judgeBookingIsValid(BookingRequest bookingRequest) {
+        ArrayList<Map<String, Integer>> emptyTimes = getEmptyTimeByStadiumIdAndDate(bookingRequest.getStadiumId(), bookingRequest.getDaysAfterToday());
+        Integer startTime = bookingRequest.getStartTime();
+        Integer endTime = bookingRequest.getEndTime();
+        for(Map<String, Integer> emptyTime : emptyTimes) {
+            if(emptyTime.get("start") <= startTime && endTime <= emptyTime.get("end")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Booking> getBookingsByStadiumAndDate(Integer stadiumId, Integer daysAfterToday) {

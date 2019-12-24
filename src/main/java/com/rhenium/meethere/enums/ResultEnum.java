@@ -46,6 +46,11 @@ public enum ResultEnum {
     COMMENT_NOT_EXIST(4001, "评论不存在"),
     DELETE_COMMENT_IS_NOT_USERS(4001, "删除非本人的评论"),
 
+    /**
+     * Booking Related
+     */
+    INVALID_TIME_IN_BOOKING(5001, "订单时间不合法"),
+
     ;
     private Integer code;
     private String message;

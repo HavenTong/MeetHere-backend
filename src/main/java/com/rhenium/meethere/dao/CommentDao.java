@@ -39,7 +39,7 @@ public interface CommentDao {
     @Select("SELECT COUNT(*) FROM comment")
     int getCommentCount();
 
-    @Select("SELECT comment.*, stadium.*, customer.* FROM comment NATURAL JOIN stadium NATURAL JOIN customer ORDER BY comment.comment_id LIMIT #{offset}, #{limit}")
+    @Select("SELECT comment.* FROM comment ORDER BY comment.comment_id LIMIT #{offset}, #{limit}")
     @Results({
             @Result(property = "customerId", column = "customer_id"),
             @Result(property = "stadiumId", column = "stadium_id"),

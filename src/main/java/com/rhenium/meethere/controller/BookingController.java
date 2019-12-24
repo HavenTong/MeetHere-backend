@@ -2,11 +2,9 @@ package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.annotation.UserLoginRequired;
 import com.rhenium.meethere.dto.BookingRequest;
-import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.service.BookingService;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

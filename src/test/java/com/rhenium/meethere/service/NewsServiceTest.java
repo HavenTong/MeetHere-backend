@@ -13,8 +13,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.DisabledIf;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,6 +36,16 @@ class NewsServiceTest {
 
     @InjectMocks
     private NewsServiceImpl newsService;
+
+    @Test
+    @DisplayName("获取新闻数量时，获取结果正确")
+    void shouldGetCorrectNewsCount() {
+        when(newsDao.getNewsCount()).thenReturn(3);
+        Map<String, String> result = newsService.getNewsCount();
+        verify(newsDao, times(1))
+                .getNewsCount();
+        assertEquals("3", result.get("count"));
+    }
 
     @Test
     @DisplayName("获取新闻列表时，当offset不是正整数，抛出异常")

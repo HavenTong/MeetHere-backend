@@ -3,11 +3,11 @@ package com.rhenium.meethere.service;
 import com.rhenium.meethere.dao.AdminDao;
 import com.rhenium.meethere.dao.CommentDao;
 import com.rhenium.meethere.domain.*;
+import com.rhenium.meethere.service.impl.CommentServiceImpl;
 import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.dto.CommentRequest;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
-import com.rhenium.meethere.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -41,7 +41,6 @@ class CommentServiceTest {
 
     @InjectMocks
     private CommentServiceImpl commentService;
-
 
     @Test
     @DisplayName("管理员删除留言时，若管理员不存在，抛出异常")

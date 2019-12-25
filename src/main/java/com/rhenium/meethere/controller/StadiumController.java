@@ -1,5 +1,6 @@
 package com.rhenium.meethere.controller;
 
+import com.rhenium.meethere.annotation.AdminLoginRequired;
 import com.rhenium.meethere.annotation.UserLoginRequired;
 import com.rhenium.meethere.domain.Stadium;
 import com.rhenium.meethere.service.StadiumService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,5 +38,15 @@ public class StadiumController {
     public ResultEntity getStadiumById(@RequestParam int id, @RequestParam int customerId) {
         Map<String, String> stadium = stadiumService.getStadiumById(id);
         return ResultEntity.succeed(stadium);
+    }
+
+    @GetMapping("/items-for-admin")
+    @AdminLoginRequired
+    public ResultEntity getStadiumsForAdmin(@RequestParam int offset,
+                                            @RequestParam int limit,
+                                            @RequestParam int adminId){
+        List<Map<String, Object>> stadiums =
+                stadiumService.findStadiumsForAdmin(offset, limit);
+        return ResultEntity.succeed(stadiums);
     }
 }

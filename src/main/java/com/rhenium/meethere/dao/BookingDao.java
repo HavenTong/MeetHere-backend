@@ -48,6 +48,9 @@ public interface BookingDao {
             "GROUP BY stadium_name;")
     List<Map<String, Object>> getBookingCountGroupByStadium();
 
+
+    @Select("SELECT * FROM booking WHERE stadium_id = #{stadiumId}")
+    List<Booking> findBookingByStadiumId(@Param("stadiumId") int stadiumId);
     @Select("SELECT * FROM booking WHERE stadium_id = #{stadiumId} AND start_time >= #{start} AND end_time <= #{end} " +
             "ORDER BY start_time;")
     ArrayList<Booking> getBookingsByStadiumIdAndStartAndEnd(@Param("stadiumId") int stadiumId, @Param("start")LocalDateTime start, @Param("end") LocalDateTime end);

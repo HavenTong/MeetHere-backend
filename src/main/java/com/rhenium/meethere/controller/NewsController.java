@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author HavenTong
@@ -23,7 +24,14 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @GetMapping("/items")
+    @GetMapping("/get-news-count")
+    @PublicLoginRequired
+    public ResultEntity getNewsCount(@RequestParam int userId) {
+        Map<String, String> data = newsService.getNewsCount();
+        return ResultEntity.succeed(data);
+    }
+
+    @GetMapping("/get-news-list")
     @PublicLoginRequired
     public ResultEntity listNewsItems(@RequestParam int offset,
                                       @RequestParam int limit,

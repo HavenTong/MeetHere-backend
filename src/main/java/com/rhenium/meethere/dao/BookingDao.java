@@ -3,11 +3,13 @@ package com.rhenium.meethere.dao;
 import com.rhenium.meethere.domain.Booking;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Book;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +24,7 @@ public interface BookingDao {
 
     // TODO: 可以优化一下 LIMIT
 
-    @Select("SELECT b.*, s.*, c.* FROM booking b NATURAL JOIN stadium s NATURAL JOIN customer c ORDER BY b.booking_id LIMIT #{offset}, #{limit}")
+    @Select("SELECT b.* FROM booking b ORDER BY b.booking_id LIMIT #{offset}, #{limit}")
     @Results({
             @Result(property = "customerId", column = "customer_id"),
             @Result(property = "stadiumId", column = "stadium_id"),
@@ -49,4 +51,12 @@ public interface BookingDao {
 
     @Select("SELECT * FROM booking WHERE stadium_id = #{stadiumId}")
     List<Booking> findBookingByStadiumId(@Param("stadiumId") int stadiumId);
+    @Select("SELECT * FROM booking WHERE stadium_id = #{stadiumId} AND start_time >= #{start} AND end_time <= #{end} " +
+            "ORDER BY start_time;")
+    ArrayList<Booking> getBookingsByStadiumIdAndStartAndEnd(@Param("stadiumId") int stadiumId, @Param("start")LocalDateTime start, @Param("end") LocalDateTime end);
+
+
+    @Insert("INSERT INTO booking(customer_id, stadium_id, start_time, end_time, price_sum, paid) VALUES (#{customerId}, #{stadiumId}, #{startTime}, #{endTime}, #{priceSum}, #{paid})")
+    int addNewBooking(Booking booking);
+
 }

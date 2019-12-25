@@ -4,6 +4,7 @@ import com.rhenium.meethere.domain.News;
 import com.rhenium.meethere.dto.NewsRequest;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author HavenTong
@@ -17,4 +18,6 @@ public interface NewsService {
     void updateNews(NewsRequest newsRequest);
 
     void deleteNews(NewsRequest newsRequest);
+
+    Map<String,String> getNewsCount();
 }

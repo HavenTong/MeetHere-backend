@@ -4,6 +4,7 @@ import com.rhenium.meethere.domain.Stadium;
 import com.rhenium.meethere.dto.CommentRequest;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +15,8 @@ import java.util.Map;
 public interface StadiumService {
 
     ArrayList<Stadium> listStadiumItems();
+
     Map<String, String> getStadiumById(Integer id);
 
+    List<Map<String, Object>> findStadiumsForAdmin(int offset, int limit);
 }

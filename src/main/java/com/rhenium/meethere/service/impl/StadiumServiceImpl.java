@@ -1,14 +1,24 @@
 package com.rhenium.meethere.service.impl;
 
 import com.rhenium.meethere.dao.StadiumDao;
+import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.enums.StadiumTypeEnum;
+import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.StadiumService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,6 +27,7 @@ import java.util.Map;
  * @date 2019/12/17 22:53
  */
 @Service
+@Slf4j
 public class StadiumServiceImpl implements StadiumService {
     @Autowired
     private StadiumDao stadiumDao;
@@ -47,4 +58,91 @@ public class StadiumServiceImpl implements StadiumService {
         return stadiumMsg;
     }
 
+    @Override
+    public List<Map<String, Object>> findStadiumsForAdmin(int offset, int limit) {
+        if (offset < 0){
+            throw new MyException(ResultEnum.INVALID_OFFSET);
+        }
+        if (limit < 1){
+            throw new MyException(ResultEnum.INVALID_LIMIT);
+        }
+        List<Stadium> stadiums = stadiumDao.findAllStadiumsForAdmin(offset, limit);
+        List<Map<String, Object>> stadiumInfoList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        for (Stadium stadium : stadiums){
+            Map<String, Object> stadiumEntry = new HashMap<>();
+            List<Booking> bookingList = stadium.getBookingList();
+
+            // 通过private函数获取空闲时间
+            List<String> freeTime =
+                    getSpareTimeFromBookingList(bookingList, LocalDate.now());
+
+            stadiumEntry.put("freeTime", freeTime);
+            stadiumEntry.put("stadiumId", stadium.getStadiumId());
+            stadiumEntry.put("stadiumName", stadium.getStadiumName());
+            stadiumEntry.put("price", stadium.getPrice());
+            stadiumEntry.put("location", stadium.getLocation());
+            stadiumEntry.put("description", stadium.getDescription());
+            stadiumEntry.put("type", StadiumTypeEnum.getByCode(stadium.getType()).getType());
+            stadiumInfoList.add(stadiumEntry);
+        }
+        return stadiumInfoList;
+    }
+
+    // TODO: 需要确定返回哪一天的空闲时间
+    private List<String> getSpareTimeFromBookingList(List<Booking> bookingList,
+                                                     LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        List<String> spareTime = new ArrayList<>();
+
+        // timeSlotTable为一个flag数组，表示该时间槽是否被预约，每小时算一个时间槽
+        // e.g. timeSlotTable[0] -> 8:00-9:00，共12个
+        boolean[] timeSlotTable = new boolean[12];
+        for (boolean used : timeSlotTable){
+            used = false;
+        }
+
+        // 只考虑一天内的预约
+        for (Booking booking : bookingList){
+            LocalDateTime startTime  = booking.getStartTime();
+            if (date.isEqual(startTime.toLocalDate())){
+                int start = startTime.getHour();
+                int end = booking.getEndTime().getHour();
+                for (int i = start; i < end; i++){
+                    timeSlotTable[i - 8] = true;
+                }
+            }
+        }
+
+        // TODO: 通过timeSlotTable中的占用情况返回一个空闲时间的list
+        int startIndex = (timeSlotTable[0]) ? 0 : -1;
+        int endIndex = 0;
+        for (int i = 1; i <= 11; i++){
+            // 若全部空闲则循环没有操作
+            if (timeSlotTable[i]){
+                if (!timeSlotTable[i - 1]){
+                    endIndex = i;
+                    StringBuilder builder = new StringBuilder();
+                    LocalTime startTime = LocalTime.of(startIndex + 9, 0);
+                    LocalTime endTime = LocalTime.of(endIndex + 8, 0);
+                    builder.append(formatter.format(startTime))
+                            .append("-")
+                            .append(formatter.format(endTime));
+                    spareTime.add(builder.toString());
+                }
+                if (i <= 10 && !timeSlotTable[i + 1]){
+                    startIndex = i;
+                }
+            }
+        }
+        if (!timeSlotTable[11]){
+            StringBuilder builder = new StringBuilder();
+            LocalTime startTime = LocalTime.of(startIndex + 9, 0);
+            builder.append(formatter.format(startTime))
+                    .append("-")
+                    .append("20:00");
+            spareTime.add(builder.toString());
+        }
+        return spareTime;
+    }
 }

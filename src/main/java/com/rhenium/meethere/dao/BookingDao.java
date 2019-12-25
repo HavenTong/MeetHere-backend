@@ -45,4 +45,8 @@ public interface BookingDao {
             "FROM booking NATURAL JOIN stadium\n" +
             "GROUP BY stadium_name;")
     List<Map<String, Object>> getBookingCountGroupByStadium();
+
+
+    @Select("SELECT * FROM booking WHERE stadium_id = #{stadiumId}")
+    List<Booking> findBookingByStadiumId(@Param("stadiumId") int stadiumId);
 }

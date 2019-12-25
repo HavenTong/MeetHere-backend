@@ -29,6 +29,11 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private AdminDao adminDao;
 
+    /**
+     * @param offset 页面偏移量 必须 >= 0
+     * @param limit 每页个数 必须 >= 1
+     * @return 返回新闻条目
+     */
     @Override
     public List<News> listNewsItems(int offset, int limit) {
         if (offset < 0){
@@ -37,7 +42,6 @@ public class NewsServiceImpl implements NewsService {
         if (limit < 1){
             throw new MyException(ResultEnum.INVALID_LIMIT);
         }
-
         return newsDao.findNewsByOffsetAndLimit(offset, limit);
     }
 

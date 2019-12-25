@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author HavenTong
@@ -34,4 +35,6 @@ public class Stadium implements Serializable {
     private String description;
     private BigDecimal price;
     private String picture;
+
+    private List<Booking> bookingList;
 }

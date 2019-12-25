@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import java.awt.print.Book;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -150,7 +151,7 @@ class AdminServiceTest {
                 Booking.builder().bookingId(1)
                         .startTime(LocalDateTime.of(2019, 12, 20, 12, 0, 0))
                         .endTime(LocalDateTime.of(2019, 12, 20, 13, 0, 0))
-                        .priceSum(200)
+                        .priceSum(BigDecimal.valueOf(200))
                         .paid(false)
                         .customerId(1)
                         .stadiumId(1)
@@ -162,7 +163,7 @@ class AdminServiceTest {
                 Booking.builder().bookingId(2)
                         .startTime(LocalDateTime.of(2019, 12, 20, 12, 0, 0))
                         .endTime(LocalDateTime.of(2019, 12, 20, 13, 0, 0))
-                        .priceSum(200)
+                        .priceSum(BigDecimal.valueOf(200))
                         .paid(true)
                         .customerId(1)
                         .stadiumId(1)

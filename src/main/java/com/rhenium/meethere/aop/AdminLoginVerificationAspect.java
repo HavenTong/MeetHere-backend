@@ -63,6 +63,7 @@ public class AdminLoginVerificationAspect {
         }
         if (!decodedAdminId.equals(actualAdminId)){
             log.info("not equals: actual: {}", actualAdminId);
+            log.info("not equals: decoded: {}", decodedAdminId);
             throw new MyException(ResultEnum.TOKEN_NOT_MATCH);
         }
     }

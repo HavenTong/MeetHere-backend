@@ -37,7 +37,7 @@ public class CommentController {
     @UserLoginRequired
     public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId,
                                               @RequestParam int customerId) {
-        ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(stadiumId);
+        ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(stadiumId, customerId);
         return ResultEntity.succeed(comments);
     }
 

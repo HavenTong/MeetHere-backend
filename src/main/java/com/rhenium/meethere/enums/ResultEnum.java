@@ -32,8 +32,8 @@ public enum ResultEnum {
     /**
      * News Related
      */
-    INVALID_OFFSET(2001, "页数必须为正整数"),
-    INVALID_LIMIT(2002, "每页条目数必须为正整数"),
+    INVALID_OFFSET(2001, "偏移数据条目数必须为正整数"),
+    INVALID_LIMIT(2002, "数据条目数必须为正整数"),
 
     /**
      * Admin Related

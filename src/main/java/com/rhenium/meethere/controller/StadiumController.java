@@ -3,13 +3,12 @@ package com.rhenium.meethere.controller;
 import com.rhenium.meethere.annotation.AdminLoginRequired;
 import com.rhenium.meethere.annotation.UserLoginRequired;
 import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.StadiumRequest;
 import com.rhenium.meethere.service.StadiumService;
 import com.rhenium.meethere.vo.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,5 +47,19 @@ public class StadiumController {
         List<Map<String, Object>> stadiums =
                 stadiumService.findStadiumsForAdmin(offset, limit);
         return ResultEntity.succeed(stadiums);
+    }
+
+    @PostMapping("/update")
+    @AdminLoginRequired
+    public ResultEntity updateStadiumInfo(@Validated @RequestBody StadiumRequest stadiumRequest){
+        stadiumService.updateStadiumInfoByAdmin(stadiumRequest);
+        return ResultEntity.succeed();
+    }
+
+    @PostMapping("/delete")
+    @AdminLoginRequired
+    public ResultEntity deleteStadium(@RequestBody StadiumRequest stadiumRequest){
+        stadiumService.deleteStadiumInfoByAdmin(stadiumRequest);
+        return ResultEntity.succeed();
     }
 }

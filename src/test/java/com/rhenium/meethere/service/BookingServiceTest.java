@@ -2,6 +2,7 @@ package com.rhenium.meethere.service;
 
 import com.rhenium.meethere.dao.BookingDao;
 import com.rhenium.meethere.domain.Booking;
+import com.rhenium.meethere.dto.BookingRequest;
 import com.rhenium.meethere.service.impl.BookingServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,5 +84,15 @@ class BookingServiceTest {
     @DisplayName("添加一个新的订单")
     void shouldAddNewBooking() {
 
+    }
+
+    @Test
+    @DisplayName("用户删除正确的订单")
+    void shouldDeleteCorrectBookingByCustomer(){
+        BookingRequest bookingRequest = BookingRequest.builder()
+                .bookingId(12).customerId(7).build();
+        bookingService.deleteBookingByCustomer(bookingRequest);
+        verify(bookingDao, times(1))
+                .deleteBookingById(12);
     }
 }

@@ -40,4 +40,11 @@ public class BookingController {
         bookingService.addNewBooking(bookingRequest);
         return ResultEntity.succeed();
     }
+
+    @PostMapping("/delete-by-customer")
+    @UserLoginRequired
+    public ResultEntity deleteBookingByCustomer(@RequestBody BookingRequest bookingRequest){
+        bookingService.deleteBookingByCustomer(bookingRequest);
+        return ResultEntity.succeed();
+    }
 }

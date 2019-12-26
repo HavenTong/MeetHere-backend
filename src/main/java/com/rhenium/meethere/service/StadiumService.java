@@ -2,6 +2,7 @@ package com.rhenium.meethere.service;
 
 import com.rhenium.meethere.domain.Stadium;
 import com.rhenium.meethere.dto.CommentRequest;
+import com.rhenium.meethere.dto.StadiumRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,4 +20,8 @@ public interface StadiumService {
     Map<String, String> getStadiumById(Integer id);
 
     List<Map<String, Object>> findStadiumsForAdmin(int offset, int limit);
+
+    void updateStadiumInfoByAdmin(StadiumRequest stadiumRequest);
+
+    void deleteStadiumInfoByAdmin(StadiumRequest stadiumRequest);
 }

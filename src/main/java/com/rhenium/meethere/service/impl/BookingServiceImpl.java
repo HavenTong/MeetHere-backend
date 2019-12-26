@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -107,5 +108,16 @@ public class BookingServiceImpl implements BookingService {
             emptyTimes.add(emptyTime);
         }
         return emptyTimes;
+    }
+
+    //TODO: 用户获取订单信息
+    @Override
+    public List<Booking> getBookingsByCustomer(int customerId) {
+        return null;
+    }
+
+    @Override
+    public void deleteBookingByCustomer(BookingRequest bookingRequest) {
+        bookingDao.deleteBookingById(bookingRequest.getBookingId());
     }
 }

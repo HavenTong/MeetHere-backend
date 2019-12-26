@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,5 +55,22 @@ public class BookingController {
     public ResultEntity updateBooking(@RequestBody BookingRequest bookingRequest) {
         bookingService.updateBooking(bookingRequest);
         return ResultEntity.succeed();
+    }
+
+    @GetMapping("/items")
+    @UserLoginRequired
+    public ResultEntity getBookingsByCustomerId(@RequestParam int offset,
+                                                @RequestParam int limit,
+                                                @RequestParam int customerId){
+        List<Map<String, Object>> bookingList = bookingService.getBookingsByCustomer(offset, limit, customerId);
+        return ResultEntity.succeed(bookingList);
+    }
+
+    @GetMapping("/count-for-customer")
+    @UserLoginRequired
+    public ResultEntity getBookingCountForCustomer(@RequestParam int customerId){
+        Map<String, Object> bookingCount =
+                bookingService.getBookingCountForCustomer(customerId);
+        return ResultEntity.succeed(bookingCount);
     }
 }

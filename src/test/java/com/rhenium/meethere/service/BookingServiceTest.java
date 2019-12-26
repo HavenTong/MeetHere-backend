@@ -5,6 +5,7 @@ import com.rhenium.meethere.dao.StadiumDao;
 import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.domain.Stadium;
 import com.rhenium.meethere.dto.BookingRequest;
+import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.impl.BookingServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -237,6 +239,69 @@ class BookingServiceTest {
         bookingService.deleteBookingByCustomer(bookingRequest);
         verify(bookingDao, times(1))
                 .deleteBookingById(12);
+    }
+
+    @Test
+    @DisplayName("用户获取自己订单时，若offset小于0，则抛出异常")
+    void shouldThrowExceptionWhenGettingBookingWithOffsetLessThanZero(){
+        Throwable exception = assertThrows(MyException.class,
+                () -> bookingService.getBookingsByCustomer(-1, 2, 1));
+        assertEquals("偏移数据条目数必须为正整数", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("用户获取自己订单时，若limit小于1，则抛出异常")
+    void shouldThrowExceptionWhenGettingBookingWithLimitLessThanOne(){
+        Throwable exception = assertThrows(MyException.class,
+                () -> bookingService.getBookingsByCustomer(0, 0, 1));
+        assertEquals("数据条目数必须为正整数", exception.getMessage());
+    }
+
+    // 改测试方法的测试用例需要根据测试方法运行的时间来进行设计，否则会测试失败
+    // 当前测试日期为12-27
+    @Test
+    @DisplayName("用户获取正确的订单列表")
+    void shouldGetCorrectBookingsForCustomer(){
+        Stadium tennisCourt = Stadium.builder()
+                .stadiumName("tennis").build();
+        Stadium volleyBallCourt = Stadium.builder()
+                .stadiumName("volleyball").build();
+        Booking bookingForTennis = Booking.builder()
+                .bookingId(1)
+                .startTime(LocalDateTime.of(2019, 12, 26, 8, 0, 0))
+                .endTime(LocalDateTime.of(2019, 12, 26, 10, 0, 0 ))
+                .paid(true).stadium(tennisCourt).priceSum(BigDecimal.valueOf(200)).build();
+        Booking bookingForVolleyball = Booking.builder()
+                .bookingId(2)
+                .startTime(LocalDateTime.of(2019, 12, 28, 18, 0, 0 ))
+                .endTime(LocalDateTime.of(2019, 12, 28, 20, 0, 0))
+                .paid(false).stadium(volleyBallCourt).priceSum(BigDecimal.valueOf(400)).build();
+        List<Booking> bookingList = new ArrayList<>(Arrays.asList(bookingForTennis, bookingForVolleyball));
+        when(bookingDao.findBookingsByCustomerId(0, 2, 1)).thenReturn(bookingList);
+        List<Map<String, Object>> bookingInfoList
+                = bookingService.getBookingsByCustomer(0, 2, 1);
+        verify(bookingDao, times(1))
+                .findBookingsByCustomerId(0, 2, 1);
+        assertEquals(2, bookingInfoList.size());
+        Map<String, Object> firstBooking = bookingInfoList.get(0);
+        Map<String, Object> secondBooking = bookingInfoList.get(1);
+        assertAll(
+                () -> assertEquals(1, firstBooking.get("bookingId")),
+                () -> assertEquals("tennis", firstBooking.get("stadiumName")),
+                () -> assertEquals("2019-12-26 08:00:00", firstBooking.get("startTime")),
+                () -> assertEquals("2019-12-26 10:00:00", firstBooking.get("endTime")),
+                () -> assertTrue((Boolean) firstBooking.get("expired")),
+                () -> assertTrue((Boolean) firstBooking.get("paid")),
+                () -> assertEquals(BigDecimal.valueOf(200), firstBooking.get("priceSum")),
+                () -> assertEquals(2, secondBooking.get("bookingId")),
+                () -> assertEquals("volleyball", secondBooking.get("stadiumName")),
+                () -> assertEquals("2019-12-28 18:00:00", secondBooking.get("startTime")),
+                () -> assertEquals("2019-12-28 20:00:00", secondBooking.get("endTime")),
+                () -> assertFalse((Boolean) secondBooking.get("expired")),
+                () -> assertFalse((Boolean) secondBooking.get("paid")),
+                () -> assertEquals(BigDecimal.valueOf(400), secondBooking.get("priceSum"))
+        );
+
     }
 
 }

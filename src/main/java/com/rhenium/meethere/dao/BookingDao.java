@@ -67,4 +67,15 @@ public interface BookingDao {
     @Insert("INSERT INTO booking(customer_id, stadium_id, start_time, end_time, price_sum, paid) VALUES (#{customerId}, #{stadiumId}, #{startTime}, #{endTime}, #{priceSum}, #{paid})")
     int addNewBooking(Booking booking);
 
+    @Select("SELECT * FROM booking WHERE customer_id = #{customerId} ORDER BY start_time DESC LIMIT #{offset}, #{limit}")
+    @Results(
+            @Result(property = "stadium", column = "stadium_id",
+            one = @One(select = "com.rhenium.meethere.dao.StadiumDao.getStadiumById", fetchType = FetchType.EAGER))
+    )
+    List<Booking> findBookingsByCustomerId(@Param("offset") int offset,
+                                           @Param("limit") int limit,
+                                           @Param("customerId") int customerId);
+
+    @Select("SELECT COUNT(*) FROM booking WHERE customer_id = #{customerId}")
+    int findBookingCountForCustomer(@Param("customerId") int customerId);
 }

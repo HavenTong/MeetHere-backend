@@ -23,10 +23,15 @@ public class StadiumRequest {
 
     private String typeName;
 
+    private Integer type;
+
     @Size(max = 100, message = "位置信息不能超过100字")
     private String location;
 
     private String description;
     private BigDecimal price;
     private String picture;
+
+    // 校验
+    private Integer adminId;
 }

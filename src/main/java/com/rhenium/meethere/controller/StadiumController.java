@@ -3,13 +3,12 @@ package com.rhenium.meethere.controller;
 import com.rhenium.meethere.annotation.AdminLoginRequired;
 import com.rhenium.meethere.annotation.UserLoginRequired;
 import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.StadiumRequest;
 import com.rhenium.meethere.service.StadiumService;
 import com.rhenium.meethere.vo.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +25,44 @@ public class StadiumController {
     @Autowired
     private StadiumService stadiumService;
 
+    @GetMapping("/get-stadium-count")
+    @AdminLoginRequired
+    public ResultEntity getStadiumCount(@RequestParam int adminId) {
+        Map<String, String> data = stadiumService.getStadiumCount();
+        return ResultEntity.succeed(data);
+    }
+
+    @PostMapping("/delete")
+    @AdminLoginRequired
+    public ResultEntity deleteStadium(@RequestBody StadiumRequest stadiumRequest) {
+        stadiumService.deleteStadium(stadiumRequest);
+        return ResultEntity.succeed();
+    }
+
+    @PostMapping("/post")
+    @AdminLoginRequired
+    public ResultEntity postStadium(@RequestBody StadiumRequest stadiumRequest){
+        stadiumService.createStadium(stadiumRequest);
+        return ResultEntity.succeed();
+    }
+
+    @PostMapping("/update")
+    @AdminLoginRequired
+    public ResultEntity updateStadium(@RequestBody StadiumRequest stadiumRequest){
+        stadiumService.updateStadium(stadiumRequest);
+        return ResultEntity.succeed();
+    }
+
+    @GetMapping("/types")
+    @AdminLoginRequired
+    public ResultEntity getStadiumTypes(@RequestParam int adminId) {
+        List<Map<String, Object>> data = stadiumService.getStadiumTypes();
+        return ResultEntity.succeed(data);
+    }
+
     @GetMapping("/items")
     @UserLoginRequired
-    public ResultEntity listNewsItems(@RequestParam int customerId) {
+    public ResultEntity listStadiumItems(@RequestParam int customerId) {
         ArrayList<Stadium> stadiums = stadiumService.listStadiumItems();
         return ResultEntity.succeed(stadiums);
     }

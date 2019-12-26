@@ -145,7 +145,7 @@ public class StadiumServiceImpl implements StadiumService {
     }
 
     // TODO: 需要确定返回哪一天的空闲时间
-    private List<String> getSpareTimeFromBookingList(List<Booking> bookingList,
+    public List<String> getSpareTimeFromBookingList(List<Booking> bookingList,
                                                      LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         List<String> spareTime = new ArrayList<>();

@@ -36,7 +36,6 @@ public interface StadiumDao {
     })
     List<Stadium> findAllStadiumsForAdmin(@Param("offset") int offset,
                                           @Param("limit") int limit);
-
     @Update("UPDATE stadium SET stadium_name = #{stadiumName}, " +
             "location = #{location}, description = #{description}, " +
             "price = #{price} WHERE stadium_id = #{stadiumId}")

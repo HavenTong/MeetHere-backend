@@ -35,6 +35,4 @@ public class StadiumRequest {
     private BigDecimal price;
     private String picture;
 
-    // 校验
-    private Integer adminId;
 }

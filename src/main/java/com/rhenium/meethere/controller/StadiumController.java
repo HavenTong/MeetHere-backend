@@ -84,17 +84,19 @@ public class StadiumController {
         return ResultEntity.succeed(stadiums);
     }
 
-    @PostMapping("/update")
-    @AdminLoginRequired
-    public ResultEntity updateStadiumInfo(@Validated @RequestBody StadiumRequest stadiumRequest){
-        stadiumService.updateStadiumInfoByAdmin(stadiumRequest);
-        return ResultEntity.succeed();
-    }
+    // duplicated
+//    @PostMapping("/update")
+//    @AdminLoginRequired
+//    public ResultEntity updateStadiumInfo(@Validated @RequestBody StadiumRequest stadiumRequest){
+//        stadiumService.updateStadiumInfoByAdmin(stadiumRequest);
+//        return ResultEntity.succeed();
+//    }
 
-    @PostMapping("/delete")
-    @AdminLoginRequired
-    public ResultEntity deleteStadium(@RequestBody StadiumRequest stadiumRequest){
-        stadiumService.deleteStadiumInfoByAdmin(stadiumRequest);
-        return ResultEntity.succeed();
-    }
+    //duplicated
+//    @PostMapping("/delete")
+//    @AdminLoginRequired
+//    public ResultEntity deleteStadium(@RequestBody StadiumRequest stadiumRequest){
+//        stadiumService.deleteStadiumInfoByAdmin(stadiumRequest);
+//        return ResultEntity.succeed();
+//    }
 }

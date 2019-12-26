@@ -228,6 +228,17 @@ class BookingServiceTest {
                 () -> assertEquals(10, bookingCaptor.getValue().getBookingId())
         );
     }
+
+    @Test
+    @DisplayName("用户删除正确的订单")
+    void shouldDeleteCorrectBookingByCustomer(){
+        BookingRequest bookingRequest = BookingRequest.builder()
+                .bookingId(12).customerId(7).build();
+        bookingService.deleteBookingByCustomer(bookingRequest);
+        verify(bookingDao, times(1))
+                .deleteBookingById(12);
+    }
+
 }
 
 class BookingServiceFake extends BookingServiceImpl {

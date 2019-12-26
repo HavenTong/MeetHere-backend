@@ -1,7 +1,7 @@
 package com.rhenium.meethere.service.impl;
 
-import com.rhenium.meethere.dao.StadiumDao;
 import com.rhenium.meethere.dao.AdminDao;
+import com.rhenium.meethere.dao.StadiumDao;
 import com.rhenium.meethere.domain.Admin;
 import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.domain.Stadium;
@@ -18,10 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author YueChen
@@ -73,16 +70,21 @@ public class StadiumServiceImpl implements StadiumService {
         }
         List<Stadium> stadiums = stadiumDao.findAllStadiumsForAdmin(offset, limit);
         List<Map<String, Object>> stadiumInfoList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         for (Stadium stadium : stadiums){
+            LocalDate current = LocalDate.now();
             Map<String, Object> stadiumEntry = new HashMap<>();
             List<Booking> bookingList = stadium.getBookingList();
+            Map<String, Object> freeTimeMap = new HashMap<>();
 
-            // 通过private函数获取空闲时间
-            List<String> freeTime =
-                    getSpareTimeFromBookingList(bookingList, LocalDate.now());
-
-            stadiumEntry.put("freeTime", freeTime);
+            for (int i = 0; i < 3; i++){
+                // 通过private函数获取空闲时间
+                List<String> freeTime =
+                        getSpareTimeFromBookingList(bookingList, current);
+                freeTimeMap.put(dateFormatter.format(current), freeTime);
+                current = current.plusDays(1);
+            }
+            stadiumEntry.put("freeTime", freeTimeMap);
             stadiumEntry.put("stadiumId", stadium.getStadiumId());
             stadiumEntry.put("stadiumName", stadium.getStadiumName());
             stadiumEntry.put("price", stadium.getPrice());
@@ -130,7 +132,7 @@ public class StadiumServiceImpl implements StadiumService {
     }
 
     // TODO: 需要确定返回哪一天的空闲时间
-    private List<String> getSpareTimeFromBookingList(List<Booking> bookingList,
+    public List<String> getSpareTimeFromBookingList(List<Booking> bookingList,
                                                      LocalDate date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         List<String> spareTime = new ArrayList<>();
@@ -158,7 +160,6 @@ public class StadiumServiceImpl implements StadiumService {
         int startIndex = (timeSlotTable[0]) ? 0 : -1;
         int endIndex = 0;
         for (int i = 1; i <= 11; i++){
-            // 若全部空闲则循环没有操作
             if (timeSlotTable[i]){
                 if (!timeSlotTable[i - 1]){
                     endIndex = i;
@@ -184,5 +185,23 @@ public class StadiumServiceImpl implements StadiumService {
             spareTime.add(builder.toString());
         }
         return spareTime;
+    }
+
+    @Override
+    public void updateStadiumInfoByAdmin(StadiumRequest stadiumRequest) {
+        Admin admin = adminDao.findAdminById(stadiumRequest.getAdminId());
+        if (Objects.isNull(admin)){
+            throw new MyException(ResultEnum.ADMIN_NOT_EXIST);
+        }
+        stadiumDao.updateStadiumInfoByAdmin(stadiumRequest);
+    }
+
+    @Override
+    public void deleteStadiumInfoByAdmin(StadiumRequest stadiumRequest) {
+        Admin admin = adminDao.findAdminById(stadiumRequest.getAdminId());
+        if (Objects.isNull(admin)){
+            throw new MyException(ResultEnum.ADMIN_NOT_EXIST);
+        }
+        stadiumDao.deleteStadiumByAdmin(stadiumRequest);
     }
 }

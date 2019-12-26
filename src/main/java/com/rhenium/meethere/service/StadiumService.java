@@ -24,4 +24,14 @@ public interface StadiumService {
     void updateStadiumInfoByAdmin(StadiumRequest stadiumRequest);
 
     void deleteStadiumInfoByAdmin(StadiumRequest stadiumRequest);
+    
+    Map<String, String> getStadiumCount();
+
+    void deleteStadium(StadiumRequest stadiumRequest);
+
+    void createStadium(StadiumRequest stadiumRequest);
+
+    void updateStadium(StadiumRequest stadiumRequest);
+
+    List<Map<String, Object>> getStadiumTypes();
 }

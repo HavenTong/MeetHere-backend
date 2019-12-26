@@ -11,7 +11,6 @@ import com.rhenium.meethere.enums.StadiumTypeEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.StadiumService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +27,7 @@ import java.util.*;
  */
 @Service
 @Slf4j
+
 public class StadiumServiceImpl implements StadiumService {
     @Autowired
     private StadiumDao stadiumDao;
@@ -94,6 +94,41 @@ public class StadiumServiceImpl implements StadiumService {
             stadiumInfoList.add(stadiumEntry);
         }
         return stadiumInfoList;
+    }
+
+    @Override
+    public Map<String, String> getStadiumCount() {
+        Map<String, String> data = new HashMap<>();
+        data.put("count", String.valueOf(stadiumDao.getStadiumCount()));
+        return data;
+    }
+
+    @Override
+    public void deleteStadium(StadiumRequest stadiumRequest) {
+        stadiumDao.deleteStadium(stadiumRequest);
+    }
+
+    @Override
+    public void createStadium(StadiumRequest stadiumRequest) {
+        Admin admin = adminDao.findAdminById(stadiumRequest.getAdminId());
+        if (admin == null){
+            throw new MyException(ResultEnum.ADMIN_NOT_EXIST);
+        }
+        stadiumDao.createStadium(stadiumRequest);
+    }
+
+    @Override
+    public void updateStadium(StadiumRequest stadiumRequest) {
+        Admin admin = adminDao.findAdminById(stadiumRequest.getAdminId());
+        if (admin == null){
+            throw new MyException(ResultEnum.ADMIN_NOT_EXIST);
+        }
+        stadiumDao.updateStadium(stadiumRequest);
+    }
+
+    @Override
+    public List<Map<String, Object>> getStadiumTypes() {
+        return StadiumTypeEnum.getTypes();
     }
 
     // TODO: 需要确定返回哪一天的空闲时间

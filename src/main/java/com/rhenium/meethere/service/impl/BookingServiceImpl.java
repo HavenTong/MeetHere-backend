@@ -9,6 +9,7 @@ import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.cache.decorators.BlockingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,16 +38,21 @@ public class BookingServiceImpl implements BookingService {
     StadiumDao stadiumDao;
 
     @Override
-    public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer daysAfterToday) {
-        ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, daysAfterToday);
-        ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings, daysAfterToday);
-        return emptyTimesByBooksInADay;
+    public void updateBooking(BookingRequest bookingRequest) {
+        Integer bookingId = bookingRequest.getBookingId();
+        Booking oldBooing = bookingDao.getBookingByBookingId(bookingId);
+        bookingDao.deleteBookingById(bookingId);
+        try {
+            addNewBooking(bookingRequest);
+        } catch (MyException e) {
+            bookingDao.addNewBooking(oldBooing);
+        }
     }
 
     @Override
     public void addNewBooking(BookingRequest bookingRequest) {
         boolean isValid = judgeBookingIsValid(bookingRequest);
-        if(!isValid) {
+        if (!isValid) {
             throw new MyException(ResultEnum.INVALID_TIME_IN_BOOKING);
         }
         Booking booking = new Booking();
@@ -64,19 +70,26 @@ public class BookingServiceImpl implements BookingService {
         bookingDao.addNewBooking(booking);
     }
 
-    boolean judgeBookingIsValid(BookingRequest bookingRequest) {
+    @Override
+    public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer daysAfterToday) {
+        ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, daysAfterToday);
+        ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings, daysAfterToday);
+        return emptyTimesByBooksInADay;
+    }
+
+    public boolean judgeBookingIsValid(BookingRequest bookingRequest) {
         ArrayList<Map<String, Integer>> emptyTimes = getEmptyTimeByStadiumIdAndDate(bookingRequest.getStadiumId(), bookingRequest.getDaysAfterToday());
         Integer startTime = bookingRequest.getStartTime();
         Integer endTime = bookingRequest.getEndTime();
-        for(Map<String, Integer> emptyTime : emptyTimes) {
-            if(emptyTime.get("start") <= startTime && endTime <= emptyTime.get("end")) {
+        for (Map<String, Integer> emptyTime : emptyTimes) {
+            if ((emptyTime.get("start") <= startTime) && (endTime <= emptyTime.get("end"))) {
                 return true;
             }
         }
         return false;
     }
 
-    public ArrayList<Booking> getBookingsByStadiumAndDate(Integer stadiumId, Integer daysAfterToday) {
+    public ArrayList<Booking>  getBookingsByStadiumAndDate(Integer stadiumId, Integer daysAfterToday) {
         LocalDate date = LocalDate.now().plusDays(daysAfterToday);
         LocalDateTime start = LocalDateTime.of(date, LocalTime.of(0, 0));
         LocalDateTime end = LocalDateTime.of(date.plusDays(1), LocalTime.of(0, 0));
@@ -87,11 +100,11 @@ public class BookingServiceImpl implements BookingService {
     public ArrayList<Map<String, Integer>> getEmptyTimesByBookingsInADay(ArrayList<Booking> bookings, Integer daysAfterToday) {
         ArrayList<Map<String, Integer>> emptyTimes = new ArrayList<>();
         int currentHour = 8;
-        if(daysAfterToday == 0)
+        if (daysAfterToday == 0)
             currentHour = LocalTime.now().getHour() + 2;
         int start, end;
-        for(Booking booking : bookings) {
-            if(currentHour != booking.getStartTime().getHour()) {
+        for (Booking booking : bookings) {
+            if (currentHour < booking.getStartTime().getHour()) {
                 start = currentHour;
                 end = booking.getStartTime().getHour();
                 Map<String, Integer> emptyTime = new HashMap<>();
@@ -101,7 +114,7 @@ public class BookingServiceImpl implements BookingService {
                 currentHour = booking.getEndTime().getHour();
             }
         }
-        if(currentHour != 20) {
+        if (currentHour != 20) {
             Map<String, Integer> emptyTime = new HashMap<>();
             emptyTime.put("start", currentHour);
             emptyTime.put("end", 20);

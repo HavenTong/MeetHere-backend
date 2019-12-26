@@ -45,6 +45,11 @@ public class BookingController {
     @UserLoginRequired
     public ResultEntity deleteBookingByCustomer(@RequestBody BookingRequest bookingRequest){
         bookingService.deleteBookingByCustomer(bookingRequest);
+        
+    @PostMapping("/update-booking")
+    @UserLoginRequired
+    public ResultEntity updateBooking(@RequestBody BookingRequest bookingRequest) {
+        bookingService.updateBooking(bookingRequest);
         return ResultEntity.succeed();
     }
 }

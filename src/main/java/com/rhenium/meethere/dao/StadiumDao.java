@@ -45,4 +45,18 @@ public interface StadiumDao {
     @Delete("DELETE FROM stadium WHERE stadium_id = #{stadiumId}")
     int deleteStadiumByAdmin(StadiumRequest stadiumRequest);
 
+    @Select("SELECT COUNT(*) FROM stadium")
+    int getStadiumCount();
+
+    @Delete("DELETE FROM stadium WHERE stadium_id = #{stadiumId}")
+    void deleteStadium(StadiumRequest stadiumRequest);
+
+    @Insert("INSERT INTO stadium (stadium_name, type, location, description, price) " +
+            "VALUES (#{stadiumName}, #{type}, #{location}, #{description}, #{price})")
+    void createStadium(StadiumRequest stadiumRequest);
+
+    @Insert("UPDATE stadium SET stadium_name = #{stadiumName}, type = #{type}, " +
+            "location = #{location}, description = #{description}, price = #{price} " +
+            "WHERE stadium_id = #{stadiumId}")
+    void updateStadium(StadiumRequest stadiumRequest);
 }

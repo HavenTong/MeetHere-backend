@@ -22,4 +22,5 @@ public interface BookingService {
     List<Booking> getBookingsByCustomer(int customerId);
 
     void deleteBookingByCustomer(BookingRequest bookingRequest);
+    void updateBooking(BookingRequest bookingRequest);
 }

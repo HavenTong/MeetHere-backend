@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ArrayList<Map<String, String>> getCommentByStadiumId(Integer stadiumId) {
+    public ArrayList<Map<String, String>> getCommentByStadiumId(Integer stadiumId, Integer customerId) {
         ArrayList<Comment> commentList = commentDao.getCommentByStadiumId(stadiumId);
         ArrayList<Map<String, String>> comments = new ArrayList<>();
         for (Comment comment : commentList) {
@@ -60,6 +60,14 @@ public class CommentServiceImpl implements CommentService {
             commentMap.put("commentContent", comment.getCommentContent());
             commentMap.put("likes", String.valueOf(comment.getLikes()));
             commentMap.put("commentId", String.valueOf(comment.getCommentId()));
+            String hashName = "comment:likes";
+            String key = comment.getCommentId() + ":" + customerId;
+            String liked = (String) redisTemplate.opsForHash().get(hashName, key);
+            if (Objects.isNull(liked)){
+                commentMap.put("liked", "0");
+            } else {
+                commentMap.put("liked", "1");
+            }
             comments.add(commentMap);
         }
         return comments;

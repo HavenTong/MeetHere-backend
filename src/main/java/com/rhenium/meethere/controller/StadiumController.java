@@ -25,9 +25,44 @@ public class StadiumController {
     @Autowired
     private StadiumService stadiumService;
 
+    @GetMapping("/get-stadium-count")
+    @AdminLoginRequired
+    public ResultEntity getStadiumCount(@RequestParam int adminId) {
+        Map<String, String> data = stadiumService.getStadiumCount();
+        return ResultEntity.succeed(data);
+    }
+
+    @PostMapping("/delete")
+    @AdminLoginRequired
+    public ResultEntity deleteStadium(@RequestBody StadiumRequest stadiumRequest) {
+        stadiumService.deleteStadium(stadiumRequest);
+        return ResultEntity.succeed();
+    }
+
+    @PostMapping("/post")
+    @AdminLoginRequired
+    public ResultEntity postStadium(@RequestBody StadiumRequest stadiumRequest){
+        stadiumService.createStadium(stadiumRequest);
+        return ResultEntity.succeed();
+    }
+
+    @PostMapping("/update")
+    @AdminLoginRequired
+    public ResultEntity updateStadium(@RequestBody StadiumRequest stadiumRequest){
+        stadiumService.updateStadium(stadiumRequest);
+        return ResultEntity.succeed();
+    }
+
+    @GetMapping("/types")
+    @AdminLoginRequired
+    public ResultEntity getStadiumTypes(@RequestParam int adminId) {
+        List<Map<String, Object>> data = stadiumService.getStadiumTypes();
+        return ResultEntity.succeed(data);
+    }
+
     @GetMapping("/items")
     @UserLoginRequired
-    public ResultEntity listNewsItems(@RequestParam int customerId) {
+    public ResultEntity listStadiumItems(@RequestParam int customerId) {
         ArrayList<Stadium> stadiums = stadiumService.listStadiumItems();
         return ResultEntity.succeed(stadiums);
     }

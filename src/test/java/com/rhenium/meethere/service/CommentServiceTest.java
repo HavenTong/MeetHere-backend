@@ -69,7 +69,7 @@ class CommentServiceTest {
         when(commentDao.getCommentByStadiumId(1)).thenReturn(new ArrayList<>());
         ArgumentCaptor<Integer> idCaptor = ArgumentCaptor.forClass(Integer.class);
 
-        ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(1);
+        ArrayList<Map<String, String>> comments = commentService.getCommentByStadiumId(1, 1);
 
         verify(commentDao, times(1)).getCommentByStadiumId(idCaptor.capture());
         assertAll(

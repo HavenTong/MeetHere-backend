@@ -37,10 +37,15 @@ public class BookingServiceImpl implements BookingService {
     StadiumDao stadiumDao;
 
     @Override
-    public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer daysAfterToday) {
-        ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, daysAfterToday);
-        ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings, daysAfterToday);
-        return emptyTimesByBooksInADay;
+    public void updateBooking(BookingRequest bookingRequest) {
+        Integer bookingId = bookingRequest.getBookingId();
+        Booking oldBooing = bookingDao.getBookingByBookingId(bookingId);
+        bookingDao.deleteBookingById(bookingId);
+        try {
+            addNewBooking(bookingRequest);
+        } catch (MyException e) {
+            bookingDao.addNewBooking(oldBooing);
+        }
     }
 
     @Override
@@ -65,15 +70,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void updateBooking(BookingRequest bookingRequest) {
-        Integer bookingId = bookingRequest.getBookingId();
-        Booking oldBooing = bookingDao.getBookingByBookingId(bookingId);
-        bookingDao.deleteBookingById(bookingId);
-        try {
-            addNewBooking(bookingRequest);
-        } catch (MyException e) {
-            bookingDao.addNewBooking(oldBooing);
-        }
+    public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer daysAfterToday) {
+        ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, daysAfterToday);
+        ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings, daysAfterToday);
+        return emptyTimesByBooksInADay;
     }
 
     public boolean judgeBookingIsValid(BookingRequest bookingRequest) {

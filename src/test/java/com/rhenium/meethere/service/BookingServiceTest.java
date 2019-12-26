@@ -44,6 +44,7 @@ class BookingServiceTest {
     private BookingServiceFake bookingServiceFake;
 
     @Test
+    @DisplayName("通过场馆ID和选定日期，来获取该场馆在选定日期的订单列表")
     void shouldGetBookingsByStadiumAndDate() {
         Integer stadiumId = 1;
         Integer daysAfterToday = 1;

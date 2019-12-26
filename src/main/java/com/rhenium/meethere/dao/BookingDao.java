@@ -4,7 +4,9 @@ import com.rhenium.meethere.domain.Booking;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -51,6 +53,10 @@ public interface BookingDao {
 
     @Select("SELECT * FROM booking WHERE stadium_id = #{stadiumId}")
     List<Booking> findBookingByStadiumId(@Param("stadiumId") int stadiumId);
+
+    @Select("SELECT * FROM booking WHERE booking_id = #{bookingId}")
+    Booking getBookingByBookingId(@Param("bookingId") int bookingId);
+
     @Select("SELECT * FROM booking WHERE stadium_id = #{stadiumId} AND start_time >= #{start} AND end_time <= #{end} " +
             "ORDER BY start_time;")
     ArrayList<Booking> getBookingsByStadiumIdAndStartAndEnd(@Param("stadiumId") int stadiumId, @Param("start")LocalDateTime start, @Param("end") LocalDateTime end);

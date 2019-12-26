@@ -1,6 +1,7 @@
 package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.annotation.UserLoginRequired;
+import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.dto.BookingRequest;
 import com.rhenium.meethere.service.BookingService;
 import com.rhenium.meethere.vo.ResultEntity;
@@ -38,6 +39,13 @@ public class BookingController {
     @UserLoginRequired
     public ResultEntity addNewBooking(@RequestBody BookingRequest bookingRequest) {
         bookingService.addNewBooking(bookingRequest);
+        return ResultEntity.succeed();
+    }
+
+    @PostMapping("/update-booking")
+    @UserLoginRequired
+    public ResultEntity updateBooking(@RequestBody BookingRequest bookingRequest) {
+        bookingService.updateBooking(bookingRequest);
         return ResultEntity.succeed();
     }
 }

@@ -60,7 +60,7 @@ public interface StadiumDao {
     void updateStadium(StadiumRequest stadiumRequest);
 
     @Insert("UPDATE stadium SET stadium_name = #{stadiumName}, type = #{type}, " +
-            "location = #{location}, description = #{description}, price = #{price} " +
+            "location = #{location}, description = #{description}, price = #{price}, " +
             "picture = #{picture} WHERE stadium_id = #{stadiumId}")
     void updateStadiumWithPicture(StadiumRequest stadiumRequest);
 }

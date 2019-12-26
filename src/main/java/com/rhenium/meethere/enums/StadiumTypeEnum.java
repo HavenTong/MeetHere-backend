@@ -28,25 +28,22 @@ public enum StadiumTypeEnum {
     private String type;
 
     public static StadiumTypeEnum getByCode(Integer code) {
-        switch (code) {
-            case 0:
-                return StadiumTypeEnum.TENNIS_BALL_STADIUM;
-            case 1:
-                return StadiumTypeEnum.VOLLEYBALL_STADIUM;
-            default:
-                return StadiumTypeEnum.NONE_STADIUM;
+        for (StadiumTypeEnum e : StadiumTypeEnum.values()) {
+            if (e.getCode().equals(code)) {
+                return e;
+            }
         }
+        return StadiumTypeEnum.NONE_STADIUM;
+
     }
 
     public static StadiumTypeEnum getByType(String name) {
-        switch (name) {
-            case "网球场":
-                return StadiumTypeEnum.TENNIS_BALL_STADIUM;
-            case "排球场":
-                return StadiumTypeEnum.VOLLEYBALL_STADIUM;
-            default:
-                return StadiumTypeEnum.NONE_STADIUM;
+        for (StadiumTypeEnum e : StadiumTypeEnum.values()) {
+            if (e.getType().equals(name)) {
+                return e;
+            }
         }
+        return StadiumTypeEnum.NONE_STADIUM;
     }
 
     public static List<Map<String, Object>> getTypes() {

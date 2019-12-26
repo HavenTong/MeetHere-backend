@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,8 +126,41 @@ public class BookingServiceImpl implements BookingService {
 
     //TODO: 用户获取订单信息
     @Override
-    public List<Booking> getBookingsByCustomer(int customerId) {
-        return null;
+    public List<Map<String, Object>> getBookingsByCustomer(int offset, int limit, int customerId) {
+        if (offset < 0) {
+            throw new MyException(ResultEnum.INVALID_OFFSET);
+        }
+        if (limit < 1){
+            throw new MyException(ResultEnum.INVALID_LIMIT);
+        }
+        List<Booking> bookings = bookingDao.findBookingsByCustomerId(offset, limit, customerId);
+        List<Map<String, Object>> bookingInfoList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for (Booking booking : bookings){
+            Map<String, Object> bookingInfo = new HashMap<>();
+            LocalDateTime endTime = booking.getEndTime();
+            bookingInfo.put("bookingId", booking.getBookingId());
+            bookingInfo.put("stadiumName", booking.getStadium().getStadiumName());
+            bookingInfo.put("startTime", formatter.format(booking.getStartTime()));
+            bookingInfo.put("endTime", formatter.format(endTime));
+            if (LocalDateTime.now().isAfter(endTime)){
+                bookingInfo.put("expired", true);
+            } else {
+                bookingInfo.put("expired", false);
+            }
+            bookingInfo.put("paid", booking.getPaid());
+            bookingInfo.put("priceSum", booking.getPriceSum());
+            bookingInfoList.add(bookingInfo);
+        }
+        return bookingInfoList;
+    }
+
+    @Override
+    public Map<String, Object> getBookingCountForCustomer(int customerId) {
+        int count = bookingDao.findBookingCountForCustomer(customerId);
+        Map<String, Object> bookingCount = new HashMap<>();
+        bookingCount.put("count", String.valueOf(count));
+        return bookingCount;
     }
 
     @Override

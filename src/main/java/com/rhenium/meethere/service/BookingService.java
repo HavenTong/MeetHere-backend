@@ -17,10 +17,14 @@ import java.util.Map;
 @Service
 public interface BookingService {
     ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer DaysAfterToday);
+
     void addNewBooking(BookingRequest bookingRequest);
 
-    List<Booking> getBookingsByCustomer(int customerId);
+    List<Map<String, Object>> getBookingsByCustomer(int offset, int limit, int customerId);
 
     void deleteBookingByCustomer(BookingRequest bookingRequest);
+
     void updateBooking(BookingRequest bookingRequest);
+
+    Map<String, Object> getBookingCountForCustomer(int customerId);
 }

@@ -41,7 +41,7 @@ public class StadiumController {
 
     @PostMapping("/post")
     @AdminLoginRequired
-    public ResultEntity postStadium(@RequestBody StadiumRequest stadiumRequest){
+    public ResultEntity postStadium(@RequestBody StadiumRequest stadiumRequest) throws Exception {
         stadiumService.createStadium(stadiumRequest);
         return ResultEntity.succeed();
     }

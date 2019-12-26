@@ -24,7 +24,7 @@ public interface StadiumService {
 
     void deleteStadium(StadiumRequest stadiumRequest);
 
-    void createStadium(StadiumRequest stadiumRequest);
+    void createStadium(StadiumRequest stadiumRequest) throws Exception;
 
     void updateStadium(StadiumRequest stadiumRequest);
 

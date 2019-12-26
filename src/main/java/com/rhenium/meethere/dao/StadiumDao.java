@@ -42,12 +42,17 @@ public interface StadiumDao {
     @Delete("DELETE FROM stadium WHERE stadium_id = #{stadiumId}")
     void deleteStadium(StadiumRequest stadiumRequest);
 
-    @Insert("INSERT INTO stadium (stadium_name, type, location, description, price) " +
-            "VALUES (#{stadiumName}, #{type}, #{location}, #{description}, #{price})")
+    @Insert("INSERT INTO stadium (stadium_name, type, location, description, price, picture) " +
+            "VALUES (#{stadiumName}, #{type}, #{location}, #{description}, #{price}, #{picture})")
     void createStadium(StadiumRequest stadiumRequest);
 
     @Insert("UPDATE stadium SET stadium_name = #{stadiumName}, type = #{type}, " +
             "location = #{location}, description = #{description}, price = #{price} " +
             "WHERE stadium_id = #{stadiumId}")
     void updateStadium(StadiumRequest stadiumRequest);
+
+    @Insert("UPDATE stadium SET stadium_name = #{stadiumName}, type = #{type}, " +
+            "location = #{location}, description = #{description}, price = #{price} " +
+            "picture = #{picture} WHERE stadium_id = #{stadiumId}")
+    void updateStadiumWithPicture(StadiumRequest stadiumRequest);
 }

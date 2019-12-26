@@ -3,6 +3,7 @@ package com.rhenium.meethere.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -31,6 +32,7 @@ public class StadiumRequest {
     private String description;
     private BigDecimal price;
     private String picture;
+    private String pictureRaw;
 
     // 校验
     private Integer adminId;

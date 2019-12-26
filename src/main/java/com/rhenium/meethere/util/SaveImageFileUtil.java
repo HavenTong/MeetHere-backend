@@ -4,6 +4,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 
 /**
  * @author YueChen
@@ -11,24 +16,30 @@ import java.io.IOException;
  * @date 2019/12/26 16:44
  */
 public class SaveImageFileUtil {
-    public static String saveImage(MultipartFile file) {
-        String pathName = "/data/images/";
-        String fName = file.getOriginalFilename();
-        pathName += fName;
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(pathName);
-            fos.write(file.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+    public static String saveImage(String imgStr) {
+        String random = String.valueOf(imgStr.hashCode());
+        int length = 20 < random.length() ? 20 : random.length();
+        String filename = String.valueOf(imgStr.hashCode()).substring(1, length);
+        String path = "/data/images/" + filename;
+        String URL = "http://152.136.173.30/images/" + filename;
+
+        String partSeparator = ",";
+        if (imgStr.contains(partSeparator)) {
+            String encodedImg = imgStr.split(partSeparator)[1];
+
+            String fileType = imgStr.split(";")[0].split("/")[1];
+
+            URL = URL + "." + fileType;
+            path = path + "." + fileType;
+            byte[] decodedImg = Base64.getDecoder().decode(encodedImg.getBytes(StandardCharsets.UTF_8));
+            Path destinationFile = Paths.get(path);
             try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                Files.write(destinationFile, decodedImg);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
-        String imageUrl = "http://152.136.173.30/images/" + fName;
-        return imageUrl;
+
+        return URL;
     }
 }

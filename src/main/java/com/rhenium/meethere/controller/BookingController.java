@@ -1,7 +1,6 @@
 package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.annotation.UserLoginRequired;
-import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.dto.BookingRequest;
 import com.rhenium.meethere.service.BookingService;
 import com.rhenium.meethere.vo.ResultEntity;

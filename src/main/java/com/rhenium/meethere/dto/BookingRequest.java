@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class BookingRequest {
+    private Integer bookingId;
+
     private Integer customerId;
     private Integer stadiumId;
 

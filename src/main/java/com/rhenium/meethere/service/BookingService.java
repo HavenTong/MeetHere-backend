@@ -15,4 +15,5 @@ import java.util.Map;
 public interface BookingService {
     ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer DaysAfterToday);
     void addNewBooking(BookingRequest bookingRequest);
+    void updateBooking(BookingRequest bookingRequest);
 }

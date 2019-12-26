@@ -40,4 +40,11 @@ public class BookingController {
         bookingService.addNewBooking(bookingRequest);
         return ResultEntity.succeed();
     }
+
+    @PostMapping("/update-booking")
+    @UserLoginRequired
+    public ResultEntity updateBooking(@RequestBody BookingRequest bookingRequest) {
+        bookingService.updateBooking(bookingRequest);
+        return ResultEntity.succeed();
+    }
 }

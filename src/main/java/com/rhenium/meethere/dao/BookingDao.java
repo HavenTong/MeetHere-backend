@@ -1,6 +1,8 @@
 package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.Booking;
+import com.rhenium.meethere.dto.BookingRequest;
+import com.rhenium.meethere.dto.CustomerRequest;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

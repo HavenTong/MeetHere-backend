@@ -1,6 +1,7 @@
 package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.Stadium;
+import com.rhenium.meethere.dto.AdminRequest;
 import com.rhenium.meethere.dto.StadiumRequest;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
@@ -35,6 +36,13 @@ public interface StadiumDao {
     })
     List<Stadium> findAllStadiumsForAdmin(@Param("offset") int offset,
                                           @Param("limit") int limit);
+    @Update("UPDATE stadium SET stadium_name = #{stadiumName}, " +
+            "location = #{location}, description = #{description}, " +
+            "price = #{price} WHERE stadium_id = #{stadiumId}")
+    int updateStadiumInfoByAdmin(StadiumRequest stadiumRequest);
+
+    @Delete("DELETE FROM stadium WHERE stadium_id = #{stadiumId}")
+    int deleteStadiumByAdmin(StadiumRequest stadiumRequest);
 
     @Select("SELECT COUNT(*) FROM stadium")
     int getStadiumCount();

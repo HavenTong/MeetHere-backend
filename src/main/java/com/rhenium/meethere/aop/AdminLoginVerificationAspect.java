@@ -55,8 +55,9 @@ public class AdminLoginVerificationAspect {
             for (Field field : fields){
                 field.setAccessible(true);
                 if ("adminId".equals(field.getName())){
+                    log.info("string actualId: {}", field.get(argument));
                     actualAdminId = (Integer) field.get(argument);
-                    log.info("actual: {}", actualAdminId);
+                    log.info("actualAdminId: {}", actualAdminId);
                     break;
                 }
             }

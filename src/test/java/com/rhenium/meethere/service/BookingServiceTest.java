@@ -96,7 +96,7 @@ class BookingServiceTest {
 
         ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimesByBookingsInADay(bookings, 0);
 
-        if(LocalTime.now().getHour() >= 9 && LocalTime.now().getHour() < 20) {
+        if(LocalTime.now().getHour() >= 9 && LocalTime.now().getHour() < 18) {
             assertAll(
                     () -> assertEquals(LocalTime.now().getHour() + 2, emptyTimes.get(0).get("start")),
                     () -> assertEquals(20, emptyTimes.get(0).get("end"))
@@ -228,6 +228,17 @@ class BookingServiceTest {
                 () -> assertEquals(10, bookingCaptor.getValue().getBookingId())
         );
     }
+
+    @Test
+    @DisplayName("用户删除正确的订单")
+    void shouldDeleteCorrectBookingByCustomer(){
+        BookingRequest bookingRequest = BookingRequest.builder()
+                .bookingId(12).customerId(7).build();
+        bookingService.deleteBookingByCustomer(bookingRequest);
+        verify(bookingDao, times(1))
+                .deleteBookingById(12);
+    }
+
 }
 
 class BookingServiceFake extends BookingServiceImpl {

@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Builder
 public class BookingRequest {
     private Integer bookingId;
-
     private Integer customerId;
     private Integer stadiumId;
 

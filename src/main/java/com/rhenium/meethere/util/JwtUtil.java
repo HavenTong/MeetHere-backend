@@ -5,6 +5,7 @@ import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,6 +19,7 @@ import java.util.Date;
  * @date 2019/12/14 11:10 上午
  * 创建和解析JWT的工具类
  */
+@Slf4j
 public class JwtUtil {
     private static final String KEY = "meethere";
     private static final long ttl = 60 * 60 * 24 * 1000 * 7;

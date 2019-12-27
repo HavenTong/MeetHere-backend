@@ -22,7 +22,7 @@ import java.util.Date;
 @Slf4j
 public class JwtUtil {
     private static final String KEY = "meethere";
-    private static final long ttl = 60 * 60 * 24 * 1000 * 7;
+    private static final long ttl = 60 * 60 * 24 * 1000 * 24;
 
     /**
      * 通过customer生成JWT

@@ -52,7 +52,7 @@ class NewsServiceTest {
     void shouldThrowExceptionWhenOffsetLessThanOne(){
         Throwable exception = assertThrows(MyException.class,
                 () -> newsService.listNewsItems(-1, 3));
-        assertEquals("页数必须为正整数", exception.getMessage());
+        assertEquals("偏移数据条目数必须为正整数", exception.getMessage());
     }
 
     @Test
@@ -60,7 +60,7 @@ class NewsServiceTest {
     void shouldThrowExceptionWhenLimitLessThanOne(){
         Throwable exception = assertThrows(MyException.class,
                 () -> newsService.listNewsItems(1, 0));
-        assertEquals("每页条目数必须为正整数", exception.getMessage());
+        assertEquals("数据条目数必须为正整数", exception.getMessage());
     }
 
     @Test

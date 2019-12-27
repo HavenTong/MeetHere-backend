@@ -365,11 +365,9 @@ class StadiumControllerTest {
         ResultActions perform = mockMvc.perform(get("/stadium/types")
                 .param("adminId", "2")
                 .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
-
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(stadiumService, times(1))
                 .getStadiumTypes();
     }
-
 }

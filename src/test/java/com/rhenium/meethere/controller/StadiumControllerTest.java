@@ -117,26 +117,259 @@ class StadiumControllerTest {
     }
 
     @Test
-    void postStadium() {
+    @DisplayName("新增场馆时，若HTTP头部未携带TOKEN，返回异常结果")
+    void shouldReturnExceptionMessageWhenPostStadiumWithoutToken() throws Exception {
+        StadiumRequest stadiumRequest = StadiumRequest.builder()
+                .adminId(1).build();
+
+        ResultActions perform = mockMvc.perform(post("/stadium/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JSON.toJSONString(stadiumRequest)));
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(stadiumService, never())
+                .createStadium(stadiumRequest);
     }
 
     @Test
-    void updateStadium() {
+    @DisplayName("新增场馆时，若HTTP头部携带的TOKEN与adminId不匹配，返回异常结果")
+    void shouldReturnExceptionMessageWhenPostStadiumWithWrongToken() throws Exception {
+        StadiumRequest stadiumRequest = StadiumRequest.builder()
+                .adminId(1).build();
+
+        ResultActions perform = mockMvc.perform(post("/stadium/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JSON.toJSONString(stadiumRequest))
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(stadiumService, never())
+                .createStadium(stadiumRequest);
     }
 
     @Test
-    void getStadiumTypes() {
+    @DisplayName("新增场馆时，若HTTP头部携带的TOKEN与adminId匹配，返回正常结果")
+    void shouldPostStadiumWithCorrectToken() throws Exception {
+        StadiumRequest stadiumRequest = StadiumRequest.builder()
+                .adminId(2).build();
+
+        ResultActions perform = mockMvc.perform(post("/stadium/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JSON.toJSONString(stadiumRequest))
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("success"));
+        verify(stadiumService, times(1))
+                .createStadium(stadiumRequest);
     }
 
     @Test
-    void listStadiumItems() {
+    @DisplayName("更新场馆时，若HTTP头部未携带TOKEN，返回异常结果")
+    void shouldReturnExceptionMessageWhenUpdateStadiumWithoutToken() throws Exception {
+        StadiumRequest stadiumRequest = StadiumRequest.builder()
+                .adminId(1).build();
+
+        ResultActions perform = mockMvc.perform(post("/stadium/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JSON.toJSONString(stadiumRequest)));
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(stadiumService, never())
+                .updateStadium(stadiumRequest);
     }
 
     @Test
-    void getStadiumById() {
+    @DisplayName("更新场馆时，若HTTP头部携带的TOKEN与adminId不匹配，返回异常结果")
+    void shouldReturnExceptionMessageWhenUpdateStadiumWithWrongToken() throws Exception {
+        StadiumRequest stadiumRequest = StadiumRequest.builder()
+                .adminId(1).build();
+
+        ResultActions perform = mockMvc.perform(post("/stadium/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JSON.toJSONString(stadiumRequest))
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(stadiumService, never())
+                .updateStadium(stadiumRequest);
     }
 
     @Test
-    void getStadiumsForAdmin() {
+    @DisplayName("更新场馆时，若HTTP头部携带的TOKEN与adminId匹配，返回正常结果")
+    void shouldUpdateStadiumWithCorrectToken() throws Exception {
+        StadiumRequest stadiumRequest = StadiumRequest.builder()
+                .adminId(2).build();
+
+        ResultActions perform = mockMvc.perform(post("/stadium/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JSON.toJSONString(stadiumRequest))
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("success"));
+        verify(stadiumService, times(1))
+                .updateStadium(stadiumRequest);
     }
+
+    @Test
+    @DisplayName("用户获取场馆列表时，若HTTP头部未携带TOKEN，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumListWithoutToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/items")
+                .param("customerId", "2"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(stadiumService, never())
+                .listStadiumItems();
+    }
+
+    @Test
+    @DisplayName("用户获取场馆列表时，若HTTP头部携带的TOKEN与customerId不匹配，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumListWithWrongToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/items")
+                .param("customerId", "1")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(stadiumService, never())
+                .listStadiumItems();
+    }
+
+    @Test
+    @DisplayName("用户获取场馆列表时，若HTTP头部携带的TOKEN与customerId匹配，返回正常结果")
+    void shouldGetStadiumListWithCorrectToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/items")
+                .param("customerId", "2")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("success"));
+        verify(stadiumService, times(1))
+                .listStadiumItems();
+    }
+
+    @Test
+    @DisplayName("管理员获取场馆列表时，若HTTP头部未携带TOKEN，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumListForAdminWithoutToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/items-for-admin")
+                .param("offset", "0")
+                .param("limit", "20")
+                .param("adminId", "2"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(stadiumService, never())
+                .findStadiumsForAdmin(0,20);
+    }
+
+    @Test
+    @DisplayName("管理员获取场馆列表时，若HTTP头部携带的TOKEN与adminId不匹配，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumListForAdminWithWrongToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/items-for-admin")
+                .param("offset", "0")
+                .param("limit", "20")
+                .param("adminId", "1")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(stadiumService, never())
+                .findStadiumsForAdmin(0,20);
+    }
+
+    @Test
+    @DisplayName("管理员获取场馆列表时，若HTTP头部携带的TOKEN与adminId匹配，返回正常结果")
+    void shouldGetStadiumListForAdminWithCorrectToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/items-for-admin")
+                .param("offset", "0")
+                .param("limit", "20")
+                .param("adminId", "2")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("success"));
+        verify(stadiumService, times(1))
+                .findStadiumsForAdmin(0,20);
+    }
+
+    @Test
+    @DisplayName("用户根据id获取场馆时，若HTTP头部未携带TOKEN，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumByIdWithoutToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/message")
+                .param("id", "1")
+                .param("customerId", "2"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(stadiumService, never())
+                .getStadiumById(1);
+    }
+
+    @Test
+    @DisplayName("用户根据id获取场馆时，若HTTP头部携带的TOKEN与customerId不匹配，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumByIdWithWrongToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/message")
+                .param("id", "1")
+                .param("customerId", "1")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(stadiumService, never())
+                .getStadiumById(1);
+    }
+
+    @Test
+    @DisplayName("用户根据id获取场馆时，若HTTP头部携带的TOKEN与customerId匹配，返回正常结果")
+    void shouldGetStadiumByIdWithCorrectToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/message")
+                .param("id", "1")
+                .param("customerId", "2")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("success"));
+        verify(stadiumService, times(1))
+                .getStadiumById(1);
+    }
+
+
+    @Test
+    @DisplayName("管理员获取场馆类型时，若HTTP头部未携带TOKEN，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumTypesWithoutToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/types")
+                .param("adminId", "2"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
+        verify(stadiumService, never())
+                .getStadiumTypes();
+    }
+
+    @Test
+    @DisplayName("管理员获取场馆类型时，若HTTP头部携带的TOKEN与adminId不匹配，返回异常结果")
+    void shouldReturnExceptionMessageWhenGetStadiumTypesWithWrongToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/types")
+                .param("adminId", "1")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("TOKEN不匹配"));
+        verify(stadiumService, never())
+                .getStadiumTypes();
+    }
+
+    @Test
+    @DisplayName("管理员获取场馆类型时，若HTTP头部携带的TOKEN与adminId匹配，返回正常结果")
+    void shouldGetStadiumTypesWithCorrectToken() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/stadium/types")
+                .param("adminId", "2")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+
+        perform.andExpect(status().isOk()).
+                andExpect(jsonPath("$.message").value("success"));
+        verify(stadiumService, times(1))
+                .getStadiumTypes();
+    }
+
 }

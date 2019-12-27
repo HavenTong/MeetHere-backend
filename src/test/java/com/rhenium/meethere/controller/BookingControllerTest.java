@@ -59,7 +59,7 @@ class BookingControllerTest {
                 .param("stadiumId", "1")
                 .param("daysAfterToday", "1")
                 .param("customerId", "506")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -74,7 +74,7 @@ class BookingControllerTest {
                 .param("stadiumId", "1")
                 .param("daysAfterToday", "1")
                 .param("customerId", "507")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
@@ -104,7 +104,7 @@ class BookingControllerTest {
         ResultActions perform = mockMvc.perform(post("/booking/add-new-booking")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(bookingRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(bookingService, never())
@@ -119,7 +119,7 @@ class BookingControllerTest {
         ResultActions perform = mockMvc.perform(post("/booking/add-new-booking")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(bookingRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(bookingService, times(1))
@@ -149,7 +149,7 @@ class BookingControllerTest {
         ResultActions perform = mockMvc.perform(post("/booking/delete-by-customer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(bookingRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(bookingService, never())
@@ -164,7 +164,7 @@ class BookingControllerTest {
         ResultActions perform = mockMvc.perform(post("/booking/delete-by-customer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(bookingRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9  .eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(bookingService, times(1))
@@ -193,7 +193,7 @@ class BookingControllerTest {
         ResultActions perform = mockMvc.perform(post("/booking/update-booking")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(bookingRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(bookingService, never())
@@ -208,7 +208,7 @@ class BookingControllerTest {
         ResultActions perform = mockMvc.perform(post("/booking/update-booking")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(bookingRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9  .eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(bookingService, times(1))
@@ -236,7 +236,7 @@ class BookingControllerTest {
                 .param("offset", "1")
                 .param("limit", "1")
                 .param("customerId", "506")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -251,7 +251,7 @@ class BookingControllerTest {
                 .param("offset", "1")
                 .param("limit", "1")
                 .param("customerId", "507")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
@@ -259,7 +259,6 @@ class BookingControllerTest {
                 .getBookingsByCustomer(1, 1, 507);
     }
 
-    /////////////////////////////////////////////
 
     @Test
     @DisplayName("用户获取订单数目，若HTTP头部未携带TOKEN，返回异常结果")
@@ -278,7 +277,7 @@ class BookingControllerTest {
     void shouldReturnExceptionMessageWhenGetBookingCountForCustomerWithWrongToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/booking/count-for-customer")
                 .param("customerId", "506")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -291,7 +290,7 @@ class BookingControllerTest {
     void shouldGetBookingCountForCustomerWithCorrectToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/booking/count-for-customer")
                 .param("customerId", "507")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NDk3MzUsImV4cCI6MTU3ODA1NDUzNX0.4fptdgT_DzIYiqaBytXUY5JNnwSkvrkiRFribKUBek8"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDciLCJpYXQiOjE1Nzc0NTQ0NDMsImV4cCI6MTU3OTUyODA0M30.iT_dyXZ13mqjND1XfDNqvELEWwvgusJwp6mHUmLKNmo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));

@@ -138,12 +138,18 @@ public class BookingServiceImpl implements BookingService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for (Booking booking : bookings){
             Map<String, Object> bookingInfo = new HashMap<>();
+            LocalDateTime startTime = booking.getStartTime();
             LocalDateTime endTime = booking.getEndTime();
             bookingInfo.put("bookingId", booking.getBookingId());
             bookingInfo.put("stadiumName", booking.getStadium().getStadiumName());
-            bookingInfo.put("startTime", formatter.format(booking.getStartTime()));
+            bookingInfo.put("startTime", formatter.format(startTime));
             bookingInfo.put("endTime", formatter.format(endTime));
-            if (LocalDateTime.now().isAfter(endTime)){
+            bookingInfo.put("stadiumId", booking.getStadium().getStadiumId());
+            bookingInfo.put("daysAfterToday", booking.getStartTime().getDayOfYear() - LocalDate.now().getDayOfYear());
+            bookingInfo.put("start", booking.getStartTime().getHour());
+            bookingInfo.put("end", booking.getEndTime().getHour());
+            LocalDateTime lastUpdatableTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0));
+            if (lastUpdatableTime.isBefore(startTime)){
                 bookingInfo.put("expired", true);
             } else {
                 bookingInfo.put("expired", false);
@@ -162,6 +168,7 @@ public class BookingServiceImpl implements BookingService {
         bookingCount.put("count", String.valueOf(count));
         return bookingCount;
     }
+
 
     @Override
     public void deleteBookingByCustomer(BookingRequest bookingRequest) {

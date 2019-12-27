@@ -53,7 +53,7 @@ class NewsControllerTest {
     void shouldReturnExceptionMessageWhenGetNewsCountWithWrongToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/news/get-news-count")
                 .param("userId", "1")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(newsService, never())
@@ -64,8 +64,8 @@ class NewsControllerTest {
     @DisplayName("获取新闻个数时，若HTTP头部携带的TOKEN与userId匹配，返回正常结果")
     void shouldGetNewsCountWithCorrectToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/news/get-news-count")
-                .param("userId", "2")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .param("userId", "502")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(newsService, times(1))
@@ -92,7 +92,7 @@ class NewsControllerTest {
                 .param("offset", "0")
                 .param("limit", "20")
                 .param("userId", "1")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(newsService, never())
@@ -105,8 +105,8 @@ class NewsControllerTest {
         ResultActions perform = mockMvc.perform(get("/news/get-news-list")
                 .param("offset", "0")
                 .param("limit", "20")
-                .param("userId", "2")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .param("userId", "502")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(newsService, times(1))
@@ -138,7 +138,7 @@ class NewsControllerTest {
                 perform(post("/news/post").
                         contentType(MediaType.APPLICATION_JSON).
                         content(JSON.toJSONString(newsRequest)).
-                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -155,7 +155,7 @@ class NewsControllerTest {
                 perform(post("/news/post").
                         contentType(MediaType.APPLICATION_JSON).
                         content(JSON.toJSONString(newsRequest)).
-                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
@@ -188,7 +188,7 @@ class NewsControllerTest {
                 perform(post("/news/update").
                         contentType(MediaType.APPLICATION_JSON).
                         content(JSON.toJSONString(newsRequest)).
-                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -205,7 +205,7 @@ class NewsControllerTest {
                 perform(post("/news/update").
                         contentType(MediaType.APPLICATION_JSON).
                         content(JSON.toJSONString(newsRequest)).
-                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
@@ -238,7 +238,7 @@ class NewsControllerTest {
                 perform(post("/news/delete").
                         contentType(MediaType.APPLICATION_JSON).
                         content(JSON.toJSONString(newsRequest)).
-                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -255,7 +255,7 @@ class NewsControllerTest {
                 perform(post("/news/delete").
                         contentType(MediaType.APPLICATION_JSON).
                         content(JSON.toJSONString(newsRequest)).
-                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                        header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));

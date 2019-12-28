@@ -50,7 +50,7 @@ class StadiumControllerTest {
     void shouldReturnExceptionMessageWhenGetStadiumCountWithWrongToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/get-stadium-count")
                 .param("adminId", "1")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(stadiumService, never())
@@ -62,7 +62,7 @@ class StadiumControllerTest {
     void shouldGetStadiumCountWithCorrectToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/get-stadium-count")
                 .param("adminId", "2")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(stadiumService, times(1))
@@ -93,7 +93,7 @@ class StadiumControllerTest {
         ResultActions perform = mockMvc.perform(post("/stadium/delete")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(stadiumRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(stadiumService, never())
@@ -109,7 +109,7 @@ class StadiumControllerTest {
         ResultActions perform = mockMvc.perform(post("/stadium/delete")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(stadiumRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(stadiumService, times(1))
@@ -140,7 +140,7 @@ class StadiumControllerTest {
         ResultActions perform = mockMvc.perform(post("/stadium/post")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(stadiumRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(stadiumService, never())
@@ -156,7 +156,7 @@ class StadiumControllerTest {
         ResultActions perform = mockMvc.perform(post("/stadium/post")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(stadiumRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(stadiumService, times(1))
@@ -187,7 +187,7 @@ class StadiumControllerTest {
         ResultActions perform = mockMvc.perform(post("/stadium/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(stadiumRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
         verify(stadiumService, never())
@@ -203,7 +203,7 @@ class StadiumControllerTest {
         ResultActions perform = mockMvc.perform(post("/stadium/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(stadiumRequest))
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(stadiumService, times(1))
@@ -214,7 +214,7 @@ class StadiumControllerTest {
     @DisplayName("用户获取场馆列表时，若HTTP头部未携带TOKEN，返回异常结果")
     void shouldReturnExceptionMessageWhenGetStadiumListWithoutToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/items")
-                .param("customerId", "2"));
+                .param("customerId", "502"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
@@ -226,8 +226,8 @@ class StadiumControllerTest {
     @DisplayName("用户获取场馆列表时，若HTTP头部携带的TOKEN与customerId不匹配，返回异常结果")
     void shouldReturnExceptionMessageWhenGetStadiumListWithWrongToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/items")
-                .param("customerId", "1")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .param("customerId", "501")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -239,8 +239,8 @@ class StadiumControllerTest {
     @DisplayName("用户获取场馆列表时，若HTTP头部携带的TOKEN与customerId匹配，返回正常结果")
     void shouldGetStadiumListWithCorrectToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/items")
-                .param("customerId", "2")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .param("customerId", "502")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
@@ -269,7 +269,7 @@ class StadiumControllerTest {
                 .param("offset", "0")
                 .param("limit", "20")
                 .param("adminId", "1")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -284,7 +284,7 @@ class StadiumControllerTest {
                 .param("offset", "0")
                 .param("limit", "20")
                 .param("adminId", "2")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
@@ -297,7 +297,7 @@ class StadiumControllerTest {
     void shouldReturnExceptionMessageWhenGetStadiumByIdWithoutToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/message")
                 .param("id", "1")
-                .param("customerId", "2"));
+                .param("customerId", "502"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("HTTP头部未携带TOKEN"));
@@ -310,8 +310,8 @@ class StadiumControllerTest {
     void shouldReturnExceptionMessageWhenGetStadiumByIdWithWrongToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/message")
                 .param("id", "1")
-                .param("customerId", "1")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .param("customerId", "501")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -324,8 +324,8 @@ class StadiumControllerTest {
     void shouldGetStadiumByIdWithCorrectToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/message")
                 .param("id", "1")
-                .param("customerId", "2")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .param("customerId", "502")
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
@@ -351,7 +351,7 @@ class StadiumControllerTest {
     void shouldReturnExceptionMessageWhenGetStadiumTypesWithWrongToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/types")
                 .param("adminId", "1")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MDIiLCJpYXQiOjE1Nzc0NTI3MzgsImV4cCI6MTU3OTUyNjMzOH0.ozzYAgd56bNUFRm9VQoOK1nIkxdPKJTvmbkmgxug9Nw"));
 
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("TOKEN不匹配"));
@@ -364,12 +364,10 @@ class StadiumControllerTest {
     void shouldGetStadiumTypesWithCorrectToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/stadium/types")
                 .param("adminId", "2")
-                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc2ODMyNzY1LCJleHAiOjE1Nzc0Mzc1NjV9.Ei9A3vq1uKrVCPVLNqsY7q2kuvlyBjkyQWuxmueAuR0"));
-
+                .header("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTc3NDU0Nzg4LCJleHAiOjE1Nzk1MjgzODh9.njy2edCCEzqqK8_w6Fd3u08uoXZXlvUqcimEBzQRWOo"));
         perform.andExpect(status().isOk()).
                 andExpect(jsonPath("$.message").value("success"));
         verify(stadiumService, times(1))
                 .getStadiumTypes();
     }
-
 }

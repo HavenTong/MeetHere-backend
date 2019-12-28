@@ -32,7 +32,7 @@ public class NewsController {
     }
 
     @GetMapping("/get-news-list")
-    @PublicLoginRequired
+//    @PublicLoginRequired
     public ResultEntity listNewsItems(@RequestParam int offset,
                                       @RequestParam int limit,
                                       @RequestParam int userId){

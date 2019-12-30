@@ -1,6 +1,7 @@
 package com.rhenium.meethere.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.rhenium.meethere.dao.CustomerDao;
 import com.rhenium.meethere.domain.Customer;
 import com.rhenium.meethere.dto.CustomerRequest;
 import com.rhenium.meethere.vo.ResultEntity;
@@ -33,6 +34,9 @@ class CustomerControllerIntegrationTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+
+    @Autowired
+    private CustomerDao customerDao;
 
     private String BASE_URL = "/customer";
 
@@ -145,6 +149,8 @@ class CustomerControllerIntegrationTest {
                 () -> assertEquals("success", result.getMessage()),
                 () -> assertEquals(0, result.getCode())
         );
+        // 清理现场
+        customerDao.deleteCustomerByEmail("852092786@qq.com");
     }
 
     @Test

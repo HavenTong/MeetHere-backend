@@ -11,15 +11,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author HavenTong
@@ -70,7 +72,7 @@ class CustomerControllerIntegrationTest {
     @DisplayName("注册用户的邮箱未发送验证码，返回错误信息")
     void shouldGetExceptionMessageWhenNoCheckCodeSent(){
         CustomerRequest customerRequest = CustomerRequest.builder()
-                .email("852092786@qq.com").password("123456").checkCode("123456").build();
+                .userName("root").email("852092786@qq.com").password("123456").checkCode("123456").build();
         // 发送post请求
         ResponseEntity<ResultEntity> response = testRestTemplate
                 .postForEntity(BASE_URL + "/register", customerRequest, ResultEntity.class);
@@ -83,10 +85,40 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("注册用户的用户名的长度不在规定范围内，返回错误信息")
+    void shouldGetExceptionMessageWhenRegisterWithUserNameNotValid(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .userName("TheUserNameIsNotValidForMeetHereSystem").email("852092786@qq.com").password("123456").checkCode("123456").build();
+        // 发送post请求
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/register", customerRequest, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode())
+        );
+    }
+
+    @Test
+    @DisplayName("注册用户的密码的长度不在规定范围内，返回错误信息")
+    void shouldGetExceptionMessageWhenRegisterWithPasswordNotValid(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .userName("root").email("852092786@qq.com").password("ThePasswordIsNotValidForMeetHere").checkCode("123456").build();
+        // 发送post请求
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/register", customerRequest, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode())
+        );
+    }
+
+    @Test
     @DisplayName("注册用户的邮箱验证码失效，返回错误信息")
     void shouldGetExceptionMessageWhenCheckCodeIsExpired(){
         CustomerRequest customerRequest = CustomerRequest.builder()
-                .email("852092786@qq.com").password("123456").checkCode("123456").build();
+                .userName("root").email("852092786@qq.com").password("123456").checkCode("123456").build();
         // 发送post请求
         ResponseEntity<ResultEntity> response = testRestTemplate
                 .postForEntity(BASE_URL + "/register", customerRequest, ResultEntity.class);
@@ -96,5 +128,172 @@ class CustomerControllerIntegrationTest {
                 () -> assertEquals("邮箱未发送验证码或验证码已失效", result.getMessage()),
                 () -> assertEquals(-1, result.getCode())
         );
+    }
+
+
+    @Test
+    @DisplayName("注册用户的验证码正确且信息符合要求，成功注册")
+    void shouldRegisterWhenCheckCodeIsCorrect(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .email("852092786@qq.com").password("123456").checkCode("260813")
+                .userName("root").build();
+        // 发送post请求
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/register", customerRequest, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals("success", result.getMessage()),
+                () -> assertEquals(0, result.getCode())
+        );
+    }
+
+    @Test
+    @DisplayName("登录用户密码不正确，返回错误信息")
+    void shouldGetExceptionMessageWhenLoginWithWrongPassword(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .email("10175101152@stu.ecnu.edu.cn")
+                .password("wrong-password")
+                .build();
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/login", customerRequest, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode()),
+                () -> assertEquals("密码错误", result.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("登录用户密码正确，返回正确登录信息")
+    void shouldGetCorrectLoginInfoWhenPasswordIsCorrect(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .email("10175101152@stu.ecnu.edu.cn")
+                .password("123456")
+                .build();
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/login", customerRequest, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        Map<String, Object> map =(Map<String, Object>) result.getData();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertTrue(map.containsKey("token")),
+                () -> assertEquals("10175101152@stu.ecnu.edu.cn", map.get("email")),
+                () -> assertEquals("621", map.get("customerId")),
+                () -> assertEquals("haven", map.get("userName")),
+                () -> assertTrue(map.containsKey("phoneNumber")),
+                () -> assertNotNull(map.get("registeredTime"))
+        );
+    }
+
+    @Test
+    @DisplayName("修改用户信息时，未携带TOKEN，则返回错误信息")
+    void shouldGetExceptionMessageWhenSavingUserInfoWithoutToken(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).userName("root")
+                .phoneNumber("18900001111").build();
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/save-user-info", customerRequest, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode()),
+                () -> assertEquals("HTTP头部未携带TOKEN", result.getMessage())
+        );
+    }
+
+
+    @Test
+    @DisplayName("修改用户信息时，若TOKEN不匹配，则返回错误信息")
+    void shouldGetExceptionMessageWhenTokenNotMatch(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).userName("root")
+                .phoneNumber("18900001111").build();
+
+        // 在头部添加token
+        HttpHeaders headers = new HttpHeaders();
+        // token for 620
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjAiLCJpYXQiOjE1Nzc2OTY1MzEsImV4cCI6MTU3OTc3MDEzMX0.demvakZwpAOzt_hZEJkjGNvBEKQsAIQQCTKMtouicUc");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/save-user-info", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode()),
+                () -> assertEquals("TOKEN不匹配", result.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("修改用户信息时，若修改的用户名长度不在要求的范围内，则返回错误信息")
+    void shouldGetExceptionMessageWhenChangingInfoWithUserNameNotValid(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).userName("TheUserNameIsNotValidForMeetHereSystem")
+                .phoneNumber("18900001111").build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjEiLCJpYXQiOjE1Nzc2OTU2NjIsImV4cCI6MTU3OTc2OTI2Mn0.moSEFHCMWRLNZSLhYK9IZG_zPGTNMMDv3DrUI4eD_K4");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/save-user-info", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode())
+        );
+    }
+
+    @Test
+    @DisplayName("修改用户信息时，若修改的手机号码不符合格式，则返回错误信息")
+    void shouldGetExceptionMessageWhenChangingInfoWithPhoneNumberNotValid(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).userName("root")
+                .phoneNumber("189abcdefgh").build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjEiLCJpYXQiOjE1Nzc2OTU2NjIsImV4cCI6MTU3OTc2OTI2Mn0.moSEFHCMWRLNZSLhYK9IZG_zPGTNMMDv3DrUI4eD_K4");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/save-user-info", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode())
+        );
+    }
+
+    @Test
+    @DisplayName("修改用户信息时，若TOKEN匹配且修改的信息格式符合要求，则修改成功")
+    void shouldSaveCorrectUserInfo(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).userName("root")
+                .phoneNumber("18900001111").build();
+
+        // 在头部添加token
+        HttpHeaders headers = new HttpHeaders();
+        // token for 621
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjEiLCJpYXQiOjE1Nzc2OTU2NjIsImV4cCI6MTU3OTc2OTI2Mn0.moSEFHCMWRLNZSLhYK9IZG_zPGTNMMDv3DrUI4eD_K4");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/save-user-info", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(0, result.getCode()),
+                () -> assertEquals("success", result.getMessage())
+        );
+
+        // restore
+        CustomerRequest restoreRequest = CustomerRequest.builder()
+                .customerId(621).userName("haven").build();
+        HttpEntity<CustomerRequest> restoreEntity = new HttpEntity<>(restoreRequest, headers);
+        testRestTemplate.postForEntity(BASE_URL + "/save-user-info", restoreEntity, ResultEntity.class);
     }
 }

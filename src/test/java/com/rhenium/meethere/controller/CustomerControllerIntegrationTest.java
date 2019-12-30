@@ -118,7 +118,7 @@ class CustomerControllerIntegrationTest {
     @DisplayName("注册用户的邮箱验证码失效，返回错误信息")
     void shouldGetExceptionMessageWhenCheckCodeIsExpired(){
         CustomerRequest customerRequest = CustomerRequest.builder()
-                .userName("root").email("852092786@qq.com").password("123456").checkCode("123456").build();
+                .userName("root").email("852092786@qq.com").password("123456").checkCode("260813").build();
         // 发送post请求
         ResponseEntity<ResultEntity> response = testRestTemplate
                 .postForEntity(BASE_URL + "/register", customerRequest, ResultEntity.class);
@@ -130,9 +130,8 @@ class CustomerControllerIntegrationTest {
         );
     }
 
-
     @Test
-    @DisplayName("注册用户的验证码正确且信息符合要求，成功注册")
+    @DisplayName("注册用户的验证码正确且信息符合要求，成功注册(check-code必须在运行测试脚本前获取最新的check-code，否则当前测试用例无法通过)")
     void shouldRegisterWhenCheckCodeIsCorrect(){
         CustomerRequest customerRequest = CustomerRequest.builder()
                 .email("852092786@qq.com").password("123456").checkCode("260813")
@@ -207,7 +206,7 @@ class CustomerControllerIntegrationTest {
 
     @Test
     @DisplayName("修改用户信息时，若TOKEN不匹配，则返回错误信息")
-    void shouldGetExceptionMessageWhenTokenNotMatch(){
+    void shouldGetExceptionMessageWhenSavingUserInfoWithTokenNotMatch(){
         CustomerRequest customerRequest = CustomerRequest.builder()
                 .customerId(621).userName("root")
                 .phoneNumber("18900001111").build();
@@ -295,5 +294,114 @@ class CustomerControllerIntegrationTest {
                 .customerId(621).userName("haven").build();
         HttpEntity<CustomerRequest> restoreEntity = new HttpEntity<>(restoreRequest, headers);
         testRestTemplate.postForEntity(BASE_URL + "/save-user-info", restoreEntity, ResultEntity.class);
+    }
+
+    @Test
+    @DisplayName("修改用户密码时，未携带TOKEN，则返回错误信息")
+    void shouldGetExceptionMessageWhenChangingPasswordWithoutToken(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).newPassword("456789").password("123456").build();
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/change-password", customerRequest, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode()),
+                () -> assertEquals("HTTP头部未携带TOKEN", result.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("修改用户密码时，若TOKEN不匹配，则返回错误信息")
+    void shouldGetExceptionMessageWhenChangingPasswordWithTokenNotMatch(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).newPassword("456789").password("123456").build();
+
+        // 在头部添加token
+        HttpHeaders headers = new HttpHeaders();
+        // token for 620
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjAiLCJpYXQiOjE1Nzc2OTY1MzEsImV4cCI6MTU3OTc3MDEzMX0.demvakZwpAOzt_hZEJkjGNvBEKQsAIQQCTKMtouicUc");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/change-password", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode()),
+                () -> assertEquals("TOKEN不匹配", result.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("修改用户密码时，若旧密码不匹配，则返回错误信息")
+    void shouldGetExceptionMessageWhenChangingPasswordWithPasswordNotMatch(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).newPassword("456789").password("wrongOldPassWord").build();
+
+        // 在头部添加token
+        HttpHeaders headers = new HttpHeaders();
+        // token for 621
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjEiLCJpYXQiOjE1Nzc2OTU2NjIsImV4cCI6MTU3OTc2OTI2Mn0.moSEFHCMWRLNZSLhYK9IZG_zPGTNMMDv3DrUI4eD_K4");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/change-password", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode()),
+                () -> assertEquals("密码错误", result.getMessage())
+        );
+    }
+
+
+    @Test
+    @DisplayName("修改用户密码时，若新密码格式不符合要求，则返回错误信息 ")
+    void shouldGetExceptionMessageWhenChangingPasswordWithNewPasswordNotValid(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).newPassword("newPasswordTooLongWithWrongFormat").password("123456").build();
+
+        // 在头部添加token
+        HttpHeaders headers = new HttpHeaders();
+        // token for 621
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjEiLCJpYXQiOjE1Nzc2OTU2NjIsImV4cCI6MTU3OTc2OTI2Mn0.moSEFHCMWRLNZSLhYK9IZG_zPGTNMMDv3DrUI4eD_K4");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/change-password", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(-1, result.getCode())
+        );
+    }
+
+    @Test
+    @DisplayName("修改用户密码时，若新密码格式符合要求且旧密码匹配，则成功修改密码")
+    void shouldChangeCorrectPassword(){
+        CustomerRequest customerRequest = CustomerRequest.builder()
+                .customerId(621).newPassword("456789").password("123456").build();
+
+        // 在头部添加token
+        HttpHeaders headers = new HttpHeaders();
+        // token for 621
+        headers.set("TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2MjEiLCJpYXQiOjE1Nzc2OTU2NjIsImV4cCI6MTU3OTc2OTI2Mn0.moSEFHCMWRLNZSLhYK9IZG_zPGTNMMDv3DrUI4eD_K4");
+        HttpEntity<CustomerRequest> entity = new HttpEntity<>(customerRequest, headers);
+
+        ResponseEntity<ResultEntity> response = testRestTemplate
+                .postForEntity(BASE_URL + "/change-password", entity, ResultEntity.class);
+        ResultEntity result = response.getBody();
+        assertAll(
+                () -> assertEquals(200, response.getStatusCodeValue()),
+                () -> assertEquals(0, result.getCode()),
+                () -> assertEquals("success", result.getMessage())
+        );
+
+        // restore
+        CustomerRequest restoreRequest = CustomerRequest.builder()
+                .customerId(621).password("456789").newPassword("123456").build();
+        HttpEntity<CustomerRequest> restoreEntity = new HttpEntity<>(restoreRequest, headers);
+        testRestTemplate.postForEntity(BASE_URL + "/change-password", restoreEntity, ResultEntity.class);
     }
 }

@@ -33,6 +33,7 @@ public interface CustomerDao {
 
     @Insert("INSERT INTO customer(email, phone_number, user_name, password, registered_time)" +
             " values (#{email}, #{phoneNumber}, #{userName}, #{password}, #{registeredTime})")
+    @Options(keyProperty = "customerId", keyColumn = "customer_id", useGeneratedKeys = true)
     int saveNewCustomer(Customer customer);
 
     @Update("UPDATE customer SET user_name = #{userName}, phone_number = #{phoneNumber} WHERE customer_id = #{id}")
@@ -44,4 +45,6 @@ public interface CustomerDao {
     @Delete("DELETE FROM customer WHERE customer_id = #{customerId}")
     void deleteCustomerById(@Param("customerId") int customerId);
 
+    @Delete("DELETE FROM customer WHERE email = #{email}")
+    void deleteCustomerByEmail(@Param("email") String email);
 }

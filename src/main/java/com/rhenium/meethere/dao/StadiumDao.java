@@ -64,4 +64,12 @@ public interface StadiumDao {
             "location = #{location}, description = #{description}, price = #{price}, " +
             "picture = #{picture} WHERE stadium_id = #{stadiumId}")
     void updateStadiumWithPicture(StadiumRequest stadiumRequest);
+
+    /** 集成测试用 **/
+
+    @Select("SELECT stadium_id FROM stadium WHERE stadium_name = #{stadiumName}")
+    int[] getStadiumIdByName(String stadiumName);
+
+    @Select("DELETE FROM stadium WHERE stadium_id = #{id}")
+    int[] deleteStadiumByID(Integer id);
 }

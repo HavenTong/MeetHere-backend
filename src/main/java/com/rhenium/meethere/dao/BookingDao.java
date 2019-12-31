@@ -80,4 +80,9 @@ public interface BookingDao {
     @Select("SELECT COUNT(*) FROM booking WHERE customer_id = #{customerId}")
     int findBookingCountForCustomer(@Param("customerId") int customerId);
 
+    @Delete("DELETE a FROM booking a, (SELECT MAX(booking_id) AS max_id FROM booking) b WHERE booking_id = b.max_id")
+    int deleteLatestBooking();
+
+    @Select("SELECT * FROM booking WHERE booking_id = (SELECT MAX(booking_id) FROM booking)")
+    Booking getLatestBooking();
 }

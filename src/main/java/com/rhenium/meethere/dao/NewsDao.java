@@ -35,4 +35,11 @@ public interface NewsDao {
 
     @Select("SELECT COUNT(*) FROM news")
     int getNewsCount();
+
+    /** 集成测试用 */
+    @Select("SELECT news_id FROM news WHERE news_title = #{newsTitle}")
+    int[] getNewsIdByNewsTitle(String newsTitle);
+
+    @Delete("DELETE FROM news WHERE news_id = #{newsId}")
+    int deleteNewsByNewsId(Integer newsId);
 }

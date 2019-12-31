@@ -93,7 +93,10 @@ public class CustomerServiceImpl implements CustomerService {
         // 若存在则判断密码，若密码一致则生成JWT，将信息放入Map中返回，
         // 密码不一致抛出异常
         // 用户不存在抛出异常
-        Customer customer = customerDao.findCustomerByEmail(customerRequest.getEmail());
+
+        // 去除空格
+        String email = StringUtils.trimWhitespace(customerRequest.getEmail());
+        Customer customer = customerDao.findCustomerByEmail(email);
         if (customer == null){
             throw new MyException(ResultEnum.USER_NOT_EXIST);
         }
@@ -103,7 +106,6 @@ public class CustomerServiceImpl implements CustomerService {
         Map<String, String> loginInfo = new HashMap<>();
         String token = JwtUtil.createJwt(customer);
         String customerId = customer.getCustomerId().toString();
-        String email = customer.getEmail();
         String userName = customer.getUserName();
         String phoneNumber = customer.getPhoneNumber();
         DateTimeFormatter dft = DateTimeFormatter.ofPattern("yyyy-MM-dd");

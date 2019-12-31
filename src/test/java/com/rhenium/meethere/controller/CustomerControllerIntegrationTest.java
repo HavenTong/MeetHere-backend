@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +36,9 @@ class CustomerControllerIntegrationTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private CustomerDao customerDao;
@@ -137,6 +142,7 @@ class CustomerControllerIntegrationTest {
     @Test
     @DisplayName("注册用户的验证码正确且信息符合要求，成功注册(check-code必须在运行测试脚本前获取最新的check-code，否则当前测试用例无法通过)")
     void shouldRegisterWhenCheckCodeIsCorrect(){
+        redisTemplate.opsForValue().set("code:852092786@qq.com", "260813", 300, TimeUnit.SECONDS);
         CustomerRequest customerRequest = CustomerRequest.builder()
                 .email("852092786@qq.com").password("123456").checkCode("260813")
                 .userName("root").build();
@@ -150,6 +156,7 @@ class CustomerControllerIntegrationTest {
                 () -> assertEquals(0, result.getCode())
         );
         // 清理现场
+        redisTemplate.delete("code:852092786@qq.com");
         customerDao.deleteCustomerByEmail("852092786@qq.com");
     }
 

@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -262,19 +263,24 @@ class BookingServiceTest {
     @Test
     @DisplayName("用户获取正确的订单列表")
     void shouldGetCorrectBookingsForCustomer(){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime tomorrowBookingStart = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(9, 0, 0));
+        LocalDateTime tomorrowBookingEnd = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(11, 0, 0));
+        LocalDateTime yesterdayBookingStart = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(9, 0, 0));
+        LocalDateTime yesterdayBookingEnd = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(11, 0, 0));
         Stadium tennisCourt = Stadium.builder()
                 .stadiumName("tennis").build();
         Stadium volleyBallCourt = Stadium.builder()
                 .stadiumName("volleyball").build();
         Booking bookingForTennis = Booking.builder()
                 .bookingId(1)
-                .startTime(LocalDateTime.of(2019, 12, 26, 8, 0, 0))
-                .endTime(LocalDateTime.of(2019, 12, 26, 10, 0, 0 ))
+                .startTime(tomorrowBookingStart)
+                .endTime(tomorrowBookingEnd)
                 .paid(true).stadium(tennisCourt).priceSum(BigDecimal.valueOf(200)).build();
         Booking bookingForVolleyball = Booking.builder()
                 .bookingId(2)
-                .startTime(LocalDateTime.of(2019, 12, 28, 18, 0, 0 ))
-                .endTime(LocalDateTime.of(2019, 12, 28, 20, 0, 0))
+                .startTime(yesterdayBookingStart)
+                .endTime(yesterdayBookingEnd)
                 .paid(false).stadium(volleyBallCourt).priceSum(BigDecimal.valueOf(400)).build();
         List<Booking> bookingList = new ArrayList<>(Arrays.asList(bookingForTennis, bookingForVolleyball));
         when(bookingDao.findBookingsByCustomerId(0, 2, 1)).thenReturn(bookingList);
@@ -288,17 +294,17 @@ class BookingServiceTest {
         assertAll(
                 () -> assertEquals(1, firstBooking.get("bookingId")),
                 () -> assertEquals("tennis", firstBooking.get("stadiumName")),
-                () -> assertEquals("2019-12-26 08:00:00", firstBooking.get("startTime")),
-                () -> assertEquals("2019-12-26 10:00:00", firstBooking.get("endTime")),
-                () -> assertTrue((Boolean) firstBooking.get("expired")),
+                () -> assertEquals(dateTimeFormatter.format(tomorrowBookingStart), firstBooking.get("startTime")),
+                () -> assertEquals(dateTimeFormatter.format(tomorrowBookingEnd), firstBooking.get("endTime")),
                 () -> assertTrue((Boolean) firstBooking.get("paid")),
                 () -> assertEquals(BigDecimal.valueOf(200), firstBooking.get("priceSum")),
+                () -> assertFalse((Boolean) firstBooking.get("expired")),
                 () -> assertEquals(2, secondBooking.get("bookingId")),
                 () -> assertEquals("volleyball", secondBooking.get("stadiumName")),
-                () -> assertEquals("2019-12-28 18:00:00", secondBooking.get("startTime")),
-                () -> assertEquals("2019-12-28 20:00:00", secondBooking.get("endTime")),
-                () -> assertFalse((Boolean) secondBooking.get("expired")),
+                () -> assertEquals(dateTimeFormatter.format(yesterdayBookingStart), secondBooking.get("startTime")),
+                () -> assertEquals(dateTimeFormatter.format(yesterdayBookingEnd), secondBooking.get("endTime")),
                 () -> assertFalse((Boolean) secondBooking.get("paid")),
+                () -> assertTrue((Boolean) secondBooking.get("expired")),
                 () -> assertEquals(BigDecimal.valueOf(400), secondBooking.get("priceSum"))
         );
 

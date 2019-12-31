@@ -85,4 +85,7 @@ public interface BookingDao {
 
     @Select("SELECT * FROM booking WHERE booking_id = (SELECT MAX(booking_id) FROM booking)")
     Booking getLatestBooking();
+
+    @Select("SELECT COUNT(*) FROM booking")
+    int getAllBookingCount();
 }

@@ -65,6 +65,7 @@ public interface BookingDao {
 
 
     @Insert("INSERT INTO booking(customer_id, stadium_id, start_time, end_time, price_sum, paid) VALUES (#{customerId}, #{stadiumId}, #{startTime}, #{endTime}, #{priceSum}, #{paid})")
+    @Options(keyProperty = "bookingId", keyColumn = "booking_id", useGeneratedKeys = true)
     int addNewBooking(Booking booking);
 
     @Select("SELECT * FROM booking WHERE customer_id = #{customerId} ORDER BY start_time DESC LIMIT #{offset}, #{limit}")

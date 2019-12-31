@@ -32,7 +32,7 @@ public class CommentController {
         return ResultEntity.succeed();
     }
 
-    // TODO: 鉴权
+
     @GetMapping("/get-by-user")
     @UserLoginRequired
     public ResultEntity getCommentByStadiumId(@RequestParam int stadiumId,

@@ -354,7 +354,6 @@ class BookingControllerIntegrationTest {
         }
     }
 
-    //===========================================================================================
     @Test
     @DisplayName("用户获取订单数目，若HTTP头部未携带TOKEN，返回异常结果")
     void shouldReturnExceptionMessageWhenGetBookingCountForCustomerWithoutToken() {

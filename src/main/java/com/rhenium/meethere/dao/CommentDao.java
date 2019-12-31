@@ -1,5 +1,6 @@
 package com.rhenium.meethere.dao;
 
+import com.rhenium.meethere.domain.Booking;
 import com.rhenium.meethere.domain.Comment;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
@@ -31,6 +32,7 @@ public interface CommentDao {
 
     @Insert("INSERT INTO comment(stadium_id, customer_id, comment_content) " +
             "VALUES (#{stadiumId}, #{customerId}, #{commentContent})")
+    @Options(keyProperty = "commentId", keyColumn = "comment_id", useGeneratedKeys = true)
     int addNewComment(Comment comment);
 
     @Delete("DELETE FROM comment WHERE comment_id = #{commentId}")
@@ -56,4 +58,10 @@ public interface CommentDao {
 
     @Select("SELECT * FROM comment WHERE comment_id = #{commentId}")
     Comment getCommentByCommentId(@Param("commentId") int commentId);
+
+    @Delete("DELETE a FROM comment a, (SELECT MAX(comment_id) AS max_id FROM comment) b WHERE comment_id = b.max_id")
+    int deleteLatestComment();
+
+    @Select("SELECT likes FROM comment WHERE comment_id = #{commentId}")
+    int getLikesByCommentId(@Param("commentId") int commentId);
 }

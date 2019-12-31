@@ -1,9 +1,7 @@
 package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.dao.NewsDao;
-import com.rhenium.meethere.dao.StadiumDao;
 import com.rhenium.meethere.dto.NewsRequest;
-import com.rhenium.meethere.dto.StadiumRequest;
 import com.rhenium.meethere.util.HttpRequestUtil;
 import com.rhenium.meethere.vo.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 

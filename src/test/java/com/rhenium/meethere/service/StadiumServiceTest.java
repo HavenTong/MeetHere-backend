@@ -20,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -252,31 +254,45 @@ class StadiumServiceTest {
     @Test
     @DisplayName("管理员获取正确的场馆信息")
     void shouldGetCorrectStadiumInfoByAdmin(){
+        LocalDateTime booking1StartTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(8, 0, 0));
+        LocalDateTime booking1EndTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 0, 0));
+        LocalDateTime booking2StartTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(10, 0, 0));
+        LocalDateTime booking2EndTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0, 0));
+        LocalDateTime booking3StartTime = LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0, 0));
+        LocalDateTime booking3EndTime = LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(13, 0, 0));
+
         Booking booking1ForStadium1 = Booking.builder()
-                .startTime(LocalDateTime.of(2019, 12, 26, 8, 0, 0))
-                .endTime(LocalDateTime.of(2019, 12, 26, 11, 0, 0))
+                .startTime(booking1StartTime)
+                .endTime(booking1EndTime)
                 .build();
         Booking booking2ForStadium1 = Booking.builder()
-                .startTime(LocalDateTime.of(2019, 12, 27, 10, 0, 0))
-                .endTime(LocalDateTime.of(2019, 12, 27, 12, 0, 0))
+                .startTime(booking2StartTime)
+                .endTime(booking2EndTime)
                 .build();
         Booking booking3ForStadium1 = Booking.builder()
-                .startTime(LocalDateTime.of(2019, 12, 28, 12, 0, 0))
-                .endTime(LocalDateTime.of(2019, 12, 28, 13, 0, 0))
+                .startTime(booking3StartTime)
+                .endTime(booking3EndTime)
                 .build();
         List<Booking> bookingsForStadium1
                 = new ArrayList<>(Arrays.asList(booking1ForStadium1, booking2ForStadium1, booking3ForStadium1));
+
+        LocalDateTime booking4StartTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0 , 0));
+        LocalDateTime booking4EndTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(13, 0, 0));
+        LocalDateTime booking5StartTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(14, 0, 0));
+        LocalDateTime booking5EndTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(16, 0, 0));
+        LocalDateTime booking6StartTime = LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(19, 0, 0));
+        LocalDateTime booking6EndTime = LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(20, 0, 0));
         Booking booking1ForStadium2 = Booking.builder()
-                .startTime(LocalDateTime.of(2019, 12, 26, 12, 0, 0))
-                .endTime(LocalDateTime.of(2019, 12, 26, 13, 0, 0))
+                .startTime(booking4StartTime)
+                .endTime(booking4EndTime)
                 .build();
         Booking booking2ForStadium2 = Booking.builder()
-                .startTime(LocalDateTime.of(2019, 12, 27, 14, 0, 0))
-                .endTime(LocalDateTime.of(2019, 12, 27, 16, 0, 0))
+                .startTime(booking5StartTime)
+                .endTime(booking5EndTime)
                 .build();
         Booking booking3ForStadium2 = Booking.builder()
-                .startTime(LocalDateTime.of(2019, 12, 28, 19, 0, 0))
-                .endTime(LocalDateTime.of(2019, 12, 28, 20, 0, 0))
+                .startTime(booking6StartTime)
+                .endTime(booking6EndTime)
                 .build();
         List<Booking> bookingsForStadium2
                 = new ArrayList<>(Arrays.asList(booking1ForStadium2, booking2ForStadium2, booking3ForStadium2));
@@ -300,14 +316,16 @@ class StadiumServiceTest {
         List<Map<String, Object>> stadiumInfo = stadiumService.findStadiumsForAdmin(0, 2);
         verify(stadiumDao, times(1))
                 .findAllStadiumsForAdmin(0, 2);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Map<String, Object> freeTimeMapForTennis = (Map<String, Object>) stadiumInfo.get(0).get("freeTime");
-        List<String> todayFreeTimeForTennis = (List<String>) freeTimeMapForTennis.get("2019-12-26");
-        List<String> tomorrowFreeTimeForTennis = (List<String>) freeTimeMapForTennis.get("2019-12-27");
-        List<String> theDayAfterTomorrowFreeTimeForTennis = (List<String>) freeTimeMapForTennis.get("2019-12-28");
+        List<String> todayFreeTimeForTennis = (List<String>) freeTimeMapForTennis.get(formatter.format(LocalDateTime.now()));
+        List<String> tomorrowFreeTimeForTennis = (List<String>) freeTimeMapForTennis.get(formatter.format(LocalDateTime.now().plusDays(1)));
+        List<String> theDayAfterTomorrowFreeTimeForTennis = (List<String>) freeTimeMapForTennis.get(formatter.format(LocalDateTime.now().plusDays(2)));
         Map<String, Object> freeTimeMapForVolleyBall = (Map<String, Object>) stadiumInfo.get(1).get("freeTime");
-        List<String> todayFreeTimeForVolleyBall = (List<String>) freeTimeMapForVolleyBall.get("2019-12-26");
-        List<String> tomorrowFreeTimeForVolleyBall = (List<String>) freeTimeMapForVolleyBall.get("2019-12-27");
-        List<String> theDayAfterTomorrowFreeTimeForVolleyBall = (List<String>) freeTimeMapForVolleyBall.get("2019-12-28");
+        List<String> todayFreeTimeForVolleyBall = (List<String>) freeTimeMapForVolleyBall.get(formatter.format(LocalDateTime.now()));
+        List<String> tomorrowFreeTimeForVolleyBall = (List<String>) freeTimeMapForVolleyBall.get(formatter.format(LocalDateTime.now().plusDays(1)));
+        List<String> theDayAfterTomorrowFreeTimeForVolleyBall = (List<String>) freeTimeMapForVolleyBall.get(formatter.format(LocalDateTime.now().plusDays(2)));
         assertAll(
                 () -> assertEquals("11:00-20:00", todayFreeTimeForTennis.get(0)),
                 () -> assertEquals("08:00-10:00", tomorrowFreeTimeForTennis.get(0)),

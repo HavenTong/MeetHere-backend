@@ -273,7 +273,7 @@ class BookingControllerTest {
     }
 
     @Test
-    @DisplayName("通过用户ID获取订单，若HTTP头部携带的TOKEN与customerId不匹配，返回异常结果")
+    @DisplayName("通过用户ID获取订单数目，若HTTP头部携带的TOKEN与customerId不匹配，返回异常结果")
     void shouldReturnExceptionMessageWhenGetBookingCountForCustomerWithWrongToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/booking/count-for-customer")
                 .param("customerId", "506")
@@ -286,7 +286,7 @@ class BookingControllerTest {
     }
 
     @Test
-    @DisplayName("通过用户ID获取订单，若HTTP头部携带的TOKEN与customerId匹配，返回正常结果")
+    @DisplayName("通过用户ID获取订单数目，若HTTP头部携带的TOKEN与customerId匹配，返回正常结果")
     void shouldGetBookingCountForCustomerWithCorrectToken() throws Exception {
         ResultActions perform = mockMvc.perform(get("/booking/count-for-customer")
                 .param("customerId", "507")

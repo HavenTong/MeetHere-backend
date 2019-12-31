@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,14 +146,16 @@ public class BookingServiceImpl implements BookingService {
             bookingInfo.put("startTime", formatter.format(startTime));
             bookingInfo.put("endTime", formatter.format(endTime));
             bookingInfo.put("stadiumId", booking.getStadium().getStadiumId());
-            bookingInfo.put("daysAfterToday", booking.getStartTime().getDayOfYear() - LocalDate.now().getDayOfYear());
+//            bookingInfo.put("daysAfterToday", booking.getStartTime().getDayOfYear() - LocalDate.now().getDayOfYear());
+            bookingInfo.put("daysAfterToday", LocalDate.now().until(booking.getStartTime(), ChronoUnit.DAYS));
+
             bookingInfo.put("start", booking.getStartTime().getHour());
             bookingInfo.put("end", booking.getEndTime().getHour());
             LocalDateTime lastUpdatableTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0));
             if (lastUpdatableTime.isBefore(startTime)){
-                bookingInfo.put("expired", true);
-            } else {
                 bookingInfo.put("expired", false);
+            } else {
+                bookingInfo.put("expired", true);
             }
             bookingInfo.put("paid", booking.getPaid());
             bookingInfo.put("priceSum", booking.getPriceSum());

@@ -25,7 +25,7 @@ public class CustomerRequest {
     @Email(message = "必须满足邮箱格式")
     private String email;
 
-    @Pattern(regexp = "^1([34578])\\d{9}$", message = "手机号码格式错误")
+    @Pattern(regexp = "(^$|^(1([34578])\\d{9}))$", message = "手机号码格式错误")
     private String phoneNumber;
 
     @Size(min = 1, max = 8, message = "用户名必须在8位以内")

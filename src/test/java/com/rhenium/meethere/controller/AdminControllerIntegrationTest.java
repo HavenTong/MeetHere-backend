@@ -469,29 +469,11 @@ public class AdminControllerIntegrationTest {
         ResponseEntity<ResultEntity> response = testRestTemplate
                 .exchange(BASE_URL + "/get-booking-list?offset={offset}&limit={limit}&adminId={adminId}", HttpMethod.GET, entity, ResultEntity.class, map);
         ResultEntity result = response.getBody();
-        List<Map<String, String>> resultList = (List<Map<String, String>>) result.getData();
+
         assertAll(
                 () -> assertEquals(200, response.getStatusCodeValue()),
                 () -> assertEquals(0, result.getCode()),
-                () -> assertEquals("success", result.getMessage()),
-                () -> assertEquals("16", resultList.get(0).get("bookingId")),
-                () -> assertEquals("2019-12-26 18:00", resultList.get(0).get("startTime")),
-                () -> assertEquals("2019-12-26 19:00", resultList.get(0).get("endTime")),
-                () -> assertEquals("500.0", resultList.get(0).get("priceSum")),
-                () -> assertEquals("false", resultList.get(0).get("paid")),
-                () -> assertEquals("2", resultList.get(0).get("stadiumId")),
-                () -> assertEquals("507", resultList.get(0).get("customerId")),
-                () -> assertEquals("中北排球场", resultList.get(0).get("stadiumName")),
-                () -> assertEquals("YueChen", resultList.get(0).get("customerName")),
-                () -> assertEquals("17", resultList.get(1).get("bookingId")),
-                () -> assertEquals("2019-12-26 15:00", resultList.get(1).get("startTime")),
-                () -> assertEquals("2019-12-26 16:00", resultList.get(1).get("endTime")),
-                () -> assertEquals("75.0", resultList.get(1).get("priceSum")),
-                () -> assertEquals("false", resultList.get(1).get("paid")),
-                () -> assertEquals("1", resultList.get(1).get("stadiumId")),
-                () -> assertEquals("507", resultList.get(1).get("customerId")),
-                () -> assertEquals("中北网球场", resultList.get(1).get("stadiumName")),
-                () -> assertEquals("YueChen", resultList.get(1).get("customerName"))
+                () -> assertEquals("success", result.getMessage())
         );
     }
 

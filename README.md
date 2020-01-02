@@ -15,6 +15,8 @@
 
     https://github.com/JJAYCHENooo/MeetHere-frontend
 
+
+
 ## 小组成员
 
 - 童翰文 10175101152
@@ -43,6 +45,20 @@ MeetHere是一个场馆预约与管理的Web电子商务网站，主要功能包
 
     已预定场馆信息的查看、取消、信息修改
 
+    
+
+## 系统部署说明
+
+系统运行地址：
+
+http://152.136.173.30/
+
+系统部署在我们购买的腾讯服务器中，其中前端使用 nginx 将我们使用 vue 开发的项目进行部署，后端程序是 java 程序，使用 nohup 使其在系统中不挂断得运行。
+
+详细部署信息如下：
+
+![](https://s2.ax1x.com/2020/01/02/lNuvqO.png)
+
 
 
 ## 后端技术栈
@@ -57,6 +73,7 @@ MeetHere是一个场馆预约与管理的Web电子商务网站，主要功能包
 - Framework & Some Dependency
     - Spring Boot 2.2.1
     - Spring Secruity 
+    - Spring Data
     - MyBatis
     - Java Mail
     - ...
@@ -71,6 +88,7 @@ MeetHere是一个场馆预约与管理的Web电子商务网站，主要功能包
     VS Code 1.41
 
 - Framework & Dependency
+
     - Vue.js
     - Vuex
     - Vue Router
@@ -78,6 +96,8 @@ MeetHere是一个场馆预约与管理的Web电子商务网站，主要功能包
     - Echats
     - vue-star
     - ...
+
+    
 
 ## 单元测试 & 集成测试
 
@@ -131,4 +151,3 @@ MeetHere是一个场馆预约与管理的Web电子商务网站，主要功能包
 
 
 ## 项目文件说明
-

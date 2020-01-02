@@ -134,8 +134,8 @@ public class CustomerServiceImpl implements CustomerService {
         customerDao.saveNewPassword(customer);
     }
 
-    @Override
-    public Customer getOne(String email) {
-        return customerDao.findCustomerByEmail(email);
-    }
+//    @Override
+//    public Customer getOne(String email) {
+//        return customerDao.findCustomerByEmail(email);
+//    }
 }

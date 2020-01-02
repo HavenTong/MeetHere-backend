@@ -22,5 +22,5 @@ public interface CustomerService {
 
     void changePassword(CustomerRequest customerRequest);
 
-    Customer getOne(String email);
+//    Customer getOne(String email);
 }

@@ -7,13 +7,13 @@ import java.util.Random;
  * @date 2019/12/7 5:54 下午
  */
 public class CheckCodeUtil {
-    private static final String source = "0123456789";
+    private static final String SOURCE = "0123456789";
 
     public static String generateCheckCode(){
         Random random = new Random();
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < 6; i++){
-            buffer.append(source.charAt(random.nextInt(10)));
+            buffer.append(SOURCE.charAt(random.nextInt(10)));
         }
         return buffer.toString();
     }

@@ -22,7 +22,7 @@ import java.util.Date;
 @Slf4j
 public class JwtUtil {
     private static final String KEY = "meethere";
-    private static final long ttl = 60 * 60 * 24 * 1000 * 24;
+    private static final long TTL = 60 * 60 * 24 * 1000 * 24;
 
     /**
      * 通过customer生成JWT
@@ -35,7 +35,7 @@ public class JwtUtil {
                 .setId(customer.getCustomerId().toString())
                 .setIssuedAt(new Date(current))
                 .signWith(SignatureAlgorithm.HS256, KEY)
-                .setExpiration(new Date(current + ttl));
+                .setExpiration(new Date(current + TTL));
         return builder.compact();
     }
 
@@ -50,7 +50,7 @@ public class JwtUtil {
                 .setId(admin.getAdminId().toString())
                 .setIssuedAt(new Date(current))
                 .signWith(SignatureAlgorithm.HS256, KEY)
-                .setExpiration(new Date(current + ttl));
+                .setExpiration(new Date(current + TTL));
         return builder.compact();
     }
 

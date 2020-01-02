@@ -21,7 +21,7 @@ public interface BookingDao {
 
     // TODO: 可以优化一下 LIMIT
 
-    @Select("SELECT b.* FROM booking b ORDER BY b.booking_id LIMIT #{offset}, #{limit}")
+    @Select("SELECT b.* FROM booking b ORDER BY b.booking_id DESC LIMIT #{offset}, #{limit}")
     @Results({
             @Result(property = "customerId", column = "customer_id"),
             @Result(property = "stadiumId", column = "stadium_id"),

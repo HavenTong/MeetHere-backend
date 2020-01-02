@@ -16,6 +16,7 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public enum StadiumTypeEnum {
+    // 表示场馆的类型，code中内容为存到数据库中内容，type表达实际含义
     NONE_STADIUM(-1, "待定分类"),
     TENNIS_BALL_STADIUM(0, "网球场"),
     VOLLEYBALL_STADIUM(1, "排球场"),

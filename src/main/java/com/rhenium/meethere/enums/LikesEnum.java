@@ -7,9 +7,12 @@ import lombok.Getter;
  * @author HavenTong
  * @date 2019/12/22 3:53 下午
  */
+
 @Getter
 public enum LikesEnum {
+    // 表示已点赞的枚举
     LIKED(1, "已点赞"),
+    // 表示未点赞的枚举
     NOT_LIKED(0,"未点赞" ),
     ;
 

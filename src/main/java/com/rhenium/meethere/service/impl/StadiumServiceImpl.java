@@ -132,7 +132,7 @@ public class StadiumServiceImpl implements StadiumService {
         String imgStr = stadiumRequest.getPictureRaw();
 
         System.out.println(imgStr);
-        if (imgStr != null && !imgStr.equals("nil")) {
+        if (imgStr != null && !"nil".equals(imgStr)) {
             stadiumRequest.setPicture(SaveImageFileUtil.saveImage(imgStr));
             stadiumDao.updateStadiumWithPicture(stadiumRequest);
         } else {

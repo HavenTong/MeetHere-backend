@@ -1,18 +1,11 @@
 package com.rhenium.meethere.dao;
 
 import com.rhenium.meethere.domain.Booking;
-import com.rhenium.meethere.dto.BookingRequest;
-import com.rhenium.meethere.dto.CustomerRequest;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

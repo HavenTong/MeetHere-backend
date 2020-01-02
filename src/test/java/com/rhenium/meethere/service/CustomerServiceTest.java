@@ -308,7 +308,7 @@ class CustomerServiceTest {
                 .customerId(6)
                 .email("10175101152@stu.ecnu.edu.cn")
                 .userName("root")
-                .password("$2a$10$lU2Cx08u/4ovjHpf/aFzhe9EdayhH3ZyYR9ThAXaXV8CuKN.ZtvAy")
+                .password("$2a$10$tcuOLfVB3Ld0c5DCD/F/UuWpH.mbrmaOHVxYJ1Hd0ttoke5NzWxsK")
                 .phoneNumber("18900001111")
                 .registeredTime(LocalDateTime.of(2019, 12, 21, 14, 30, 30))
                 .build();

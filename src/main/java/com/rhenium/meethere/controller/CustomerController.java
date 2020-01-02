@@ -61,28 +61,4 @@ public class CustomerController {
         return ResultEntity.succeed();
     }
 
-    // Testing
-    // 可以接收并成功验证
-//    @GetMapping("/get-one")
-//    @UserLoginRequired
-//    public ResultEntity getOne(@RequestParam String email, @RequestBody CustomerRequest customerRequest){
-//        Customer customer = customerService.getOne(email);
-//        return ResultEntity.succeed(customer);
-//    }
-
-
-    /**
-     * 非业务接口，仅仅便于获得某个用户的JWT进行测试
-     * @param customerRequest 想要获取JWT的customerRequest
-     * @return JWT
-     */
-    @GetMapping("/jwt")
-    public ResultEntity getCustomerJwt(@RequestBody CustomerRequest customerRequest){
-        Customer customer = Customer.builder()
-                .customerId(customerRequest.getCustomerId())
-                .email(customerRequest.getEmail())
-                .build();
-        String token = JwtUtil.createJwt(customer);
-        return ResultEntity.succeed(token);
-    }
 }

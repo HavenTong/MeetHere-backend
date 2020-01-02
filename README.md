@@ -65,7 +65,7 @@ http://152.136.173.30/
 
 - IDE
 
-    IDEA 2019.3
+    IDEA IntelliJ 2019.3
 
 - DataBase
     - MySQL 8.0.18

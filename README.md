@@ -105,7 +105,9 @@ http://152.136.173.30/
 - Mockito 3.x
 - JMockit 1.48
 
+- 测试结果
 
+    ![image-20200102220426215](https://tva1.sinaimg.cn/large/006tNbRwly1gaikh0wln2j327w0lijvp.jpg)
 
 ## 系统测试
 

@@ -15,7 +15,9 @@ import java.util.Map;
 @Slf4j
 public class MapUtil {
     public static Map<String, Object> objToMap(Object object){
-        if (object == null) return null;
+        if (object == null) {
+            return null;
+        }
         Map<String, Object> map = new HashMap<>();
         Field[] fields = object.getClass().getDeclaredFields();
         for (Field field : fields){

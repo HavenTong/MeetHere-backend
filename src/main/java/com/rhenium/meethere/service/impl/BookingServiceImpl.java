@@ -102,8 +102,9 @@ public class BookingServiceImpl implements BookingService {
     public ArrayList<Map<String, Integer>> getEmptyTimesByBookingsInADay(ArrayList<Booking> bookings, Integer daysAfterToday) {
         ArrayList<Map<String, Integer>> emptyTimes = new ArrayList<>();
         int currentHour = 8;
-        if (daysAfterToday == 0)
+        if (daysAfterToday == 0) {
             currentHour = LocalTime.now().getHour() + 2;
+        }
         int start, end;
         for (Booking booking : bookings) {
             if (currentHour < booking.getStartTime().getHour()) {

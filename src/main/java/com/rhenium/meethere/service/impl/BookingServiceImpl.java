@@ -9,11 +9,8 @@ import com.rhenium.meethere.enums.ResultEnum;
 import com.rhenium.meethere.exception.MyException;
 import com.rhenium.meethere.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.cache.decorators.BlockingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -76,8 +73,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public ArrayList<Map<String, Integer>> getEmptyTimeByStadiumIdAndDate(Integer stadiumId, Integer daysAfterToday) {
         ArrayList<Booking> bookings = getBookingsByStadiumAndDate(stadiumId, daysAfterToday);
-        ArrayList<Map<String, Integer>> emptyTimesByBooksInADay = getEmptyTimesByBookingsInADay(bookings, daysAfterToday);
-        return emptyTimesByBooksInADay;
+        ArrayList<Map<String, Integer>> emptyTimesByBooksInOneDay = getEmptyTimesByBookingsInOneDay(bookings, daysAfterToday);
+        return emptyTimesByBooksInOneDay;
     }
 
     public boolean judgeBookingIsValid(BookingRequest bookingRequest) {
@@ -100,7 +97,7 @@ public class BookingServiceImpl implements BookingService {
         return bookings;
     }
 
-    public ArrayList<Map<String, Integer>> getEmptyTimesByBookingsInADay(ArrayList<Booking> bookings, Integer daysAfterToday) {
+    public ArrayList<Map<String, Integer>> getEmptyTimesByBookingsInOneDay(ArrayList<Booking> bookings, Integer daysAfterToday) {
         ArrayList<Map<String, Integer>> emptyTimes = new ArrayList<>();
         int currentHour = 8;
         if (daysAfterToday == 0) {
@@ -127,7 +124,6 @@ public class BookingServiceImpl implements BookingService {
         return emptyTimes;
     }
 
-    //TODO: 用户获取订单信息
     @Override
     public List<Map<String, Object>> getBookingsByCustomer(int offset, int limit, int customerId) {
         if (offset < 0) {
@@ -148,7 +144,6 @@ public class BookingServiceImpl implements BookingService {
             bookingInfo.put("startTime", formatter.format(startTime));
             bookingInfo.put("endTime", formatter.format(endTime));
             bookingInfo.put("stadiumId", booking.getStadium().getStadiumId());
-//            bookingInfo.put("daysAfterToday", booking.getStartTime().getDayOfYear() - LocalDate.now().getDayOfYear());
             bookingInfo.put("daysAfterToday", LocalDate.now().until(booking.getStartTime(), ChronoUnit.DAYS));
 
             bookingInfo.put("start", booking.getStartTime().getHour());

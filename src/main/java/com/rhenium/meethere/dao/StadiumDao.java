@@ -71,5 +71,5 @@ public interface StadiumDao {
     int[] getStadiumIdByName(String stadiumName);
 
     @Select("DELETE FROM stadium WHERE stadium_id = #{id}")
-    int[] deleteStadiumByID(Integer id);
+    int[] deletestadiumbyId(Integer id);
 }

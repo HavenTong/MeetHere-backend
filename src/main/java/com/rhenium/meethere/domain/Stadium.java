@@ -27,7 +27,6 @@ public class Stadium implements Serializable {
     @NotNull
     private String stadiumName;
 
-    // 后续改为枚举类型
     private Integer type;
     private String location;
 

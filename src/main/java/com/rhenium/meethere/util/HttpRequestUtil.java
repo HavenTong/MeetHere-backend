@@ -8,11 +8,11 @@ import java.util.Map;
  * @date 2019/12/30 19:44
  */
 public class HttpRequestUtil {
-    public static String getGetRequestUrl(String BaseUrl, Map<String, String> request) {
-        BaseUrl += "?";
+    public static String getGetRequestUrl(String baseUrl, Map<String, String> request) {
+        baseUrl += "?";
         for(Map.Entry<String, String> item : request.entrySet()) {
-            BaseUrl += item.getKey() + "=" + item.getValue() + "&";
+            baseUrl += item.getKey() + "=" + item.getValue() + "&";
         }
-        return BaseUrl;
+        return baseUrl;
     }
 }

@@ -35,7 +35,9 @@ public class Comment implements Serializable {
     private String commentContent;
     private Integer likes;
 
-    // 关联用户
+    /**
+     * 关联用户
+     */
     private Customer customer;
     private Stadium stadium;
 

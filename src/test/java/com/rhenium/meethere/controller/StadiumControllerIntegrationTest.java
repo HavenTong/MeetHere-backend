@@ -1,8 +1,6 @@
 package com.rhenium.meethere.controller;
 
 import com.rhenium.meethere.dao.StadiumDao;
-import com.rhenium.meethere.domain.Admin;
-import com.rhenium.meethere.domain.Stadium;
 import com.rhenium.meethere.dto.StadiumRequest;
 import com.rhenium.meethere.util.HttpRequestUtil;
 import com.rhenium.meethere.vo.ResultEntity;
@@ -12,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.data.annotation.Id;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -214,7 +210,7 @@ public class StadiumControllerIntegrationTest {
         assertEquals(1, Ids.length);
 
         for (int i : Ids) {
-            stadiumDao.deleteStadiumByID(i);
+            stadiumDao.deletestadiumbyId(i);
         }
     }
 
@@ -416,7 +412,7 @@ public class StadiumControllerIntegrationTest {
         assertEquals(1, Ids.length);
 
         for (int i : Ids) {
-            stadiumDao.deleteStadiumByID(i);
+            stadiumDao.deletestadiumbyId(i);
         }
         /** 恢复测试环境完毕 */
     }

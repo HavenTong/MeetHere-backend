@@ -26,7 +26,9 @@ public class NewsRequest {
     @Size(max = 40, message = "新闻标题不能超过40字")
     private String newsTitle;
 
-    // 已通过aop层校验
+    /**
+     * 已通过aop层校验
+     */
     private Integer adminId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -38,7 +38,9 @@ public class AdminRequest {
      */
     private Integer customerId;
 
-    // 管理员需要对留言进行审核
+    /**
+     * 管理员需要对留言进行审核
+     */
     private Integer commentId;
 
     private Integer bookingId;

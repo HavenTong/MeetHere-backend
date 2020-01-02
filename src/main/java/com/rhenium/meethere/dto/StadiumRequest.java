@@ -19,7 +19,9 @@ import java.math.BigDecimal;
 public class StadiumRequest {
     private Integer stadiumId;
 
-    // 管理员才需要修改场馆信息
+    /**
+     * 管理员才需要修改场馆信息
+     */
     private Integer adminId;
 
     @Size(max = 40, message = "场馆名不能超过40字")

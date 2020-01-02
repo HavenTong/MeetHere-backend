@@ -1,9 +1,5 @@
 package com.rhenium.meethere.util;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +17,7 @@ public class SaveImageFileUtil {
         int length = 20 < random.length() ? 20 : random.length();
         String filename = String.valueOf(imgStr.hashCode()).substring(1, length);
         String path = "/data/images/" + filename;
-        String URL = "http://152.136.173.30/images/" + filename;
+        String url = "http://152.136.173.30/images/" + filename;
 
         String partSeparator = ",";
         if (imgStr.contains(partSeparator)) {
@@ -29,7 +25,7 @@ public class SaveImageFileUtil {
 
             String fileType = imgStr.split(";")[0].split("/")[1];
 
-            URL = URL + "." + fileType;
+            url = url + "." + fileType;
             path = path + "." + fileType;
             byte[] decodedImg = Base64.getDecoder().decode(encodedImg.getBytes(StandardCharsets.UTF_8));
             Path destinationFile = Paths.get(path);
@@ -40,6 +36,6 @@ public class SaveImageFileUtil {
             }
         }
 
-        return URL;
+        return url;
     }
 }

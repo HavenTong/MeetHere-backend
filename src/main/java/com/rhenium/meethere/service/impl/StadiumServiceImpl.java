@@ -145,7 +145,6 @@ public class StadiumServiceImpl implements StadiumService {
         return StadiumTypeEnum.getTypes();
     }
 
-    // TODO: 需要确定返回哪一天的空闲时间
     public List<String> getSpareTimeFromBookingList(List<Booking> bookingList,
                                                      LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");

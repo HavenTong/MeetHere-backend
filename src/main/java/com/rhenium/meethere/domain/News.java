@@ -36,6 +36,8 @@ public class News implements Serializable {
     @Size(max = 200, message = "新闻内容最多200字")
     private String newsContent;
 
-    // 相关联的管理员
+    /**
+     * 相关联的管理员
+     */
     private Admin admin;
 }

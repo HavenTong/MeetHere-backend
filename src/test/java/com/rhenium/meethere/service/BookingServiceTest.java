@@ -78,7 +78,7 @@ class BookingServiceTest {
         ArrayList<Booking> bookings = new ArrayList<>();
         bookings.add(booking);
 
-        ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimesByBookingsInADay(bookings, 1);
+        ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimesByBookingsInOneDay(bookings, 1);
 
         assertAll(
                 () -> assertEquals(8, emptyTimes.get(0).get("start")),
@@ -97,7 +97,7 @@ class BookingServiceTest {
         ArrayList<Booking> bookings = new ArrayList<>();
         bookings.add(booking);
 
-        ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimesByBookingsInADay(bookings, 0);
+        ArrayList<Map<String, Integer>> emptyTimes = bookingService.getEmptyTimesByBookingsInOneDay(bookings, 0);
 
         if(LocalTime.now().getHour() >= 9 && LocalTime.now().getHour() < 18) {
             assertAll(

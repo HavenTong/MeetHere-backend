@@ -169,7 +169,6 @@ public class StadiumServiceImpl implements StadiumService {
             }
         }
 
-        // TODO: 通过timeSlotTable中的占用情况返回一个空闲时间的list
         int startIndex = (timeSlotTable[0]) ? 0 : -1;
         int endIndex = 0;
         for (int i = 1; i <= 11; i++) {

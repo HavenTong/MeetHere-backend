@@ -1,6 +1,5 @@
 # MeetHere-backend:sparkles:
 <div align="center"><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gaiix846njj305k05kaa0.jpg"></img></div>
-
 ## 项目地址
 
 - 部署地址:rocket:
@@ -118,7 +117,7 @@ http://152.136.173.30/
 
 ## 性能测试
 
-- JMeter 4.0
+- JMeter 5.2.1
 
 
 

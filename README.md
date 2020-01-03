@@ -6,6 +6,20 @@
 
     http://152.136.173.30/
 
+- 用户登录地址:rocket:
+
+    http://152.136.173.30/
+
+    可自行注册登录
+
+- 管理员登录地址:rocket:
+
+     http://152.136.173.30/#/adminLogin
+
+    可登录账号：705276106@qq.com
+
+    密码：123456
+
 - 后端项目地址:rocket:
 
     https://github.com/HavenTong/MeetHere-backend
